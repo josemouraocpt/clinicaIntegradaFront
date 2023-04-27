@@ -1,7 +1,9 @@
+import NavBar from '@/components/NavBar'
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Roboto } from 'next/font/google'
+import Footer from '@/components/Footer'
 
-const inter = Inter({ subsets: ['latin'] })
+const roboto = Roboto({ subsets: ['latin'], weight: '400' })
 
 export const metadata = {
   title: 'Clínica Integrada Unibh - HelthLab 4.0',
@@ -20,8 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={inter.className}>
+      <body className={roboto.className}>
+							<NavBar/>
 							{children}
+							<Footer/>
 						</body>
     </html>
   )

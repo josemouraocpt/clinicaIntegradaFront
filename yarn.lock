@@ -847,6 +847,7 @@ __metadata:
     autoprefixer: 10.4.14
     eslint: 8.39.0
     eslint-config-next: 13.3.1
+    lucide-react: ^0.181.0
     next: 13.3.1-canary.5
     postcss: 8.4.23
     react: 18.2.0
@@ -2429,6 +2430,15 @@ __metadata:
   version: 7.18.3
   resolution: "lru-cache@npm:7.18.3"
   checksum: e550d772384709deea3f141af34b6d4fa392e2e418c1498c078de0ee63670f1f46f5eee746e8ef7e69e1c895af0d4224e62ee33e66a543a14763b0f2e74c1356
+  languageName: node
+  linkType: hard
+
+"lucide-react@npm:^0.181.0":
+  version: 0.181.0
+  resolution: "lucide-react@npm:0.181.0"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0
+  checksum: 3fa9572ea6a1fd83e8029480ee689742b90a817fbf215d002ce80875c0c0671cd042afade83f4c8e9952e2f3572b21e776de2d8c69939d7f57d79e1853059fc4
   languageName: node
   linkType: hard
 
