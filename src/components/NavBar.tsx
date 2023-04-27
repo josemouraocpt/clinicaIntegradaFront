@@ -10,11 +10,11 @@ export default function NavBar(){
 					<Image src={logo} alt="Logo Assopoc" width={234} height={59}/>
 				</Link>
 			</div>
-			<div className="mr-20 space-x-5">
-				<Link href="/" className="text-menu-text text-lg" >Home</Link>
-				<Link href="/about" className="text-menu-text text-lg" >Contatos</Link>
-				<Link href="/about" className="text-menu-text text-lg" >Trabalhe Conosco</Link>
-				<Link href="/login" className="text-menu-text text-lg" ><MyButton buttonText="Área de Login"/></Link>
+			<div className="mr-20 space-x-5 text-lg text-menu-text">
+				<Link href="/">Home</Link>
+				<Link href="/about">Contatos</Link>
+				<Link href="/about">Trabalhe Conosco</Link>
+				<Link href="/login"><MyButton buttonText="Área de Login"/></Link>
 			</div>
 		</nav>
 	)
