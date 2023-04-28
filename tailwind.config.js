@@ -13,10 +13,12 @@ module.exports = {
       },
 						colors: {
 							"button": "#ED3237",
+							"button-hover": "#db2e33",
 							"menu-text": "#888888",
 							"gradient": "#F8797C",
 							"gradient2": "#ED3237",
 							"footer": "#373435",
+							"background": "#EBEBEB",
 						},
     },
   },
