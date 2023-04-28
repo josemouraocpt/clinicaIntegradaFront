@@ -1,9 +1,9 @@
-import AboutUs from '@/components/AboutUs'
+import { AboutUs } from '@/components/AboutUs'
 import { Roboto } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
 import banner from '../../public/images/banner.png'
-import MyButton from '@/components/MyButton'
+import { MyButton } from '@/components/MyButton'
 
 const roboto = Roboto({ subsets: ['latin'], weight: '400' })
 

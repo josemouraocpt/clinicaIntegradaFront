@@ -1,5 +1,5 @@
-import Card from "@/components/Card";
-import Search from "@/components/Search";
+import { Card } from "@/components/Card";
+import { Search } from "@/components/Search";
 import Link from "next/link";
 
 export default function Dashboard(){

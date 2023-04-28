@@ -1,7 +1,7 @@
 import { MapPin, Phone } from "lucide-react"
 import InfoContainer from "./InfoContainer"
 
-export default function AboutUs() {
+export function AboutUs() {
 	return(
 		<div className="flex flex-row justify-around bg-gradient text-white p-5">
 				<InfoContainer icon={<MapPin size={44} />} title="Ondes Estamos" itens={["SEDE EM CRUCILÂNDIA", "Rua: São Vicente de Paula 175", "Vicentino - Crucilândia/MG"]}/>

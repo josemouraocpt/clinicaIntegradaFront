@@ -6,7 +6,7 @@ interface IInfoContainerProps{
 	itens: string[];
 }
 
-export default function InfoContainer( { icon, title, itens }: IInfoContainerProps ){
+export function InfoContainer( { icon, title, itens }: IInfoContainerProps ){
 	return(
 		<div>
 			<div>

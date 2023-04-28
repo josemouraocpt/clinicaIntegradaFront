@@ -6,7 +6,7 @@ import unibh from '../../public/images/unibh.png';
 import galo from '../../public/images/galo.png';
 import Image from 'next/image';
 
-export default function Footer(){
+export function Footer(){
 	return (
 		<div className="bg-footer flex flex-row items-center justify-evenly text-white text-lg">
 				<h3>Em Parceria com </h3>

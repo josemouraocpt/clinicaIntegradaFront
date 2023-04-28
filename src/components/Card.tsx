@@ -1,4 +1,4 @@
-export default function Card(){
+export function Card(){
 	return(
 		<div>
 			<h1>Card</h1>

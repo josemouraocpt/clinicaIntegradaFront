@@ -1,8 +1,9 @@
 import Image from "next/image"
 import logo from "../assets/img/logo-branco.png";
 import Link from "next/link";
-import MyButton from "./MyButton";
-export default function NavBar(){
+import { MyButton } from "./MyButton";
+
+export function NavBar(){
 	return(
 		<nav className="flex justify-between items-center p-1">
 			<div className="ml-14">

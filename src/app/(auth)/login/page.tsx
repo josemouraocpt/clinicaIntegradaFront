@@ -1,5 +1,5 @@
 'use client'
-import MyButton from "@/components/MyButton";
+import { MyButton } from "@/components/MyButton";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,6 +11,8 @@ const schema = yup.object({
 });
 
 type FormData = yup.InferType<typeof schema>;
+
+// Criar um componente para o form e hidratar apenas ele
 
 export default function Login(){
 	const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
