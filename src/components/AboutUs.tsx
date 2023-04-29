@@ -1,5 +1,5 @@
 import { MapPin, Phone } from "lucide-react"
-import InfoContainer from "./InfoContainer"
+import { InfoContainer } from "./InfoContainer"
 
 export function AboutUs() {
 	return(
