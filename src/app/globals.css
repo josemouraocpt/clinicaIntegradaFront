@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .input{
-	@apply border-2 border-background rounded-md placeholder:text-xs p-1 focus:outline-none cursor-pointer text-sm;
+	@apply border-2 border-background rounded-md placeholder:text-xs p-1 focus:outline-none cursor-pointer text-sm w-full;
 }

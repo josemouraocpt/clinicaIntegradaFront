@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={roboto.className}>
+      <body className={`${roboto.className} bg-background`}>
 							<NavBar/>
 							{children}
 							<Footer/>

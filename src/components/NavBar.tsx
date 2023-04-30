@@ -5,7 +5,7 @@ import { MyButton } from "./MyButton";
 
 export function NavBar(){
 	return(
-		<nav className="flex justify-between items-center p-1">
+		<nav className="flex justify-between items-center p-1 bg-white">
 			<div className="ml-14">
 				<Link href="/">
 					<Image src={logo} alt="Logo Assopoc" width={234} height={59}/>

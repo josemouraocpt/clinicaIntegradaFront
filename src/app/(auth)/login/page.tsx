@@ -26,7 +26,7 @@ export default function Login(){
 	};
 
 	return(
-		<div className="bg-background flex justify-center h-screen">
+		<div className="flex justify-center h-screen">
 			<div className="bg-white p-10 h-fit mt-14 rounded-lg shadow-md">
 				<h2 className="font-bold">Insira seus dados de acesso:</h2>
 				<p className="text-xs">Lembre-se de não compartilhar seus dados com ninguém</p>
