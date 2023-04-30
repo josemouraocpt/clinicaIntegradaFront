@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { useRouter } from "next/navigation";
 
 const schema = yup.object({
 	email: yup.string().required("Insira o e-mail").email("Insira um e-mail válido"),
@@ -15,11 +16,13 @@ type FormData = yup.InferType<typeof schema>;
 // Criar um componente para o form e hidratar apenas ele
 
 export default function Login(){
+	const router = useRouter();
 	const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
 	const onSubmit: SubmitHandler<FormData> = (data) => {
 		console.log(data);
+		router.push('/dashboard')
 	};
 
 	return(

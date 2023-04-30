@@ -857,12 +857,12 @@ __metadata:
     autoprefixer: 10.4.14
     eslint: 8.39.0
     eslint-config-next: 13.3.1
-    lucide-react: ^0.181.0
     next: 13.3.1-canary.5
     postcss: 8.4.23
     react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: ^7.43.9
+    react-icons: ^4.8.0
     tailwindcss: 3.3.1
     typescript: 5.0.4
     yup: ^1.1.1
@@ -2445,15 +2445,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.181.0":
-  version: 0.181.0
-  resolution: "lucide-react@npm:0.181.0"
-  peerDependencies:
-    react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: 3fa9572ea6a1fd83e8029480ee689742b90a817fbf215d002ce80875c0c0671cd042afade83f4c8e9952e2f3572b21e776de2d8c69939d7f57d79e1853059fc4
-  languageName: node
-  linkType: hard
-
 "make-fetch-happen@npm:^10.0.3":
   version: 10.2.1
   resolution: "make-fetch-happen@npm:10.2.1"
@@ -3177,6 +3168,15 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
   checksum: 65b94de625f2b7921c4e856bf0abbe142bfe06c052217bd1bcc3a842e2cc37fa3a3e03758119dc038bbcf5edb49e02c29206528b80b201f9a4d601471ef78153
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^4.8.0":
+  version: 4.8.0
+  resolution: "react-icons@npm:4.8.0"
+  peerDependencies:
+    react: "*"
+  checksum: 4dbba7ad989c295b410e19b2a702722dae44368cb04b6515f9471353552f31ac80bd350f121d5bff79f81504b84039ede44d09e9f035f48bb1032e6eace126c4
   languageName: node
   linkType: hard
 
