@@ -13,12 +13,12 @@ export default function Dashboard(){
 			</div>
 			<h2 className="text-xl font-bold">Conta</h2>
 			<div className="text-white flex flex-row space-x-5">
-				<Actions icon={<MdManageAccounts size={90}/>} title="Perfil"/>
+				<Link href="/perfil"><Actions icon={<MdManageAccounts size={90}/>} title="Perfil"/></Link>
 			</div>
 			<h2 className="text-xl font-bold">Usuários</h2>
 			<div className="text-white flex flex-row space-x-5">
 				<Actions icon={<MdBusinessCenter size={90}/>} title="Funcionários"/>
-				<Actions icon={<MdHotel size={90}/>} title="Hóspedes"/>
+				<Link href="/hospedes"><Actions icon={<MdHotel size={90}/>} title="Hóspedes"/></Link>
 			</div>
 			<h2 className="text-xl font-bold">Setores</h2>
 			<div className="text-white flex flex-row space-x-5">
