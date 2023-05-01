@@ -100,5 +100,4 @@ export function ProfileForm(){
 		</div>
 	</form>
 	)
-
 };

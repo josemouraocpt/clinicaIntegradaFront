@@ -17,7 +17,7 @@ module.exports = {
 							"menu-text": "#888888",
 							"gradient": "#F8797C",
 							"gradient2": "#ED3237",
-							"footer": "#373435",
+							"footer": "#bfbfbf",
 							"background": "#EBEBEB",
 							"label": "#888888"
 						},

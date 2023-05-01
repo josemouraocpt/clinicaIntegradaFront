@@ -1,22 +1,22 @@
-import assopoc from '../../public/images/assopoc.png';
-import healthlab from '../../public/images/healthlab.png';
-import rcs from '../../public/images/rcs.png';
-import animahub from '../../public/images/anihub.png';
-import unibh from '../../public/images/unibh.png';
-import galo from '../../public/images/galo.png';
+import assopoc from '../../public/images/footer/assopoc150.png';
+import healthlab from '../../public/images/footer/HEALTHLAB150.png';
+import rcs from '../../public/images/footer/rcs 1.png';
+import animahub from '../../public/images/footer/animalab_hub450.png';
+import unibh from '../../public/images/footer/unibh200.png';
+import galo from '../../public/images/footer/apoio_galo.png';
 import Image from 'next/image';
 
 export function Footer(){
 	return (
-		<div className="bg-footer flex flex-row items-center justify-evenly text-white text-lg">
+		<div className="bg-footer flex flex-row items-center justify-evenly text-lg">
 				<h3>Em Parceria com </h3>
-				<Image src={assopoc} alt='assopoc'/>
-				<Image src={healthlab} alt='assopoc'/>
-				<Image src={rcs} alt='assopoc'/>
-				<Image src={animahub} alt='assopoc'/>
-				<Image src={unibh} alt='assopoc'/>
+				<Image src={assopoc} alt='assopoc' width={100} />
+				<Image src={healthlab} alt='Health Lab' width={100}/>
+				<Image src={rcs} alt='RCS' width={120}/>
+				<Image src={animahub} alt='Anima hub' width={120}/>
+				<Image src={unibh} alt='Unibh' width={100}/>
 				<h3>Apoio</h3>
-				<Image src={galo} alt='assopoc'/>
+				<Image src={galo} alt='Galo' width={100}/>
 		</div>
 	)
 };

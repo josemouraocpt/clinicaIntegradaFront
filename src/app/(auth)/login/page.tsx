@@ -17,7 +17,7 @@ type FormData = yup.InferType<typeof schema>;
 
 export default function Login(){
 	const router = useRouter();
-	const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
+	const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
 	const onSubmit: SubmitHandler<FormData> = (data) => {
