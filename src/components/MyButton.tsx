@@ -1,6 +1,6 @@
 interface IButtonProps{
-	buttonText: string
-	buttonType?: string 
+	buttonText: string;
+	buttonType?: string;
 };
 
 export function MyButton({ buttonText, buttonType }: IButtonProps){
