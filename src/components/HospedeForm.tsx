@@ -23,7 +23,7 @@ export function HospedeForm(){
 	};
 
 	return(
-		<div className="bg-white p-5 rounded-md shadow-lg">
+		<div className="bg-white p-5 rounded-md mb-20 shadow-lg">
 			<form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
 				{/* Inicio da primeira parte do formulário */}
 				{currentStep == 0 && (
@@ -32,48 +32,54 @@ export function HospedeForm(){
 						<div className="flex flex-col space-y-3">
 							<div className="flex space-x-5">
 								<label className="w-1/4">Primeiro nome:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 								<label className="w-1/4">Sobrenome:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
+								</label>
+								<label>Apelido:
+									<input type="text" className="input"/>
 								</label>
 								<label>Nome Social (se tiver):
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 								<label>Nacionalidade:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 							</div>
 							<div className="flex space-x-5">
 								<label className="w-1/4">Nome do Pai:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 								<label className="w-1/4">Nome da Mãe:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 								<label>CPF:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 								<label>RG:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 							</div>
 
 							<div className="flex space-x-5">
 								<label>Nascimento:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
+								</label>
+								<label>DDD:
+									<input type="text" className="input"/>
 								</label>
 								<label>Telefone:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 								<label>Estado civil:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 								<label>Profissão:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 								<label>Título de Eleitor:
-									<input type="text" className="input block"/>
+									<input type="text" className="input"/>
 								</label>
 							</div>
 						</div>
@@ -83,36 +89,90 @@ export function HospedeForm(){
 									<h1 className="font-bold">Endereços</h1>
 									<div className="flex space-x-5">
 										<label>CEP:
-											<input type="text" className="input block"/>
+											<input type="text" className="input"/>
 										</label>
-										<label>Bairro:
-											<input type="text" className="input block"/>
+										<label className="w-3/4">Endereço:
+											<input type="text" className="input"/>
 										</label>
-										<label>Estado:
-											<input type="text" className="input block"/>
+										<label>Nº:
+											<input type="text" className="input"/>
+										</label>
+										<label>Complemento:
+											<input type="text" className="input"/>
 										</label>
 									</div>
 									<div className="flex space-x-5">
-										<label className="w-3/4">Endereço:
-											<input type="text" className="input block"/>
+										<label>Bairro:
+											<input type="text" className="input"/>
 										</label>
-										<label>Nº:
-											<input type="text" className="input block"/>
+										<label>Estado:
+											<select className="input">
+												<option value=""></option>
+												<option value="AC">Acre</option>																	
+												<option value="AL">Alagoas</option>
+												<option value="AP">Amapá</option>
+												<option value="AM">Amazonas</option>
+												<option value="BA">Bahia</option>
+												<option value="CE">Ceará</option>
+												<option value="DF">Distrito Federal</option>
+												<option value="ES">Espírito Santo</option>
+												<option value="GO">Goiás</option>
+												<option value="MA">Maranhão</option>
+												<option value="MT">Mato Grosso</option>
+												<option value="MS">Mato Grosso do Sul</option>
+												<option value="MG">Minas Gerais</option>
+												<option value="PA">Pará</option>
+												<option value="PB">Paraíba</option>
+												<option value="PR">Paraná</option>
+												<option value="PE">Pernambuco</option>
+												<option value="PI">Piauí</option>
+												<option value="RJ">Rio de Janeiro</option>
+												<option value="RN">Rio Grande do Norte</option>
+												<option value="RS">Rio Grande do Sul</option>
+												<option value="RO">Rondônia</option>
+												<option value="RR">Roraima</option>
+												<option value="SC">Santa Catarina</option>
+												<option value="SP">São Paulo</option>
+												<option value="SE">Sergipe</option>
+												<option value="TO">Tocantins</option>
+											</select>
+										</label>
+										<label>País:
+											<input type="text" className="input"/>
 										</label>
 									</div>
 								</div>
-
 								<h1 className="font-bold">Data Entrada</h1>
 								<div className="flex space-x-5">
+									<label>Origem:
+										<select className="input">
+											<option value=""></option>
+											<option value="indicação">Indicação</option>
+											<option value="convênio">Convênio</option>
+											<option value="espontâneo">Espontâneo</option>
+										</select>
+									</label>
 									<label>Data:
-										<input type="text" className="input block"/>
+										<input type="text" className="input"/>
 									</label>
 									<label>Horário:
-										<input type="text" className="input block"/>
+										<input type="text" className="input"/>
+									</label>
+								</div>
+								<h1 className="font-bold">Possui contatos?</h1>
+								<div className="flex space-x-5">
+									<label>Tipo:
+										<input type="text" className="input"/>
+									</label>
+									<label>Observação:
+										<input type="text" className="input"/>
+									</label>
+									<label>Contato:
+										<input type="text" className="input"/>
 									</label>
 								</div>
 							</div>
-							<div className="flex flex-col items-end w-2/6">
+							<div className="flex flex-col items-end w-2/6 mt-14 mr-16">
 							<h1 className="font-bold mr-6">Foto de Identificação</h1>
 							<div className="w-52 h-40">
 								<Image src={profile} alt="teste" className="w-full"/>
@@ -148,13 +208,13 @@ export function HospedeForm(){
 						</div>
 						<div className="flex space-x-5">
 							<label className="w-2/6">Nome do banco:
-								<input type="text" className="input block"/>
+								<input type="text" className="input"/>
 							</label>
 							<label className="w-2/6">Agência:
-								<input type="text" className="input block"/>
+								<input type="text" className="input"/>
 							</label>
 							<label>Conta:
-								<input type="text" className="input block"/>
+								<input type="text" className="input"/>
 							</label>
 						</div>
 						<div>
@@ -165,13 +225,13 @@ export function HospedeForm(){
 								{/* {maisContas && (
 									<div className="flex space-x-5">
 										<label className="w-2/6">Nome do banco:
-											<input type="text" className="input block"/>
+											<input type="text" className="input"/>
 										</label>
 										<label className="w-2/6">Agência:
-											<input type="text" className="input block"/>
+											<input type="text" className="input"/>
 										</label>
 										<label>Conta:
-											<input type="text" className="input block"/>
+											<input type="text" className="input"/>
 										</label>
 									</div>
 								)} */}
@@ -183,7 +243,7 @@ export function HospedeForm(){
 								<MdAddCircle className="inline"/> Adicionar informações
 							</button>
 							{/* {maisInfo && (
-								<textarea placeholder="Descrição" className="input block w-full resize-none" rows={10}/>
+								<textarea placeholder="Descrição" className="input w-full resize-none" rows={10}/>
 							)} */}
 						</div>
 					</div>
@@ -228,16 +288,16 @@ export function HospedeForm(){
 							</button>
 							<div className="flex space-x-3">
 								<label>Nome do Medicamento:
-									<input type="text" className="input block" />
+									<input type="text" className="input" />
 								</label>
 								<label>Frequência do Medicamento:
-									<input type="text" className="input block" />
+									<input type="text" className="input" />
 								</label>
 								<label>Tempo de Uso:
-									<input type="text" className="input block" />
+									<input type="text" className="input" />
 								</label>
 								<label>Dosagem:
-									<input type="text" className="input block" />
+									<input type="text" className="input" />
 								</label>
 							</div>
 						</div>
@@ -249,7 +309,7 @@ export function HospedeForm(){
 							</button>
 							<div className="flex flex-col">
 								<label className="w-2/5">Informação:
-									<input type="text" className="input block" />
+									<input type="text" className="input" />
 								</label>
 							</div>
 						</div>

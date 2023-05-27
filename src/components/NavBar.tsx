@@ -11,11 +11,12 @@ export function NavBar(){
 					<Image src={logo} alt="Logo Assopoc" width={234} height={59}/>
 				</Link>
 			</div>
-			<div className="mr-20 space-x-5 text-lg text-menu-text">
+			<div className="mr-14 space-x-5 text-lg text-menu-text">
 				<Link href="/dashboard">Home</Link>
 				<Link href="/about">Contatos</Link>
 				<Link href="/about">Trabalhe Conosco</Link>
-				<Link href="/login"><MyButton buttonText="Área de Login"/></Link>
+				<Link href="/login"><MyButton buttonText="Login"/></Link>
+				<Link href="/register"><MyButton buttonText="Cadastro"/></Link>
 			</div>
 		</nav>
 	)
