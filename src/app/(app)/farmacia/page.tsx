@@ -1,5 +1,5 @@
 export default function Farmacia(){
 	return(
-		<h1>Farmacia</h1>
+		<h1>Iniciando página da farmacia...</h1>
 	)
 };
