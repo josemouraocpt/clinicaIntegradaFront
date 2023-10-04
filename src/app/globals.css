@@ -5,3 +5,6 @@
 .input{
 	@apply border-2 border-background rounded-md placeholder:text-xs p-1 focus:outline-none cursor-pointer text-sm w-full;
 }
+.style{
+	@apply text-white
+}

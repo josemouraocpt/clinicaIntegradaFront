@@ -2,15 +2,12 @@ import { Actions } from "@/components/Actions";
 import { MdManageAccounts, MdBusinessCenter, MdHotel, MdRestaurant, MdSportsSoccer, MdOutlineLightbulb } from "react-icons/md";
 import { TbPill, TbCurrencyReal, TbPhysotherapist } from "react-icons/tb"
 import Link from "next/link";
-
+import { PageInfoText } from "@/components/PageInfoText";
 
 export default function Dashboard(){
 	return(
 		<div className="p-4 space-y-7">
-			<div>
-				<h2 className="font-bold text-lg">Você está logado com o usuário <span className="text-yellow-500">@Usuário</span></h2>
-				<p>Para começar voce deseja: </p>
-			</div>
+			<PageInfoText message="Para começar voce deseja:"/>
 			<h2 className="text-xl font-bold">Conta</h2>
 			<div className="text-white flex flex-row space-x-5">
 				<Link href="/perfil"><Actions icon={<MdManageAccounts size={90}/>} title="Perfil"/></Link>

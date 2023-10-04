@@ -1,14 +1,15 @@
 interface IButtonProps{
 	buttonText: string;
 	buttonType?: string;
+	styles?: string
 };
 
-export function MyButton({ buttonText, buttonType }: IButtonProps){
+export function MyButton({ buttonText, buttonType, styles }: IButtonProps){
+	let style = 'bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover ';
+	styles ? style += styles : style
 	return(
-		<>
-			<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type={buttonType}>
-				{buttonText} 
-			</button>
-		</>
+		<button className={style} type={buttonType}>
+			{buttonText}  
+		</button>
 	)
 };
