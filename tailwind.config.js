@@ -19,7 +19,8 @@ module.exports = {
 							"gradient2": "#ED3237",
 							"footer": "#bfbfbf",
 							"background": "#EBEBEB",
-							"label": "#888888"
+							"label": "#888888",
+              "container": "#ED3237" 
 						},
     },
   },
