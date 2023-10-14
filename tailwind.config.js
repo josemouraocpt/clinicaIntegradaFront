@@ -20,7 +20,9 @@ module.exports = {
 							"footer": "#bfbfbf",
 							"background": "#EBEBEB",
 							"label": "#888888",
-              "container": "#ED3237" 
+              "container": "#ED3237",
+              "info": "#121111",
+              "bord": "#A4A4A4",
 						},
     },
   },
