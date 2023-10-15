@@ -23,6 +23,7 @@ module.exports = {
               "container": "#ED3237",
               "info": "#121111",
               "bord": "#A4A4A4",
+              "inp": "#141414",
 						},
     },
   },
