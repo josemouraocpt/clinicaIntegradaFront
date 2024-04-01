@@ -8,8 +8,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'banner': 'url("../../public/images/banner.png")',
-								"gradient": 'linear-gradient(to right, #ED3237, #F8797C , #ED3237)',
+       'banner': 'url("../../public/images/banner.png")'
       },
 						colors: {
 							"button": "#ED3237",
