@@ -5,15 +5,14 @@ import { PageInfoText } from "@/components/PageInfoText";
 import { TbPill } from "react-icons/tb";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
+import { ContainerFarmacia } from "@/components/ContainerFarmacia";
 
 export default function Farmacia(){
 	return(
-		<div className="p-4 space-y-7 h-screen">
-			<BackButton/>
-			<PageInfoText message="Você está na área da Farmácia"/>
-			<Actions icon={<TbPill size={90}/>} title="Farmácia"/>
+		<div className="p-4">
+			<ContainerFarmacia/>
 			<div>
-				<h2 className="font-bold text-lg mb-5">
+				<h2 className="font-bold text-lg mb-5 ml-10">
 					Você deseja acessar: 
 				</h2>
 				<div className="flex justify-around">
