@@ -14,7 +14,7 @@ async function register(data: any) {
         }else{
             localStorage.setItem("user", JSON.stringify(response))
         }
-        return data
+        return response
     } catch (error) {
         console.log(error)
         return {error: error}
@@ -36,7 +36,7 @@ async function login(data: any) {
         }else{
             localStorage.setItem("user", JSON.stringify(response))
         }
-        return data
+        return response
     } catch (error) {
         console.log(error);
         return {error: error}
