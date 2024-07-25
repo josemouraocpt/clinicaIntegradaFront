@@ -89,17 +89,91 @@ async function getUsersAndDepartments(token: string) {
     }
 }
 
-async function createHospede(data: any, token: string){
-    //inserir os remedios
-    //inserir doenças e alergias
-    //inserir os dados medicos
-    //inserir o hospede
-    //inserir os daddos bancarios
-    //inserir situação financeira
-    //inserir hospedagem
-    //inserir responsabilidade
+async function createHospedeFull(data: any, token: string){
     try {
-        
+        //inserir os remedios
+        const remedioData = {
+            name: data.nomeRemedio,
+            usageFrequency: data.frequenciaUso,
+            usageTime: data.tempoUso,
+            dosage: data.dosagem
+        }
+        const remedioRes = await createRemedio(remedioData, token);
+
+        //inserir doenças e alergias
+        const doencasData = {
+            type: data.tipoAlergiaDieta,
+            description: data.descAlergiaDieta
+        }
+        const doencasRes = await createDoencasAlergiasDietas(doencasData, token);
+
+        //inserir os dados medicos
+        const dadosMedicosData = {
+            dependenceDegree: data.grauDependencia,
+            observations: data.obsMed, 
+            idRemedies: remedioRes,
+            idDiseaseAllergiesDiets: doencasRes,
+        }
+        const dadosMedicosRes = await createDadosMedicos(dadosMedicosData, token);
+
+        //inserir o hospede
+        const hospedeData = {
+            name: data.nome,
+            socialName: data.nomeSocial,
+            nickname: data.apelido,
+            rg: data.rg,
+            cpf: data.cpf,
+            nationality: data.nacionalidade,
+            naturalness: data.naturalidade,
+            civilState: data.estadoCivil,
+            birthDate: data.dataNascimento,
+            motherName: data.nomeMae,
+            fatherName: data.nomePai,
+            phoneNumber: data.telefone,
+            occupation: data.profissao,
+            electoralTitle: data.tituloEleitor,
+            address: data.endereco,
+            city: data.cidade,
+            state: data.uf,
+            zipCode: data.cep,
+            entryDate: data.dataEntrada,
+            idMedicalRecord: dadosMedicosRes
+        }
+        const hospedeRes = await createHospede(hospedeData, token);
+
+        //inserir os daddos bancarios
+        const bankData = {
+            hasAccount: data.possuiConta,
+            bankName: data.nomeBanco,
+            agency: data.agencia,
+            accountNumber: data.conta,
+            idGuest: hospedeRes
+        }
+        const bankRes = await createBank(bankData, token);
+
+        //inserir situação financeira
+        const situacaoData = {
+            description: data.situacaoFinanceiraDesc,
+            idGuest: hospedeRes
+        }
+        const situacaoRes = createFinancial(situacaoData, token);
+
+        //inserir hospedagem
+        const hospedamData = {
+            room: data.quarto,
+            bed: data.leito,
+            information: data.hospedagemInfo,
+            status: true, //como o hospede está sendo inserido o status vai como ativo
+            idGuest: hospedeRes
+        }
+        const hospedagemRes = await createHospedagem(hospedamData, token);
+
+        //inserir responsabilidade
+        const responsabilidadeData = {
+            userId: data.responsavel,
+            guestId: hospedeRes
+        }
+        const responsabilidadeRes = await createResponsabilidae(responsabilidadeData, token);
     } catch (error) {
         console.log(error)
         return {error: error}
@@ -108,8 +182,8 @@ async function createHospede(data: any, token: string){
 
 async function createRemedio(data: any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/users/edit/${userID}`, {
-            method: "PATCH",
+        const res = await fetch('http://localhost:3001/medicalRecord/remedy', {
+            method: "POST",
 			headers: {
 				"Content-Type": "application/json",
                 "Authorization": token
@@ -117,18 +191,146 @@ async function createRemedio(data: any, token: string) {
             body: JSON.stringify(data)
         });
         const response = await res.json();
-        
+        return response.remedioID
     } catch (error) {
         console.log(error)
         return {error: error}
     }
 }
 
+async function createDoencasAlergiasDietas(data: any, token: string){
+    try {
+        const res = await fetch('http://localhost:3001/medicalRecord/diseases', {
+            method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify(data)
+        });
+        const response = await res.json();
+        return response.doencasID
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function createDadosMedicos(data: any, token: string){
+    try {
+        const res = await fetch('http://localhost:3001/medicalRecord/data', {
+            method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify(data)
+        });
+        const response = await res.json();
+        return response.medicalDataId
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function createHospede(data: any, token: string){
+    try {
+        const res = await fetch('http://localhost:3001/guest/create', {
+            method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify(data)
+        });
+        const response = await res.json();
+        return response.hospedeId
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function createBank(data: any, token: string){
+    try {
+        const res = await fetch('http://localhost:3001/guest/bank', {
+            method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify(data)
+        });
+        const response = await res.json();
+        return response
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function createFinancial(data: any, token: string){
+    try {
+        const res = await fetch('http://localhost:3001/guest/financial', {
+            method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify(data)
+        });
+        const response = await res.json();
+        return response
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function createHospedagem(data: any, token: string){
+    try {
+        const res = await fetch('http://localhost:3001/accommodation/create', {
+            method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify(data)
+        });
+        const response = await res.json();
+        return response
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function createResponsabilidae(data: any, token: string){
+    try {
+        const res = await fetch('http://localhost:3001/responsability/create', {
+            method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify(data)
+        });
+        const response = await res.json();
+        return response
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+
 const userService = {
     getUserData,
     updateUser,
     getHospedes,
-    getUsersAndDepartments
+    getUsersAndDepartments,
+    createHospedeFull
 }
 
 export default userService;

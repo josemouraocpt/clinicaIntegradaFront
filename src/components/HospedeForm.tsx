@@ -18,59 +18,52 @@ const schema = yup.object({
 	nacionalidade: yup.string().required("Insira a nacionalidade") ,
 	naturalidade: yup.string().required("Insira a naturalidade") ,
 	estadoCivil: yup.string().required("Insira o estado civil") ,
-	dataNascimento: yup.string().required("Insira o campo") ,
-	nomeMae: yup.string().required("Insira o campo") ,
-	nomePai: yup.string().required("Insira o campo") ,
-	telefone: yup.string().required("Insira o campo") ,
-	profissao: yup.string().required("Insira o campo") ,
-	tituloEleitor: yup.string().required("Insira o campo") ,
-	endereco: yup.string().required("Insira o campo") ,
-	cidade: yup.string().required("Insira o campo") ,
-	uf: yup.string().required("Insira o campo") ,
-	cep: yup.string().required("Insira o campo") ,
-	dataEntrada: yup.string().required("Insira o campo") ,
+	dataNascimento: yup.string().required("Insira a data de nascimento") ,
+	nomeMae: yup.string().required("Insira o nome da mão") ,
+	nomePai: yup.string().required("Insira o nome do pai") ,
+	telefone: yup.string().required("Insira o telefone") ,
+	profissao: yup.string().required("Insira a profissão") ,
+	tituloEleitor: yup.string().required("Insira o titulo de eleitor") ,
+	endereco: yup.string().required("Insira o endereço") ,
+	cidade: yup.string().required("Insira a cidade") ,
+	uf: yup.string().required("Insira o estado") ,
+	cep: yup.string().required("Insira o cep") ,
+	dataEntrada: yup.string().required("Insira a data de entrda"),
+	possuiConta: yup.string(),
 	nomeBanco: yup.string(),
 	conta: yup.string(),
 	agencia: yup.string(),
 	numeroConta: yup.string(),
-	situacaoFinanceiraDesc: yup.string().required("Insira o campo"),
-	grauDependencia: yup.string().required("Insira o campo"),
-	nomeRemedio: yup.string().required("Insira o campo"),
-	frequenciaUso: yup.string().required("Insira o campo"),
-	tempoUso: yup.string().required("Insira o campo"),
-	dosagem: yup.string().required("Insira o campo"),
-	tipoAlergiaDieta: yup.string().required("Insira o campo"),
-	descAlergiaDieta: yup.string().required("Insira o campo"),
-	quarto: yup.string().required("Insira o campo"),
-	leito: yup.string().required("Insira o campo"),
+	situacaoFinanceiraDesc: yup.string(),
+	grauDependencia: yup.string().required("Insira o grau de dependencia"),
+	nomeRemedio: yup.string().required("Insira o nome do remedio"),
+	frequenciaUso: yup.string().required("Insira a frequencia de uso"),
+	tempoUso: yup.string().required("Insira o tempo de uso"),
+	dosagem: yup.string().required("Insira a dosagem"),
+	obsMed: yup.string(),
+	tipoAlergiaDieta: yup.string().required("Insira o tipo"),
+	descAlergiaDieta: yup.string().required("Insira a descrição do tipo"),
+	quarto: yup.string().required("Insira o quarto"),
+	leito: yup.string().required("Insira o leito"),
 	hospedagemInfo: yup.string(),
-	responsavel: yup.string().required("Insira o campo"),
-	setorResponsavel: yup.string(),
-	responsavelAceite: yup.string().required("Insira o campo"),
+	responsavel: yup.string().required("Insira o responsavel"),
+	responsavelAceite: yup.string().required("Insira o responsavel pelo aceite"),
 });
 
 type FormData = yup.InferType<typeof schema>;
 
 export function HospedeForm(){
 	const [currentStep, setCurrentStep] = useState(0);
-	const [possuiConta, setPossuiConta] = useState<boolean | undefined>(undefined);
+	const [possuiConta, setPossuiConta] = useState<boolean>(false);
 	const [sitFin, setSitFin] = useState(false);
 	const [usersAndDepartments, setUsersAndDepartments] = useState();
 	const router = useRouter();
 	const { user } = useSelector((state) => state.auth);
-	const { getUsersAndDepartments } = userService;
+	const { getUsersAndDepartments, createHospedeFull } = userService;
 
 	const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
-
-	const watcher = watch("responsavel");
-
-	function findSetor(num: string): string{
-		//DEU RUIM NA HORA DE VOLTAR VERIFICAR
-		const desc = usersAndDepartments.filter((valor) => { return valor.idUSUARIO == num });
-		return desc[0].descricao || "";
-	}
 
 	const handleNext = () => {
 		setCurrentStep(state => state + 1)
@@ -90,9 +83,8 @@ export function HospedeForm(){
 
 	async function onSubmit(data: FormData){
 		console.log("chegou até o final");
-		console.log(data)
-
-
+		console.log(data);
+		await createHospedeFull(data, user.token);
 	};
 
 	return(
@@ -228,70 +220,69 @@ export function HospedeForm(){
 				{/* Inicio da segunda parte do formulário */}
 				{currentStep == 1 && (
 					<div>
-					<div className="flex flex-col space-y-3">
-						<h1 className="font-bold">Dados Bancários</h1>
-						<div className="space-x-3">
-							<h3>Possui conta bancária?</h3>
-							<label>Sim
-								<input type="radio" name="possui_banco" className="ml-2" onChange={() => setPossuiConta(true)}/>
-							</label>
-							<label>Não
-								<input type="radio" name="possui_banco" className="ml-2" onChange={() => setPossuiConta(false)}/>
-							</label>
-						</div>
-						{possuiConta && (
-							<>
-								<div className="flex space-x-5">
-									<label className="w-2/6">Nome do banco:
-										<input type="text" className="input" {...register("nomeBanco")}/>
-									</label>
-									<label className="w-2/6">Agência:
-										<input type="text" className="input" {...register("agencia")}/>
-									</label>
-									<label>Conta:
-										<input type="text" className="input" {...register("conta")}/>
-									</label>
-								</div>
-								{/* <div>
-									<button className="text-lg text-button hover:text-button-hover" >
-										<MdAddCircle className="inline"/> Adicionar mais contas
-									</button>
-									<div className="flex flex-col space-y-3">
-										{maisContas && (
-											<div className="flex space-x-5">
-												<label className="w-2/6">Nome do banco:
-													<input type="text" className="input"/>
-												</label>
-												<label className="w-2/6">Agência:
-													<input type="text" className="input"/>
-												</label>
-												<label>Conta:
-													<input type="text" className="input"/>
-												</label>
-											</div>
-										)}
+						<div className="flex flex-col space-y-3">
+							<h1 className="font-bold">Dados Bancários</h1>
+							<div className="space-x-3">
+								<h3>Possui conta bancária?</h3>
+								<select className="input" {...register("possuiConta")} onChange={() => setPossuiConta(!possuiConta)}>
+									<option hidden={true}></option>
+									<option value="1">Sim</option>
+									<option value="0">Não</option>
+								</select>
+							</div>
+							{possuiConta && (
+								<>
+									<div className="flex space-x-5">
+										<label className="w-2/6">Nome do banco:
+											<input type="text" className="input" {...register("nomeBanco")}/>
+										</label>
+										<label className="w-2/6">Agência:
+											<input type="text" className="input" {...register("agencia")}/>
+										</label>
+										<label>Conta:
+											<input type="text" className="input" {...register("conta")}/>
+										</label>
 									</div>
-								</div> */}
-							</>
-						)}
-						<div>
-							<h1 className="font-bold">Situação Financeira</h1>
-							<button className="text-lg text-button hover:text-button-hover" onClick={() => setSitFin(!sitFin)} hidden={sitFin == true || possuiConta == false}>
-								<MdAddCircle className="inline"/> Adicionar informações
-							</button>
-							{possuiConta === false || sitFin == true ? (
-								<textarea placeholder="Descrição" className="input w-full resize-none" rows={10} {...register("situacaoFinanceiraDesc")}/>
-							):(<></>)}
+									{/* <div>
+										<button className="text-lg text-button hover:text-button-hover" >
+											<MdAddCircle className="inline"/> Adicionar mais contas
+										</button>
+										<div className="flex flex-col space-y-3">
+											{maisContas && (
+												<div className="flex space-x-5">
+													<label className="w-2/6">Nome do banco:
+														<input type="text" className="input"/>
+													</label>
+													<label className="w-2/6">Agência:
+														<input type="text" className="input"/>
+													</label>
+													<label>Conta:
+														<input type="text" className="input"/>
+													</label>
+												</div>
+											)}
+										</div>
+									</div> */}
+								</>
+							)}
+							<div>
+								<h1 className="font-bold">Situação Financeira</h1>
+								<button className="text-lg text-button hover:text-button-hover" onClick={() => setSitFin(!sitFin)} hidden={sitFin == true || possuiConta == false}>
+									<MdAddCircle className="inline"/> Adicionar informações
+								</button>
+								{sitFin == true ? (
+									<textarea placeholder="Descrição" className="input w-full resize-none" rows={10} {...register("situacaoFinanceiraDesc")}/>
+								):(<></>)}
+							</div>
 						</div>
-					</div>
-					<div className="flex justify-end space-x-3">
-						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handlePrevius}>
-							Voltar
-						</button>
-						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handleNext}>
-							Próximo
-						</button>
-					</div>
+						<div className="flex justify-end space-x-3">
+							<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handlePrevius}>
+								Voltar
+							</button>
+							<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handleNext}>
+								Próximo
+							</button>
+						</div>
 					</div>
 				)}
 				{/* Fim da segunda parte do formulário */}
@@ -334,6 +325,12 @@ export function HospedeForm(){
 								{/* <button className="text-lg text-button hover:text-button-hover">
 									<MdAddCircle className="inline"/> Adicionar mais medicamentos
 								</button> */}
+							</div>
+							<div>
+								<h2 className="font-bold">Observações</h2>
+								<label>Obrservações:
+									<textarea placeholder="Descrição" className="input w-full resize-none" rows={10} {...register("obsMed")}/>
+								</label>
 							</div>
 							<div>
 								<h2 className="font-bold">Doenças, Alergias e Dietas</h2>
@@ -425,16 +422,6 @@ export function HospedeForm(){
 											))
 										)}
 									</select>
-								</label>
-								<label>Setor do Responsavél:
-									{watcher !== undefined ? (
-										<>
-											{setValue("setorResponsavel", findSetor(watcher))}
-											<input type="text" className="input" {...register("setorResponsavel")} disabled={true}/>
-										</>
-									) : (
-										<input type="text" className="input" {...register("setorResponsavel")} disabled={true}/>
-									)}
 								</label>
 							</div>
 							<div className="flex justify-end space-x-3">
