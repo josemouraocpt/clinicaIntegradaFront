@@ -25,7 +25,6 @@ export function LoginForm(){
 	});
 	async function onSubmit(data: FormData){
 		const res  = await dispatch(login(data))
-        console.log(res)
         if(res.type == "/login/rejected"){
             return
         }else{

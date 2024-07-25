@@ -43,8 +43,6 @@ export function RegisterForm(){
 	});
 
 	async function onSubmit(data: FormData){
-        const novaData = convertDate(data.birthDate)
-        data.birthDate = novaData
         const res  = await dispatch(singUp(data))
         if(res.type == "/register/rejected"){
             return
@@ -56,12 +54,6 @@ export function RegisterForm(){
 	useEffect(() => {
 		dispatch(reset());
 	}, [dispatch]);
-
-    function convertDate(string: string){
-        const values = string.split("/")
-        return `${values[2]}-${values[1]}-${values[0]}`
-    }
-
 
     return(
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -84,7 +76,7 @@ export function RegisterForm(){
                         </label>
                         <label>Setor:
                             <select className="input" {...register("departmentId")}>
-                                <option value=""></option>
+                                <option hidden={true}></option>
                                 <option value={1}>Farmácia</option>
                             </select>
                         </label>
@@ -92,7 +84,7 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Tipo do usuário:
                             <select className="input" {...register("userProfileId")}>
-                                <option value=""></option>
+                                <option hidden={true}></option>
                                 <option value={1}>Funcionário</option>
                                 <option value={2}>Usuário</option>
                             </select>
@@ -112,7 +104,7 @@ export function RegisterForm(){
                 <div>
                     <div className="flex flex-row space-x-5">
                         <label>Data de Nascimento:
-                            <input {...register("birthDate")} type="text" className="input"/>
+                            <input {...register("birthDate")} type="date" className="input"/>
                         </label>
                         <label>Nacionalidade:
                             <input {...register("nationality")} type="text" className="input"/>
@@ -145,7 +137,7 @@ export function RegisterForm(){
                                     </label>
                                     <label>Estado:
                                         <select className="input" {...register("state")}>
-                                            <option value=""></option>
+                                            <option hidden={true}></option>
                                             <option value="AC">Acre</option>
                                             <option value="AL">Alagoas</option>
                                             <option value="AP">Amapá</option>

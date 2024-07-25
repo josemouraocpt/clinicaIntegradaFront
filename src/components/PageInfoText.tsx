@@ -10,7 +10,6 @@ export function PageInfoText({message}: IPageInfoText){
 	const [userName, setUserName] = useState("")
 	const { user } = useSelector((state) => state.auth);
 	useEffect(() => {
-		console.log(user)
 		setUserName(user.user?.name)
 	}, [])
 	return(

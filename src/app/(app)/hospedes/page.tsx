@@ -1,5 +1,4 @@
 import { Search } from "@/components/Search";
-import Link from "next/link";
 
 export default function Hospedes(){
 	return(

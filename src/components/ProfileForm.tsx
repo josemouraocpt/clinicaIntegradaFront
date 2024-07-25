@@ -110,7 +110,7 @@ export function ProfileForm(){
 						</label> */}
 						<label>Setor:
 							<select className="input" {...register("departmentId")}>
-								<option value=""></option>
+								<option hidden={true}></option>
 								<option value={1}>Farmácia</option>
 							</select>
 						</label>
@@ -118,7 +118,7 @@ export function ProfileForm(){
 					<div className="flex flex-row space-x-5">
 						<label>Tipo do usuário:
 							<select className="input" {...register("userProfileId")}>
-								<option value=""></option>
+								<option hidden={true}></option>
 								<option value={1}>Funcionário</option>
 								<option value={2}>Usuário</option>
 							</select>
@@ -171,7 +171,7 @@ export function ProfileForm(){
 									</label>
 									<label>Estado:
 										<select className="input" {...register("state")}>
-											<option value=""></option>
+											<option hidden={true}></option>
 											<option value="AC">Acre</option>
 											<option value="AL">Alagoas</option>
 											<option value="AP">Amapá</option>
