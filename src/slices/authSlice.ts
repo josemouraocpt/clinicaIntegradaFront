@@ -50,7 +50,7 @@ const authSlice = createSlice({
             state.loading = false;
             state.error = false;
             state.success = true;
-            state.user = action.payload;
+            state.user = state.user ? state.user : action.payload;
         })
         .addCase(singUp.rejected, (state, action) => {
             state.loading = false;

@@ -3,7 +3,7 @@
 import { reset, singUp } from "@/slices/authSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
@@ -177,6 +177,9 @@ export function RegisterForm(){
                         </div>
                 </div>
                     <div className="flex justify-end space-x-3">
+                        <button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="button" onClick={() => { router.back() }}>
+                            Cancelar
+                        </button>
                         <button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit">
                             Finalizar
                         </button>

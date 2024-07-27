@@ -1,40 +1,45 @@
 'use client'
 
 import Link from "next/link";
-import { Card } from "./Card";
 import { MyButton } from "./MyButton";
 import { MdSearch } from "react-icons/md";
 import userService from "@/services/userService";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { CardFuncionarios } from "./CardFuncionarios";
+import { useRouter } from "next/navigation";
 
-export function Search(){
+
+export function SearchFuncionarios(){
 	const { user } = useSelector((state) => state.auth);
 	const [data, setData] = useState([]);
 	const [auxData, setAuxData] = useState([]);
 	const [search, setSearch] = useState("");
-	const { getHospedes } = userService;
+	const { getFuncionarios } = userService;
+	const router = useRouter();
 
 	useEffect(() => {
 		async function fetchAll(){
-			const res = await getHospedes(user.token);
-			setData(res.guest);
-			setAuxData(res.guest);
+			const res = await getFuncionarios(user.token);
+            setData(res.users)
+			setAuxData(res.users)
 		}
-		fetchAll()
-	}, [user, getHospedes]);
+		if(user.token !== undefined){
+			fetchAll()
+		}
+	}, [user, getFuncionarios]);
 
 	function handleClick(){
 		if(search == ""){
-			return;
+			return
 		}
-		let newArr = [];
+		let newArr = []
 		data.map((obj) => {
-			if(obj.idHOSPEDE == search || obj.NOME_COMPLETO.includes(search)){
-				newArr.push(obj);
+			if(obj.idUSUARIO == search || obj.NOME.includes(search)){
+				newArr.push(obj)
 			}
 		})
-		setAuxData(newArr);
+		setAuxData(newArr)
 	}
 
 	function handleChange(e: React.FormEvent<HTMLInputElement>){
@@ -47,9 +52,9 @@ export function Search(){
 	return(
 		<div className="bg-white p-8 rounded-lg shadow-xl space-y-5">
 			<div className="space-x-3 p-2">
-				<Link href="/hospedes/cadastro">
+                <Link href="/register">
 					<MyButton buttonText="Realizar novo cadastro"/>
-				</Link>
+				</Link>	
 				<Link href="/dashboard">
 					<MyButton buttonText="Voltar"/>
 				</Link>
@@ -64,9 +69,9 @@ export function Search(){
 					</div>
 					<div>
 						{auxData && (
-							<div className="grid grid-cols-2"> 
+							<div className="grid grid-cols-2">
 								{auxData.map((obj) => (
-									<Card key={obj.idHOSPEDE} data={obj}/>
+									<CardFuncionarios key={obj.idUSUARIO} data={obj}/>
 								))}
 							</div>
 						)}

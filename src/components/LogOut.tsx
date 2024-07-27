@@ -13,8 +13,8 @@ export function LogOut(){
 	}, [dispatch]);
 
     async function sair() {
-        await dispatch(logout())
         router.push("/")
+        await dispatch(logout())
     }
     return(
         <div className="inline">

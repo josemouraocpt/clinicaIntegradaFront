@@ -12,7 +12,9 @@ async function register(data: any) {
         if(response.message == "Erro ao criar registro em USUARIO"){
             return { error: response.message }
         }else{
-            localStorage.setItem("user", JSON.stringify(response))
+            if(!window.localStorage.getItem("user")){
+				localStorage.setItem("user", JSON.stringify(response))
+			}
         }
         return response
     } catch (error) {

@@ -4,10 +4,10 @@ import profile from "../assets/img/profile.png";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import userService from "@/services/userService";
 
 const schema = yup.object({
@@ -32,9 +32,12 @@ const schema = yup.object({
 
 type FormData = yup.InferType<typeof schema>;
 
+
 export function ProfileForm(){
 	const { user } = useSelector((state) => state.auth);
+	const [userId, setUserId] = useState<number>();
     const router = useRouter();
+	const pathname = usePathname();
 	const { getUserData, updateUser } = userService;
 	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -51,14 +54,22 @@ export function ProfileForm(){
 	};
 
 	useEffect(() => {
-		async function fetch(){
-			const res = await getUserData(user.user.userId, user.token)
-			if(res.message == "Sucesso"){
-				setValues(res.user)
-			}
+		async function fetch(userId: number){
+			const res = await getUserData(userId, user.token)
+				if(res.message == "Sucesso"){
+					setValues(res.user)
+				}
 		}
-		fetch();
-	}, [getUserData, setValues, user]);
+
+		if(pathname.length > 7){
+			setUserId(Number(pathname.substring(8)))
+		}else{
+			setUserId(user.user.userId)
+		}
+		if(userId !== undefined){
+			fetch(userId);
+		}
+	}, [getUserData, setValues, user, userId]);
 
     function convertDateToIso(string: string){
         const values = string.split("/")
@@ -66,7 +77,7 @@ export function ProfileForm(){
     }
 
 	function formatDate(data: string){
-		return new Date(data).toLocaleDateString("pt-BR")
+		return data.substring(0,10)
 	}
 
 	function setValues(data: any){
@@ -138,7 +149,7 @@ export function ProfileForm(){
 				<div>
 					<div className="flex flex-row space-x-5">
 						<label>Data de Nascimento:
-							<input {...register("birthDate")} type="text" className="input"/>
+							<input {...register("birthDate")} type="date" className="input"/>
 						</label>
 						<label>Nacionalidade:
 							<input {...register("nationality")} type="text" className="input"/>
@@ -214,7 +225,7 @@ export function ProfileForm(){
 						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="button" onClick={() => router.back()}>
 							Voltar
 						</button>
-						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit">
+						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit" disabled={user.user.userId != userId ? true : false}>
 							Salvar
 						</button>
 					</div>

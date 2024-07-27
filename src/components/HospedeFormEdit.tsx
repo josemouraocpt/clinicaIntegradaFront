@@ -5,7 +5,7 @@ import { MdAddCircle } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import userService from "@/services/userService";
 
@@ -46,21 +46,30 @@ const schema = yup.object({
 	quarto: yup.string().required("Insira o quarto"),
 	leito: yup.string().required("Insira o leito"),
 	hospedagemInfo: yup.string(),
-	responsavel: yup.string().required("Insira o responsavel")
+	hospedagemStatus: yup.string(),
+	responsavel: yup.string().required("Insira o responsavel"),
+	idHospedagem: yup.string(),
+	idDadosBancarios: yup.string(),
+	idSituacaoFinanceira: yup.string(),
+	idRemedio: yup.string(),
+	idDadosMedicos: yup.string(),
+	idAlergias: yup.string(),
+	idResponsabilidade: yup.string()
 });
 
 type FormData = yup.InferType<typeof schema>;
 
-export function HospedeForm(){
+export function HospedeFormEdit(){
 	const [currentStep, setCurrentStep] = useState(0);
 	const [possuiConta, setPossuiConta] = useState<boolean>(false);
 	const [sitFin, setSitFin] = useState(false);
 	const [usersAndDepartments, setUsersAndDepartments] = useState();
 	const router = useRouter();
+	const pathname = usePathname();
 	const { user } = useSelector((state) => state.auth);
-	const { getUsersAndDepartments, createHospedeFull } = userService;
+	const { getUsersAndDepartments, getHospedeById, editHospedeById } = userService;
 
-	const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
 
@@ -74,6 +83,10 @@ export function HospedeForm(){
 
 	useEffect(() => {
 		async function fetch(){
+			if(pathname.length > 9){
+				const hospedeData = await getHospedeById(Number(pathname.substring(10)), user.token);
+				setVaues(hospedeData);
+			}
 			const data = await getUsersAndDepartments(user.token);
 			return setUsersAndDepartments(data.data)
 		}
@@ -81,13 +94,85 @@ export function HospedeForm(){
 	}, [user, getUsersAndDepartments])
 
 	async function onSubmit(data: FormData){
-		const res = await createHospedeFull(data, user.token);
-		if(res.message == "Sucesso"){
+		const res = await editHospedeById(Number(pathname.substring(10)),data, user.token);
+		if(res.message == "Hospedagem e Hospede atualizado com sucesso"){
 			router.push("/dashboard")
 		}else{
 			console.log(res.error)
 		}
 	};
+
+	function setVaues(data: any){
+		//hospede info
+		data.guest.map((guest) => {
+			setValue("nome", guest.NOME_COMPLETO)
+			setValue("nomeSocial", guest.NOME_SOCIAL)
+			setValue("apelido", guest.APELIDO)
+			setValue("rg", guest.RG)
+			setValue("cpf", guest.CPF)
+			setValue("nacionalidade", guest.NACIONALIDADE)
+			setValue("naturalidade", guest.NATURALIDADE)
+			setValue("estadoCivil", guest.ESTADO_CIVIL)
+			setValue("dataNascimento", formatDate(guest.DATA_NASCIMENTO))
+			setValue("nomeMae", guest.NOME_MAE)
+			setValue("nomePai", guest.NOME_PAI)
+			setValue("telefone", guest.TELEFONE)
+			setValue("profissao", guest.PROFISSAO)
+			setValue("tituloEleitor", guest.TITULO_ELEITOR)
+			setValue("endereco", guest.ENDERECO)
+			setValue("cidade", guest.CIDADE)
+			setValue("uf", guest.UF)
+			setValue("cep", guest.CEP)
+			setValue("dataEntrada", formatDate(guest.DATA_ENTRADA))
+		})
+		//hospedagem info
+		data.accommodation.map((accommodation) => {
+			setValue("quarto", accommodation.QUARTO)
+			setValue("leito", accommodation.LEITO)
+			setValue("hospedagemInfo", accommodation.INFORMACOES)
+			setValue("hospedagemStatus", accommodation.STATUS_HOSPEDAGEM)
+			setValue("idHospedagem", accommodation.idHOSPEDAGEM)
+		})
+		//conta bancaria info
+		data.bankAccounts.map((bankAccounts) => {
+            setPossuiConta(true);
+            setSitFin(true);
+            setValue("possuiConta", "1")
+			setValue("nomeBanco", bankAccounts.NOME_BANCO)
+			setValue("conta", bankAccounts.CONTA)
+			setValue("agencia", bankAccounts.AGENCIA)
+			setValue("numeroConta", bankAccounts.NUMERO_CONTA)
+			setValue("idDadosBancarios", bankAccounts.idDADOS_BANCARIOS)
+		})
+		//situação financeira info
+		data.financialSituation.map((financialSituation) => {
+			setValue("situacaoFinanceiraDesc", financialSituation.DESCRICAO)
+			setValue("idSituacaoFinanceira", financialSituation.idSITUACAO_FINANCEIRA)
+		})
+		//informações medicas
+		data.medicalRecords.map((medicalRecords) => {
+			setValue("grauDependencia", medicalRecords.GRAU_DEPENDENCIA)
+			setValue("nomeRemedio", medicalRecords.NOME)
+			setValue("frequenciaUso", medicalRecords.FREQUENCIA_USO)
+			setValue("tempoUso", medicalRecords.TEMPO_USO)
+			setValue("dosagem", medicalRecords.DOSAGEM)
+			setValue("obsMed", medicalRecords.OBSERVACOES)
+			setValue("tipoAlergiaDieta", medicalRecords.TIPO)
+			setValue("descAlergiaDieta", medicalRecords.DESCRICAO)
+			setValue("idRemedio", medicalRecords.idREMEDIOS)
+			setValue("idDadosMedicos", medicalRecords.idDADOS_MEDICOS)
+			setValue("idAlergias", medicalRecords.idDOENCAS_ALERGIAS_DIETAS)
+		})
+		//responsabilidade
+		data.responsability.map((responsability) => {
+			setValue("responsavel", responsability.USUARIO_idUSUARIO);
+			setValue("idResponsabilidade", responsability.idRESPONSABILIDADE);
+		})
+	}
+
+	function formatDate(data: string){
+		return data.substring(0,10)
+	}
 
 	return(
 		<div className="bg-white p-5 rounded-md mb-20 shadow-lg">
@@ -373,6 +458,14 @@ export function HospedeForm(){
 						<div className="flex flex-col space-y-3">
 							<h1 className="font-bold">Hospedagem</h1>
 							<div>
+								<h2 className="font-bold">Status da Hospedagem</h2>
+								<select className="input" {...register("hospedagemStatus")}>
+									<option hidden={true}></option>
+									<option value="1">ATIVA</option>
+									<option value="0">INATIVA</option>
+								</select>
+							</div>
+							<div>
 								<h2 className="font-bold">Informações do quarto</h2>
 								<p className="text-sm">Por favor, selecione um quarto disponível:</p>
 								<label>Número do Quarto:
@@ -462,9 +555,16 @@ export function HospedeForm(){
 								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handlePrevius}>
 									Voltar
 								</button>
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit">
-									Finalizar
-								</button>					
+								{pathname.length > 9 ? (
+									<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit">
+										Atualizar
+									</button>
+								) : (
+									<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit">
+										Finalizar
+									</button>
+								)}
+								
 							</div>
 						</div>
 					</div>

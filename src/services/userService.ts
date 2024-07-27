@@ -174,6 +174,9 @@ async function createHospedeFull(data: any, token: string){
             guestId: hospedeRes
         }
         const responsabilidadeRes = await createResponsabilidae(responsabilidadeData, token);
+
+        return { message: "Sucesso" }
+
     } catch (error) {
         console.log(error)
         return {error: error}
@@ -324,13 +327,146 @@ async function createResponsabilidae(data: any, token: string){
     }
 }
 
+async function getFuncionarios(token: string) {
+    try {
+        const res = await fetch('http://localhost:3001/users', {
+            method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			}
+        });
+        const response = await res.json();
+        
+        if(response.message == "Usuário não encontrado!"){
+            return { error: response.message }
+        }else{
+            return response 
+        }
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function getHospedeById(hospedeId:number, token: string) {
+    try {
+        const res = await fetch(`http://localhost:3001/guest/${hospedeId}`, {
+            method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			}
+        });
+        const response = await res.json();
+        return response;
+        // if(response.message == "Usuário não encontrado!"){
+        //     return { error: response.message }
+        // }else{
+        //     return response 
+        // }
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function editHospedeById(hospedeId:number, data:any, token: string) {
+    try {
+        const dataPut = {
+            guest:{
+                id: hospedeId,
+                name: data.nome, 
+                socialName: data.nomeSocial, 
+                nickname: data.apelido, 
+                rg: data.rg, 
+                cpf: data.cpf, 
+                nationality: data.nacionalidade, 
+                naturalness: data.naturalidade, 
+                civilState: data.estadoCivil, 
+                birthDate: data.dataNascimento, 
+                motherName: data.nomeMae, 
+                fatherName: data.nomePai, 
+                phoneNumber: data.telefone, 
+                occupation: data.profissao, 
+                electoralTitle: data.tituloEleitor, 
+                address: data.endereco, 
+                city: data.cidade, 
+                state: data.uf, 
+                zipCode: data.cep, 
+                entryDate: data.dataEntrada, 
+            },
+            financial:{
+                id: data.idSituacaoFinanceira,
+                description: data.situacaoFinanceiraDesc,
+            },
+            bank: {
+                id: data.idDadosBancarios,
+                hasAccount: data.possuiConta,
+                bankName: data.nomeBanco,
+                agency: data.agencia,
+                accountNumber: data.numeroConta,
+            },
+            accommodation:{
+                id: data.idHospedagem,
+                room: data.quarto,
+                bed: data.leito,
+                information: data.hospedagemInfo,
+                status: data.hospedagemStatus
+            },
+            responsability:{
+                id: data.idResponsabilidade,
+                userId: data.responsavel
+            },
+            remedy: {
+                id: data.idRemedio,
+                name: data.nomeRemedio,
+                usageFrequency: data.frequenciaUso,
+                usegeTime: data.tempoUso,
+                dosage: data.dosagem
+            },
+            disease:{
+                id: data.idAlergias,
+                type: data.tipoAlergiaDieta,
+                description: data.descAlergiaDieta
+            },
+            medicalData:{
+                id: data.idDadosMedicos,
+                dependenceDegree: data.grauDependencia,
+                observations: data.obsMed
+            }
+        }
+        const res = await fetch(`http://localhost:3001/guest/edit/${hospedeId}`, {
+            method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify(dataPut)
+        });
+        const response = await res.json();
+        console.log(response);
+        if(response.message == "Erro ao atualizar a hospedagem"){
+            return { error: response.message }
+        }else{
+            return response 
+        }
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
 
 const userService = {
     getUserData,
     updateUser,
     getHospedes,
     getUsersAndDepartments,
-    createHospedeFull
+    createHospedeFull,
+    getFuncionarios,
+    getHospedeById,
+    editHospedeById
 }
 
 export default userService;
