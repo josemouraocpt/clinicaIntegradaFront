@@ -9,7 +9,7 @@ import { ContainerFarmacia } from "@/components/ContainerFarmacia";
 
 export default function Farmacia(){
 	return(
-		<div className="p-4">
+		<div className="p-4 min-h-screen">
 			<ContainerFarmacia/>
 			<div>
 				<h2 className="font-bold text-lg mb-5 ml-10">
