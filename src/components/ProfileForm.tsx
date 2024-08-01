@@ -46,6 +46,7 @@ export function ProfileForm(){
 	async function onSubmit(data: FormData){
         const novaData = convertDateToIso(data.birthDate)
         data.birthDate = novaData
+		//corrigir tipo de data
 		const res = await updateUser(user.user.userId, data, user.token);
 		if(res.message == "Usuário editado com sucesso!"){
 			return router.push("/dashboard")

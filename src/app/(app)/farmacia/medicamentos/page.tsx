@@ -12,7 +12,7 @@ export default function Medicamentos(){
     useEffect(() => {
         async function fetch() {
             const res = await getRemedys(user.token)
-            setData(res.remedys)
+            setData(res.remedies)
         }
         fetch()
     }, [user])

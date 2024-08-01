@@ -24,7 +24,7 @@ export default function Registros(){
                 {data && (
                     <div className="grid grid-cols-2"> 
                         {data.map((obj) => (
-                            <RegistrosCard key={obj.idHOSPEDE} data={obj}/>
+                            <RegistrosCard key={obj.idHOSPEDE} data={obj} token={user.token}/>
                         ))}
                     </div>
                 )}

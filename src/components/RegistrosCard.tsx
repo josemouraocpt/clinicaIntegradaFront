@@ -1,8 +1,14 @@
 "use client"
 import { MdPermIdentity } from "react-icons/md";
 import { MyButton } from "./MyButton";
+import { useState } from "react";
+import remedyService from "@/services/remedyService";
 
-export function RegistrosCard({data}: any){
+export function RegistrosCard({data, token}: any){
+	const [infoData, setInfoData] = useState();
+	const [isHidden, setIsHidden] = useState(false);
+	const { getRemedyInfo } = remedyService;
+
 	function formatDate(data: string){
 		return new Date(data).toLocaleDateString("pt-BR")
 	}
@@ -18,8 +24,10 @@ export function RegistrosCard({data}: any){
 		return age;
 	}
 
-    function handleClick(){
-        console.log("aqui")
+    async function handleClick(id: number){
+        const res = await getRemedyInfo(token, id);
+		setInfoData(res.data);
+		setIsHidden(!isHidden)
     }
 
 	return(
@@ -40,9 +48,26 @@ export function RegistrosCard({data}: any){
 					</ul>
 				</div>
 			</div>
-            <div className="flex flex-row-reverse">
-                <MyButton buttonText="Medicamentos" handleClick={handleClick}/>
+            <div className={isHidden === true ? "hidden" :"flex gap-x-2 flex-row-reverse"}>
+                <MyButton buttonText="Visualizar" handleClick={() => handleClick(data.DADOS_MEDICOS_idDADOS_MEDICOS)}/>
             </div>
+			<div className={isHidden === false ? "hidden" : "mt-5"}>
+				<h1 className="font-bold text-lg">Dados sobre os medicamentos do usuário</h1>
+				{infoData &&  (
+					infoData.map((med) => (
+						<div className="mt-2" key={med.idREMEDIOS}>
+							<ul>
+								<li><span className="font-bold">Medicamento ministrado: </span>{med.NOME}</li>
+								<li><span className="font-bold">Dosagem ministrada: </span>{med.DOSAGEM}</li>
+								<li><span className="font-bold">Observações: </span>{med.OBSERVACOES}</li>
+							</ul>
+					</div>
+					))
+				)}
+				<div className="flex gap-x-2 flex-row-reverse">
+                	<MyButton buttonText="Fechar" handleClick={() => setIsHidden(!isHidden)}/>
+           		</div>
+			</div>
 		</div>
 	)
 };
