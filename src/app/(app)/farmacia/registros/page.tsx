@@ -2,6 +2,7 @@
 
 import { ContainerFarmacia } from "@/components/ContainerFarmacia";
 import { RegistrosCard } from "@/components/RegistrosCard";
+import { SetorInfo } from "@/components/SetorInfo";
 import userService from "@/services/userService";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -18,8 +19,9 @@ export default function Registros(){
         fetch()
     }, [user])
     return(
-        <div>
+        <div className="min-h-screen">
             <ContainerFarmacia/>
+            <SetorInfo setor="Registros"/>
             <div className="bg-white p-6 m-10 rounded-lg">
                 {data && (
                     <div className="grid grid-cols-2"> 

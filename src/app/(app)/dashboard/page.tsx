@@ -18,7 +18,7 @@ export default function Dashboard(){
 				<Link href="/hospedes"><Actions icon={<MdHotel size={90}/>} title="Hóspedes"/></Link>
 			</div>
 			<h2 className="text-xl font-bold">Setores</h2>
-			<div className="text-white flex flex-row space-x-5">
+			<div className="text-white flex flex-row gap-5 flex-wrap">
 				<Link href="/farmacia">
 					<Actions icon={<TbPill size={90}/>} title="Farmácia"/>
 				</Link>
