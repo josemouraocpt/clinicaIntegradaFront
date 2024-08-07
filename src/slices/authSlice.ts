@@ -1,3 +1,5 @@
+'use client';
+
 import authService from "@/services/authService";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 

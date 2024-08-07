@@ -1,3 +1,5 @@
+'use client';
+
 async function getUserData(userID: number, token: string) {
     try {
         const res = await fetch(`http://localhost:3001/users/${userID}`, {

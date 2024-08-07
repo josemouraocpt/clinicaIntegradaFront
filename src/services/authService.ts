@@ -1,3 +1,5 @@
+'use client';
+
 async function register(data: any) {
     try {
         const res = await fetch("http://localhost:3001/users/singup", {

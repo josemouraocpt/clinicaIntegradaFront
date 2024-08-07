@@ -3,6 +3,7 @@ import { MdPermIdentity } from "react-icons/md";
 import { MyButton } from "./MyButton";
 import { useState } from "react";
 import remedyService from "@/services/remedyService";
+import Link from "next/link";
 
 export function RegistrosCard({data, token}: any){
 	const [infoData, setInfoData] = useState();
@@ -26,6 +27,7 @@ export function RegistrosCard({data, token}: any){
 
     async function handleClick(id: number){
         const res = await getRemedyInfo(token, id);
+		console.log(res)
 		setInfoData(res.data);
 		setIsHidden(!isHidden)
     }
@@ -65,6 +67,9 @@ export function RegistrosCard({data, token}: any){
 					))
 				)}
 				<div className="flex gap-x-2 flex-row-reverse">
+					<Link href={`/hospedes/1`}>
+						<MyButton buttonText="Editar"/>
+					</Link>
                 	<MyButton buttonText="Fechar" handleClick={() => setIsHidden(!isHidden)}/>
            		</div>
 			</div>
