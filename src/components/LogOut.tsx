@@ -17,9 +17,9 @@ export function LogOut(){
         await dispatch(logout())
     }
     return(
-        <div className="inline">
-            <button onClick={sair} className=" absolute">
-                <MdLogout title="Sair" size={32} className="text-black"/>
+        <div className="border-t border-black w-4/5 mx-auto">
+            <button onClick={sair}>
+                <MdLogout title="Sair" size={32} className="inline"/> Sair
             </button>
         </div>
     )

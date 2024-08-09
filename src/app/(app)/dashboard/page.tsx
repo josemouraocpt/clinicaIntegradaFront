@@ -32,7 +32,7 @@ export default function Dashboard(){
 					<Actions icon={<MdOutlineLightbulb size={90}/>} title="Projetos"/>
 				</Link>
 				<Link href="/fisioterapia">
-					<Actions icon={ <TbPhysotherapist size={90}/>} title="Fisioterapia"/>
+					<Actions icon={ <TbPhysotherapist size={90}/>} title="Atendimentos"/>
 				</Link>
 				<Link href="/financeiro">
 					<Actions icon={<TbCurrencyReal size={90}/>} title="Financeiro"/>

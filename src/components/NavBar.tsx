@@ -5,6 +5,7 @@ import Link from "next/link";
 import { MyButton } from "./MyButton";
 import { useSelector } from "react-redux";
 import { LogOut } from "./LogOut";
+import { Menu } from "./Menu";
 
 export function NavBar(){
 	const { user } = useSelector((state) => state.auth);
@@ -22,7 +23,8 @@ export function NavBar(){
 				<Link href="/about">Contatos</Link>
 				<Link href="\trabalhe_conosco">Trabalhe Conosco</Link>
 				{user ? (
-					<LogOut/>
+					// <LogOut/>
+					<Menu/>
 				) : (
 					<>
 						<Link href="/login"><MyButton buttonText="Login"/></Link>
