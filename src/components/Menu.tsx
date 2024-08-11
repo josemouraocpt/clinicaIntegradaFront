@@ -15,7 +15,7 @@ export function Menu(){
             <button onClick={() => setToggle(!toggle)}>
                 <MdMenu size={32}  className="mt-5"/>
             </button>
-            <div className={toggle == false ? "hidden" : "absolute -right-2 w-56 top-[67px] space-y-2 text-black bg-white rounded-b-lg pb-2"}>
+            <div className={toggle == false ? "hidden" : "absolute -right-2 w-56 top-[67px] space-y-2 text-black bg-white rounded-b-lg pb-2 z-10"}>
                 <div className="border-t border-black w-4/5 mx-auto">
                     <Link href="/farmacia" onClick={handleClick}>
                         <TbPill size={32} className="inline"/> Farmácia

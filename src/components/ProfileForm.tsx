@@ -4,7 +4,7 @@ import profile from "../assets/img/profile.png";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";

@@ -19,7 +19,7 @@ export function Card({data}: any){
 		return age;
 	}
 	return(
-		<div className="bg-background max-w-[40vw] p-5 rounded-md shadow-md my-4">
+		<div className="bg-background max-w-[40vw] p-5 rounded-md shadow-md my-4 space-y-4">
 			<div className="flex space-x-5">
 				<div>
 					<MdPermIdentity size={96}/>
@@ -36,9 +36,14 @@ export function Card({data}: any){
 					</ul>
 				</div>
 			</div>
-				<Link href={`/hospedes/${data.idHOSPEDE}`} className="flex justify-end">
-					<MyButton buttonText="Ver mais"/>
+			<div className="flex justify-end space-x-2">
+				<Link href={`/hospedes/${data.idHOSPEDE}`} >
+					<MyButton buttonText="Ver dados"/>
 				</Link>
+				<Link href={`/hospedes/atividades/${data.idHOSPEDE}`}>
+					<MyButton buttonText="Ver atividades"/>
+				</Link>
+			</div>
 		</div>
 	)
 };

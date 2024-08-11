@@ -18,7 +18,7 @@ export function CardFuncionarios({data}: any){
 				</div>
 			</div>
 				<div className="flex justify-end">
-					<Link href={`/perfil/${data.idUSUARIO}`}>
+					<Link href={`/funcionarios/detalhes/${data.idUSUARIO}`}>
 						<MyButton buttonText="Ver mais"/>
 					</Link>
 				</div>
