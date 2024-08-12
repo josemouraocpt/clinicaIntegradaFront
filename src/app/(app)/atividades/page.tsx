@@ -1,8 +1,6 @@
-import BackButton from "@/components/BackButton";
 import { ContainerAtividades } from "@/components/ContainerAtividades";
 import { MyButtonImage } from "@/components/MyButtonImage";
 import Link from "next/link";
-
 
 export default function Atividades(){
 	return(

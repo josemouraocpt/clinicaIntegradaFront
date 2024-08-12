@@ -1,5 +1,11 @@
+import { AtividadeForm } from "@/components/AtividadeForm";
+import { ContainerAtividades } from "@/components/ContainerAtividades";
+
 export default function CadastrarAtividade(){
 	return(
-		<h1>.</h1>
+		<div className="min-h-screen">
+			<ContainerAtividades/>
+			<AtividadeForm/>
+		</div>
 	)
 }
