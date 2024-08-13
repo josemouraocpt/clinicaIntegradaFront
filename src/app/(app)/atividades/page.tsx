@@ -1,11 +1,13 @@
 import { ContainerAtividades } from "@/components/ContainerAtividades";
 import { MyButtonImage } from "@/components/MyButtonImage";
+import { SetorInfo } from "@/components/SetorInfo";
 import Link from "next/link";
 
 export default function Atividades(){
 	return(
 		<div className="p-4 ">
 			<ContainerAtividades/>
+			<SetorInfo setor="Atividades"/>
 			<div className=" container bg-white rounded-lg mt-12 mx-auto shadow-lg">
 				<div className="flex flex-col">
 					<div className="ml-4 mt-4">

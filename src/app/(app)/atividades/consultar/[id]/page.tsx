@@ -1,10 +1,12 @@
 import { AtividadesListMin } from "@/components/AtividadesListMin"
 import { ContainerAtividades } from "@/components/ContainerAtividades"
+import { SetorInfo } from "@/components/SetorInfo"
 
 export default function ConsultarPresencaId(){
     return(
         <div className="min-h-screen">
             <ContainerAtividades/>
+            <SetorInfo setor="Atividades"/>
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10 flex flex-row space-x-5">
                 <div className="w-1/3 flex flex-col space-y-6">
                     <label className="text-button text-sm">Atividade:

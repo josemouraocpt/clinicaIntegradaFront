@@ -2,6 +2,7 @@
 import { ContainerAtividades } from "@/components/ContainerAtividades";
 import { LancarPresencaList } from "@/components/LancarPresencaList";
 import { MyButton } from "@/components/MyButton";
+import { SetorInfo } from "@/components/SetorInfo";
 import { useState } from "react";
 
 export default function LancarPresencaId(){
@@ -15,6 +16,7 @@ export default function LancarPresencaId(){
     return(
         <div className="min-h-screen">
             <ContainerAtividades/>
+            <SetorInfo setor="Atividades"/>
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10 flex flex-row space-x-5">
                 <div className="w-1/3 flex flex-col space-y-6">
                     <label className="text-button text-sm">Atividade:
