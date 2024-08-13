@@ -1,13 +1,11 @@
 'use client';
+import './globals.css';
+import { Roboto } from 'next/font/google';
+import dynamic from 'next/dynamic';
 
-import { NavBar } from '@/components/NavBar'
-import './globals.css'
-import { Roboto } from 'next/font/google'
-import { Footer } from '@/components/Footer'
-import { Provider } from 'react-redux'
-import { store } from '@/store'
+const roboto = Roboto({ subsets: ['latin'], weight: '400' });
 
-const roboto = Roboto({ subsets: ['latin'], weight: '400' })
+const DynamicProvider = dynamic(() => import('@/components/ProviderComponent'), { ssr: false, loading: () => <p>Carregando...</p> })
 
 export default function RootLayout({
   children,
@@ -17,11 +15,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={`${roboto.className} bg-background`}>
-        <Provider store={store}>
-          <NavBar/>
-            {children}
-          <Footer/>
-        </Provider>
+        <DynamicProvider children={children}/>
 			</body>
     </html>
   )

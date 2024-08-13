@@ -1,10 +1,8 @@
-'use client';
-
 import authService from "@/services/authService";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //@ts-expect-error
-const user = JSON.parse(localStorage.getItem("user"))
+const user = JSON.parse(window.localStorage.getItem("user"))
 
 const initialState = {
     user: user,

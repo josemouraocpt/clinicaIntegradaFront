@@ -31,7 +31,7 @@ export default function Dashboard(){
 				<Link href="/projetos">
 					<Actions icon={<MdOutlineLightbulb size={90}/>} title="Projetos"/>
 				</Link>
-				<Link href="/fisioterapia">
+				<Link href="/atendimentos">
 					<Actions icon={ <TbPhysotherapist size={90}/>} title="Atendimentos"/>
 				</Link>
 				<Link href="/financeiro">

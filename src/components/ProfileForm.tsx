@@ -39,6 +39,7 @@ export function ProfileForm(){
     const router = useRouter();
 	const pathname = usePathname();
 	const { getUserData, updateUser } = userService;
+	const [canEdit, setCanEdit] = useState(false);
 	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
@@ -109,19 +110,19 @@ export function ProfileForm(){
 					<h2 className="font-bold">Dados do usuário</h2>
 					<div className="flex flex-row space-x-5">
 						<label>Nome:
-							<input {...register("name")} type="text" className="input"/>
+							<input readOnly={!canEdit} {...register("name")} type="text" className="input"/>
 						</label>
 						<label>E-mail:
-							<input {...register("email")} type="email" className="input"/>
+							<input readOnly={!canEdit} {...register("email")} type="email" className="input"/>
 						</label>
 						{/* <label>Senha:
-							<input {...register("password")} type="password" className="input"/>
+							<input readOnly={!canEdit} {...register("password")} type="password" className="input"/>
 						</label> */}
 						{/* <label>Confirmação de senha:
-							<input {...register("confirmPassword")} type="password" className="input"/>
+							<input readOnly={!canEdit} {...register("confirmPassword")} type="password" className="input"/>
 						</label> */}
 						<label>Setor:
-							<select className="input" {...register("departmentId")}>
+							<select disabled={!canEdit} className="input" {...register("departmentId")}>
 								<option hidden={true}></option>
 								<option value={1}>Farmácia</option>
 							</select>
@@ -129,20 +130,20 @@ export function ProfileForm(){
 					</div>
 					<div className="flex flex-row space-x-5">
 						<label>Tipo do usuário:
-							<select className="input" {...register("userProfileId")}>
+							<select disabled={!canEdit} className="input" {...register("userProfileId")}>
 								<option hidden={true}></option>
 								<option value={1}>Funcionário</option>
 								<option value={2}>Usuário</option>
 							</select>
 						</label>
 						<label>Telefone:
-							<input {...register("phoneNumber")} type="text" className="input"/>
+							<input readOnly={!canEdit} {...register("phoneNumber")} type="text" className="input"/>
 						</label>
 						<label>CPF:
-							<input {...register("cpf")} type="text" className="input"/>
+							<input readOnly={!canEdit} {...register("cpf")} type="text" className="input"/>
 						</label>
 						<label>RG:
-							<input {...register("rg")} type="text" className="input"/>
+							<input readOnly={!canEdit} {...register("rg")} type="text" className="input"/>
 						</label>
 					</div>
 				</div>
@@ -150,19 +151,19 @@ export function ProfileForm(){
 				<div>
 					<div className="flex flex-row space-x-5">
 						<label>Data de Nascimento:
-							<input {...register("birthDate")} type="date" className="input"/>
+							<input readOnly={!canEdit} {...register("birthDate")} type="date" className="input"/>
 						</label>
 						<label>Nacionalidade:
-							<input {...register("nationality")} type="text" className="input"/>
+							<input readOnly={!canEdit} {...register("nationality")} type="text" className="input"/>
 						</label>
 						<label>Naturalidae:
-							<input {...register("naturalness")} type="text" className="input"/>
+							<input readOnly={!canEdit} {...register("naturalness")} type="text" className="input"/>
 						</label>
 						<label>Formação:
-							<input {...register("formation")} type="text" className="input"/>
+							<input readOnly={!canEdit} {...register("formation")} type="text" className="input"/>
 						</label>
 						<label>Instituição de Ensino:
-							<input {...register("institution")} type="text" className="input"/>
+							<input readOnly={!canEdit} {...register("institution")} type="text" className="input"/>
 						</label>
 					</div>
 				</div>
@@ -173,16 +174,16 @@ export function ProfileForm(){
 							<div className="flex flex-col space-y-2">
 								<div className="flex flex-row space-x-5">
 									<label>CEP:
-										<input {...register("zipCode")} type="text" className="input"/>
+										<input readOnly={!canEdit} {...register("zipCode")} type="text" className="input"/>
 									</label>
 									<label>Endereço:
-										<input {...register("address")} type="text" className="input"/>
+										<input readOnly={!canEdit} {...register("address")} type="text" className="input"/>
 									</label>
 									<label>Cidade:
-										<input {...register("city")} type="text" className="input"/>
+										<input readOnly={!canEdit} {...register("city")} type="text" className="input"/>
 									</label>
 									<label>Estado:
-										<select className="input" {...register("state")}>
+										<select disabled={!canEdit} className="input" {...register("state")}>
 											<option hidden={true}></option>
 											<option value="AC">Acre</option>
 											<option value="AL">Alagoas</option>
@@ -218,11 +219,14 @@ export function ProfileForm(){
 							{/* Imagem */}
 							<div className="w-52 h-40 hidden">
 								<Image src={profile} alt="teste" className="w-full"/>
-								<input {...register("image")} type="number" value={0}/>
+								<input readOnly={!canEdit} {...register("image")} type="number" value={0}/>
 							</div>
 						</div>
 				</div>
 					<div className="flex justify-end space-x-3">
+						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="button" onClick={() => setCanEdit(!canEdit)}>
+							Editar
+						</button>
 						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="button" onClick={() => router.back()}>
 							Voltar
 						</button>

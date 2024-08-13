@@ -1,7 +1,7 @@
 'use client'
 import Link from "next/link";
 import { useState } from "react";
-import { MdMenu, MdOutlineLightbulb, MdRestaurant, MdSportsSoccer } from "react-icons/md";
+import { MdBusinessCenter, MdHotel, MdManageAccounts, MdMenu, MdOutlineLightbulb, MdRestaurant, MdSportsSoccer } from "react-icons/md";
 import { TbCurrencyReal, TbPhysotherapist, TbPill } from "react-icons/tb";
 import { LogOut } from "./LogOut";
 
@@ -17,8 +17,18 @@ export function Menu(){
             </button>
             <div className={toggle == false ? "hidden" : "absolute -right-2 w-56 top-[67px] space-y-2 text-black bg-white rounded-b-lg pb-2 z-10"}>
                 <div className="border-t border-black w-4/5 mx-auto">
-                    <Link href="/farmacia" onClick={handleClick}>
-                        <TbPill size={32} className="inline"/> Farmácia
+                    <Link href="/perfil" onClick={handleClick}>
+                        <MdManageAccounts size={32} className="inline"/> Perfil
+                    </Link>
+                </div>
+                <div className="border-t border-black w-4/5 mx-auto">
+                    <Link href="/funcionarios" onClick={handleClick}>
+                        <MdBusinessCenter size={32} className="inline"/> Funcionários
+                    </Link>
+                </div>
+                <div className="border-t border-black w-4/5 mx-auto">
+                    <Link href="/hospedes" onClick={handleClick}>
+                        <MdHotel size={32} className="inline"/> Hóspedes
                     </Link>
                 </div>
                 <div className="border-t border-black w-4/5 mx-auto">
@@ -37,7 +47,7 @@ export function Menu(){
                     </Link>
                 </div>
 				<div className="border-t border-black w-4/5 mx-auto">
-                    <Link href="/fisioterapia" onClick={handleClick}>
+                    <Link href="/atendimentos" onClick={handleClick}>
                          <TbPhysotherapist className="inline" size={32}/> Atendimentos
                     </Link>
                 </div>

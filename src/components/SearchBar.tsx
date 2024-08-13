@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { MyButton } from "./MyButton"
 import { Dispatch, SetStateAction, useState } from "react";
-import { useRouter } from "next/navigation";
 
 interface ISearchBarProps{
     data: any
@@ -14,7 +13,6 @@ interface ISearchBarProps{
 
 export function SearchBar({data, setAuxData, path, type}: ISearchBarProps){
 	const [search, setSearch] = useState("");
-    const router = useRouter();
 
     function handleClick(){
 		if(search == ""){
@@ -46,11 +44,10 @@ export function SearchBar({data, setAuxData, path, type}: ISearchBarProps){
 
     return(
         <div>
-			<div className="space-x-3 p-2">
+			<div className="flex justify-end my-4">
 				<Link href={path}>
 					<MyButton buttonText="Realizar novo cadastro"/>
 				</Link>
-				<MyButton buttonText="Voltar" handleClick={() => router.back()}/>
 			</div>
 			{data !== undefined ? (
                 <div className="flex gap-x-6">

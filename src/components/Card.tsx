@@ -3,7 +3,12 @@ import { MdPermIdentity } from "react-icons/md";
 import { MyButton } from "./MyButton";
 import Link from "next/link";
 
-export function Card({data}: any){
+interface ICardProps{
+	data: any
+	path: string
+}
+
+export function Card({data, path}: ICardProps){
 	function formatDate(data: string){
 		return new Date(data).toLocaleDateString("pt-BR")
 	}
@@ -21,9 +26,9 @@ export function Card({data}: any){
 	return(
 		<div className="bg-background max-w-[40vw] p-5 rounded-md shadow-md my-4 space-y-4">
 			<div className="flex space-x-5">
-				<div>
+				{/* <div>
 					<MdPermIdentity size={96}/>
-				</div>
+				</div> */}
 				<div className="flex flex-col">
 					<h3 className="font-bold">{data.idHOSPEDE} <span className="text-button">{data.NOME_COMPLETO}</span></h3>
 					<ul className="columns-2">
@@ -37,12 +42,14 @@ export function Card({data}: any){
 				</div>
 			</div>
 			<div className="flex justify-end space-x-2">
-				<Link href={`/hospedes/${data.idHOSPEDE}`} >
+				<Link href={path} >
 					<MyButton buttonText="Ver dados"/>
 				</Link>
-				<Link href={`/hospedes/atividades/${data.idHOSPEDE}`}>
-					<MyButton buttonText="Ver atividades"/>
-				</Link>
+				{path.includes('/hospedes') && (
+					<Link href={`/hospedes/atividades/${data.idHOSPEDE}`}>
+						<MyButton buttonText="Ver atividades"/>
+					</Link>
+				)}
 			</div>
 		</div>
 	)

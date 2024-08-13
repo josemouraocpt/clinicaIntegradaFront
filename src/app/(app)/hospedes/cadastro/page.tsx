@@ -1,19 +1,14 @@
+import { ContainerHospedes } from "@/components/ContainerHospedes";
 import { HospedeForm } from "@/components/HospedeForm";
-import { MyButton } from "@/components/MyButton";
-import Link from "next/link";
 
 export default function Cadastro(){
 	return(
 		<div className="p-4 space-y-5 min-h-screen">
-			<div>
+			<ContainerHospedes/>
+			<div className="mx-10">
 				<h2 className="text-lg font-bold mt-5">Cadastro de hospede</h2>
 				<p className="text-sm">Informe os dados</p>
 			</div>
-			<div>
-                <Link href="/hospedes">
-                    <MyButton buttonText="Voltar"/>
-                </Link>
-            </div>
 			<div>
 				<HospedeForm/>
 			</div>

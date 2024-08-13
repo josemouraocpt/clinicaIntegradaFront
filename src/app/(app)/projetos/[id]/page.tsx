@@ -1,10 +1,12 @@
 import { ContainerProjeto } from "@/components/ContainerProjeto"
+import { SetorInfo } from "@/components/SetorInfo"
 
 export default function DetalhesProjeto(){
     return(
         <div className="min-h-screen">
             <ContainerProjeto/>
-            <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
+            <SetorInfo setor="Projetos"/>
+            <div className="bg-white p-5 rounded-md mb-20 shadow-lg m-10">
                 <div className="grid grid-cols-3 gap-4">
                     <div>
                         <label>Nome do projeto:

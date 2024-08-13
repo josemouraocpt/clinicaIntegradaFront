@@ -90,7 +90,7 @@ export function HospedeForm(){
 	};
 
 	return(
-		<div className="bg-white p-5 rounded-md mb-20 shadow-lg">
+		<div className="bg-white p-5 rounded-md mx-10 mb-20 shadow-lg">
 			<form className="flex flex-col space-y-3" onSubmit={handleSubmit(onSubmit)}>
 				{/* Inicio da primeira parte do formulário */}
 				{currentStep == 0 && (

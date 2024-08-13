@@ -14,7 +14,7 @@ export function ProjetoForm(){
     };
 
     return(
-        <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
+        <div className="bg-white p-5 rounded-md mb-20 shadow-lg m-10">
             <form>
                 <div className="grid grid-cols-3 gap-4">
                     <div>
