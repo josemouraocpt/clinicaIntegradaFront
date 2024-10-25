@@ -6,7 +6,7 @@ export default function CadastrarMedicamento(){
         <div className="min-h-screen">
             <ContainerFarmacia/>
             <div className="m-10">
-                <FormFarmacia/>
+                <FormFarmacia type="MEDICAMENTO" action="CRIAR"/>
             </div>
         </div>
     )

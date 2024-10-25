@@ -3,37 +3,17 @@
 import Link from "next/link"
 import { MyButton } from "./MyButton"
 import { Dispatch, SetStateAction, useState } from "react";
+import { MdSearch } from "react-icons/md";
 
 interface ISearchBarProps{
-    data: any
+    data?: Array<any>
     setAuxData: Dispatch<SetStateAction<never[]>>
-    path: string
-	type: string
+    path?: string
+	keys: Array<string>
 }
-
-export function SearchBar({data, setAuxData, path, type}: ISearchBarProps){
+ 
+export function SearchBar({data, setAuxData, path, keys}: ISearchBarProps){
 	const [search, setSearch] = useState("");
-
-    function handleClick(){
-		if(search == ""){
-			return;
-		}
-		let newArr = [];
-		if(type == "HOSPEDE"){
-			data.map((obj) => {
-				if(obj.idHOSPEDE == search || obj.NOME_COMPLETO.includes(search)){
-					newArr.push(obj);
-				}
-			})
-		}else{
-			data.map((obj) => {
-				if(obj.idUSUARIO == search || obj.NOME.includes(search)){
-					newArr.push(obj)
-				}
-			})
-		}
-		setAuxData(newArr);
-	}
 
     function handleChange(e: React.FormEvent<HTMLInputElement>){
 		setSearch(e.currentTarget.value)
@@ -42,14 +22,32 @@ export function SearchBar({data, setAuxData, path, type}: ISearchBarProps){
 		}
 	}
 
+	function handleClick(){
+		if(search == ""){
+			return;
+		}
+		let newArr = [];
+		const id = keys[0]
+		const nome = keys[1]
+		data.map((obj) => {
+			if(obj[id] == search || obj[nome].includes(search)){
+				newArr.push(obj);
+			}
+		})
+		setAuxData(newArr);
+	}
+
+
     return(
         <div>
 			<div className="flex justify-end my-4">
-				<Link href={path}>
-					<MyButton buttonText="Realizar novo cadastro"/>
-				</Link>
+				{path  && (
+					<Link href={path}>
+						<MyButton buttonText="Realizar novo cadastro"/>
+					</Link>
+				)}
 			</div>
-			{data !== undefined ? (
+			{ data !== undefined &&  data?.length > 0 ? (
                 <div className="flex gap-x-6">
                     <input type="text" className="input" value={search} placeholder="Digite o nome de pesquisa ou o ID" name="pesquisa" onChange={handleChange}/>
                     <div>
@@ -59,7 +57,7 @@ export function SearchBar({data, setAuxData, path, type}: ISearchBarProps){
 			) : (
 				<div className="text-label min-h-[60vh] flex flex-col justify-center items-center">
 					<MdSearch size={90}/>
-					<p>Sem pesquisas no momento</p>
+					<p>Sem registros no momento.</p>
 				</div>
 			)}
 		</div>

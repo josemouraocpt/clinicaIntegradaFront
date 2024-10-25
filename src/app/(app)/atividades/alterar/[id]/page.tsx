@@ -7,7 +7,7 @@ export default function AlterarAtividadeId(){
         <div className="min-h-screen">
             <ContainerAtividades/>
             <SetorInfo setor="Atividades"/>
-            <AtividadeForm/>
+            <AtividadeForm action="EDITAR"/>
         </div>
     )
 }

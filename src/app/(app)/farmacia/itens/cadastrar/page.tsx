@@ -6,7 +6,7 @@ export default function CadastrarItem(){
         <div className="min-h-screen">
             <ContainerFarmacia/>
             <div className="m-10">
-                <FormFarmacia/>
+                <FormFarmacia action="CRIAR" type="ITEM"/>
             </div>
         </div>
     )

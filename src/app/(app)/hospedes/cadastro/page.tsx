@@ -10,7 +10,7 @@ export default function Cadastro(){
 				<p className="text-sm">Informe os dados</p>
 			</div>
 			<div>
-				<HospedeForm/>
+				<HospedeForm action="CRIAR"/>
 			</div>
 		</div>
 	)

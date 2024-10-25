@@ -7,7 +7,7 @@ export default function CadastrarProjeto(){
         <div className="min-h-screen">
             <ContainerProjeto/>
             <SetorInfo setor="Projetos"/>
-            <ProjetoForm/>
+            <ProjetoForm action="CRIAR"/>
         </div>
     )
 }

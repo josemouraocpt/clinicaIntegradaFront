@@ -2,7 +2,7 @@
 
 async function register(data: any) {
     try {
-        const res = await fetch("http://localhost:3001/users/singup", {
+        const res = await fetch("http://localhost:3001/usuarios/registro", {
             method: "POST",
 			body: JSON.stringify(data),
 			headers: {
@@ -27,7 +27,7 @@ async function register(data: any) {
 
 async function login(data: any) {
     try {
-        const res = await fetch("http://localhost:3001/users/login", {
+        const res = await fetch("http://localhost:3001/usuarios/registro", {
             method: "POST",
 			body: JSON.stringify(data),
 			headers: {

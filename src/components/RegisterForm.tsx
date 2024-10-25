@@ -1,35 +1,33 @@
 "use client"
 
 import { reset, singUp } from "@/slices/authSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import profile from "../assets/img/profile.png";
+import userService from "@/services/userService";
 
 const schema = yup.object({
-    name: yup.string().required("name obrigatorio"),
-	password: yup.string().required("Insira a password"),
-    confirmPassword: yup.string().required("Insira a password"),
-	email: yup.string().required("Insira o e-mail").email("Insira um e-mail válido"),
-    nationality: yup.string().required("nationality obrigatorio"),
-    naturalness: yup.string().required("naturalness obrigatorio"),
-    institution: yup.string().required("Instituição obrigatorio"),
-    phoneNumber: yup.string().required("phoneNumber obrigatorio"),
-    cpf: yup.string().required("CPF obrigatorio"),
-    rg: yup.string().required("RG obrigatorio"),
-    birthDate: yup.string().required("Data de nascimento obrigatorio"),
-    formation: yup.string().required("Formação obrigatorio"),
-    zipCode: yup.string().required("zipCode obrigatorio"),
-    address: yup.string().required("Endereço obrigatorio"),
-    city: yup.string().required("city obrigatorio"),
-    state: yup.string().required("UF obrigatorio"),
-    departmentId: yup.number().required("departmentId obrigatorio"),
-    image: yup.boolean().nullable(),
-    userProfileId: yup.number().required("departmentId obrigatorio")
+    name: yup.string(),
+	password: yup.string(),
+    confirmPassword: yup.string(),
+	email: yup.string(),
+    nationality: yup.string(),
+    naturalness: yup.string(),
+    institution: yup.string(),
+    phoneNumber: yup.string(),
+    cpf: yup.string(),
+    rg: yup.string(),
+    birthDate: yup.string(),
+    formation: yup.string(),
+    zipCode: yup.string(),
+    address: yup.string(),
+    city: yup.string(),
+    state: yup.string(),
+    departmentId: yup.number(),
+    userProfileId: yup.number(),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -38,6 +36,9 @@ export function RegisterForm(){
     const dispatch = useDispatch();
 	const { loading, error } = useSelector((state) => state.auth);
     const router = useRouter();
+    const { getUserSetores, getUserProfiles } = userService;
+    const [setores, setSetores] = useState([]);
+    const [profiles, setProfiles] = useState([]);
 	const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
@@ -53,6 +54,13 @@ export function RegisterForm(){
 
 	useEffect(() => {
 		dispatch(reset());
+        async function fetch() {
+            const res1 = await getUserSetores();
+            const res2 = await getUserProfiles();
+            setSetores(res1.data);
+            setProfiles(res2.data);
+        }
+        fetch()
 	}, [dispatch]);
 
     return(
@@ -77,7 +85,11 @@ export function RegisterForm(){
                         <label>Setor:
                             <select className="input" {...register("departmentId")}>
                                 <option hidden={true}></option>
-                                <option value={1}>Farmácia</option>
+                                {setores.length >= 1 && (
+                                    setores.map((value) => (
+                                        <option value={value.idSETOR} key={value.idSETOR}>{value.DESCRICAO}</option>
+                                    ))
+                                )}
                             </select>
                         </label>
                     </div>
@@ -85,8 +97,11 @@ export function RegisterForm(){
                         <label>Tipo do usuário:
                             <select className="input" {...register("userProfileId")}>
                                 <option hidden={true}></option>
-                                <option value={1}>Funcionário</option>
-                                <option value={2}>Usuário</option>
+                                {profiles.length >= 1 && (
+                                    profiles.map((value) => (
+                                        <option value={value.idUSER_DOMAIN} key={value.idUSER_DOMAIN}>{value.DOMAIN_DESCRIPTION}</option>
+                                    ))
+                                )}
                             </select>
                         </label>
                         <label>Telefone:
@@ -168,11 +183,6 @@ export function RegisterForm(){
                                         </select>
                                 </label>
                                 </div>
-                            </div>
-                            {/* Imagem */}
-                            <div className="w-52 h-40 hidden">
-                                <Image src={profile} alt="teste" className="w-full"/>
-                                <input {...register("image")} type="number" value={0}/>
                             </div>
                         </div>
                 </div>

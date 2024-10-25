@@ -10,7 +10,7 @@ export default function EditarEstoque(){
                 <div className='m-4'>
                     <h2 className='text-2xl text-center'>Insira <span className="text-red-500">todos</span> os dados necessários</h2>
                 </div>
-                <EstoqueForm type="EDITAR"/>
+                <EstoqueForm action="EDITAR"/>
             </div>
         </div>
     )

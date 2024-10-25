@@ -9,7 +9,6 @@ export default function TrabalheConosco(){
 			<TrabalheHead></TrabalheHead>
       <div className='flex justify-between'>
         <ContainerTrabalhe></ContainerTrabalhe>
-        <ContainerEnvie></ContainerEnvie>
       </div>
 		</div>
 	)

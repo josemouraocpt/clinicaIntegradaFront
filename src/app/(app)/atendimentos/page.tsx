@@ -1,23 +1,36 @@
 'use client';
-import { Card } from "@/components/Card";
+import { AtendimentosCard } from "@/components/AtendimentosCard";
 import { ContainerAtendimento } from "@/components/ContainerAtendimento";
 import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
-import userService from "@/services/userService";
+import hospedeService from "@/services/hospedeService";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
+interface IHospedeData{
+    idHOSPEDE: number
+    NOME_COMPLETO: string
+    DATA_NASCIMENTO: string
+    DATA_ENTRADA: string
+    RESPONSAVEL: string
+    STATUS_HOSPEDE: string
+    QUARTO: string
+    LEITO: string
+    GRAU_DEPENDENCIA: number
+    OBSERVACOES: string
+}
+
 export default function Atendimentos(){
 	const { user } = useSelector((state) => state.auth);
-	const [data, setData] = useState([]);
-	const [auxData, setAuxData] = useState([]);
-	const { getHospedes } = userService;
+	const [data, setData] = useState<Array<IHospedeData>>([]);
+	const [auxData, setAuxData] = useState<Array<IHospedeData>>([]);
+	const { getHospedes } = hospedeService;
 
 	useEffect(() => {
 		async function fetchAll(){
-			const res = await getHospedes(user.token);
-			setData(res.guest);
-			setAuxData(res.guest);
+			const res = await getHospedes(user.token); 
+			setData(res.data);
+			setAuxData(res.data);
 		}
 		fetchAll()
 	}, [user, getHospedes]);
@@ -27,12 +40,12 @@ export default function Atendimentos(){
 			<ContainerAtendimento/>
 			<SetorInfo setor="Atendimentos"/>
 			<div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
-                <SearchBar data={data} setAuxData={setAuxData} path="/atendimentos/cadastrar" type="HOSPEDE"/>
+                <SearchBar data={data} setAuxData={setAuxData} path="/atendimentos/cadastrar" keys={["idHOSPEDE","NOME_COMPLETO"]}/>
                 <div>
                     {auxData && (
                         <div className="grid grid-cols-2">
                             {auxData.map((obj) => (
-                                <Card key={obj.idHOSPEDE} data={obj} path={`/atendimentos/editar/${obj.idHOSPEDE}`}/>
+                                <AtendimentosCard key={obj.idHOSPEDE} data={obj} />
                             ))}
                         </div>
                     )}

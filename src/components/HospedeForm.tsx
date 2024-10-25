@@ -1,409 +1,244 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { MdAddCircle } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import userService from "@/services/userService";
+import { DadosBasicos } from "./HospedeFormComponets/DadosBasicos";
+import { DadosBancarios } from "./HospedeFormComponets/DadosBancarios";
+import { DadosMedicos } from "./HospedeFormComponets/DadosMedicos";
+import { DadosHospedagem } from "./HospedeFormComponets/DadosHospedagem";
+import hospedeService from "@/services/hospedeService";
+import { MyButton } from "./MyButton";
+import { MdDelete } from "react-icons/md";
+
+interface IHospedeFormProps{
+	action: string
+}
 
 const schema = yup.object({
-	nome: yup.string().required("Insira o mome"),
+	nome: yup.string(),
 	nomeSocial: yup.string(),
 	apelido: yup.string(),
-	rg: yup.string().required("Insira o RG") ,
-	cpf: yup.string().required("Insira o CPF") ,
-	nacionalidade: yup.string().required("Insira a nacionalidade") ,
-	naturalidade: yup.string().required("Insira a naturalidade") ,
-	estadoCivil: yup.string().required("Insira o estado civil") ,
-	dataNascimento: yup.string().required("Insira a data de nascimento") ,
-	nomeMae: yup.string().required("Insira o nome da mão") ,
-	nomePai: yup.string().required("Insira o nome do pai") ,
-	telefone: yup.string().required("Insira o telefone") ,
-	profissao: yup.string().required("Insira a profissão") ,
-	tituloEleitor: yup.string().required("Insira o titulo de eleitor") ,
-	endereco: yup.string().required("Insira o endereço") ,
-	cidade: yup.string().required("Insira a cidade") ,
-	uf: yup.string().required("Insira o estado") ,
-	cep: yup.string().required("Insira o cep") ,
-	dataEntrada: yup.string().required("Insira a data de entrda"),
-	possuiConta: yup.string(),
-	nomeBanco: yup.string(),
-	conta: yup.string(),
-	agencia: yup.string(),
-	numeroConta: yup.string(),
+	rg: yup.string() ,
+	cpf: yup.string() ,
+	nacionalidade: yup.string(),
+	naturalidade: yup.string() ,
+	estadoCivil: yup.string() ,
+	dataNascimento: yup.string() ,
+	nomeMae: yup.string() ,
+	nomePai: yup.string(),
+	telefone: yup.string(),
+	profissao: yup.string() ,
+	tituloEleitor: yup.string() ,
+	endereco: yup.string() ,
+	cidade: yup.string(),
+	uf: yup.string() ,
+	cep: yup.string(),
+	dataEntrada: yup.string(),
 	situacaoFinanceiraDesc: yup.string(),
-	grauDependencia: yup.string().required("Insira o grau de dependencia"),
-	nomeRemedio: yup.string().required("Insira o nome do remedio"),
-	frequenciaUso: yup.string().required("Insira a frequencia de uso"),
-	tempoUso: yup.string().required("Insira o tempo de uso"),
-	dosagem: yup.string().required("Insira a dosagem"),
-	obsMed: yup.string(),
-	tipoAlergiaDieta: yup.string().required("Insira o tipo"),
-	descAlergiaDieta: yup.string().required("Insira a descrição do tipo"),
-	quarto: yup.string().required("Insira o quarto"),
-	leito: yup.string().required("Insira o leito"),
+	quarto: yup.string(),
+	leito: yup.string(),
 	hospedagemInfo: yup.string(),
-	responsavel: yup.string().required("Insira o responsavel")
+	responsavel: yup.string(),
+	hospedeStatus: yup.string(),
+	hospedagemStatus: yup.string(),
+	agencia: yup.string(),
+	conta: yup.string(),
+	nomeBanco: yup.string(),
+	numConta: yup.string(),
+	grauDependencia: yup.string(),
+	nomeMedicamento: yup.string(),
+	freqMedicamento: yup.string(),
+	tempoMedicamento: yup.string(),
+	dosagemMedicamento: yup.string(),
+	observacoeMedicamento: yup.string(),
+	tipoComplicacao: yup.string(),
+	descComplicacao: yup.string(),
+	anexo: yup.mixed(),
+	descAnexo: yup.string(),
+	idANEXO: yup.number(),
+	HOSPEDE_idHOSPEDE: yup.number(),
+	idDADOS_BANCARIOS: yup.number(),
+	REMEDIOS_idREMEDIOS: yup.number(),
+	idDADOS_MEDICOS: yup.number(),
+	idDOENCAS_ALERGIAS_DIETAS: yup.number(),
+	idREMEDIOS: yup.number(),
+	idHOSPEDAGEM: yup.number(),
+	idSITUACAO_FINANCEIRA: yup.number(),
 });
 
 type FormData = yup.InferType<typeof schema>;
 
-export function HospedeForm(){
+export function HospedeForm({action}: IHospedeFormProps){
 	const [currentStep, setCurrentStep] = useState(0);
-	const [possuiConta, setPossuiConta] = useState<boolean>(false);
-	const [sitFin, setSitFin] = useState(false);
-	const [usersAndDepartments, setUsersAndDepartments] = useState();
 	const router = useRouter();
+	const pathname = usePathname();
 	const { user } = useSelector((state) => state.auth);
-	const { getUsersAndDepartments, createHospedeFull } = userService;
+	const { createHospedeFull, getHospedeStatus, editHospedeById, getHospedeById } = hospedeService;
 
-	const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+	const [hospedeStatusList, setHospedeStatusList] = useState([]);
+	const [hospedagemStatusList, setHospedagemStatusList] = useState([]);
+	const [canEdit, setCanEdit] = useState(false);
+	const [hospedeData, setHospedeData] = useState();
+
+	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
 
-	const handleNext = () => {
-		setCurrentStep(state => state + 1)
+	function handleNext(){
+		setCurrentStep(state => state + 1);
 	};
 
-	const handlePrevius = () => {
+	function handlePrevius(){
 		setCurrentStep(state => state - 1)
 	};
 
-	useEffect(() => {
-		async function fetch(){
-			const data = await getUsersAndDepartments(user.token);
-			return setUsersAndDepartments(data.data)
-		}
-		fetch()
-	}, [user, getUsersAndDepartments])
 
 	async function onSubmit(data: FormData){
-		const res = await createHospedeFull(data, user.token);
-		if(res.message == "Sucesso"){
-			router.push("/dashboard")
+		if(action == "CRIAR"){
+			const res = await createHospedeFull(data, user.token);
+			if(res.type == "SUCCESS"){
+				router.push("/dashboard")
+			}else{
+				console.log(res.error)
+			}
 		}else{
-			console.log(res.error)
+			if(!data.anexo) {
+				setValue("anexo", hospedeData.anexosData.BUCKET_URL);
+				setValue("descAnexo", hospedeData.anexosData.DESCRIPTION);
+			}
+			const res = await editHospedeById(Number(pathname.substring(10)),data, user.token);
+			if(res.type == "SUCCESS"){
+				router.push("/dashboard")
+			}else{
+				console.log(res.error)
+			}
 		}
 	};
+
+	useEffect(() => {
+		async function fetch() {
+			const res1 = await getHospedeStatus(user.token);
+			setHospedeStatusList(res1.data.hospede);
+			setHospedagemStatusList(res1.data.hospedagem);
+			if(action == "EDITAR"){
+				const res2 = await getHospedeById(Number(pathname.substring(10)),user.token);
+				setHospedeData(res2.data);
+				setValues(res2.data);
+			}
+		}
+		fetch();
+		if(action == "CRIAR"){
+			setCanEdit(!canEdit);
+		}
+	}, [getHospedeStatus, user, getHospedeById]);
+
+
+	function setValues(data: any){
+		setValue("nome", data.hospedeData.NOME_COMPLETO)
+		setValue("nomeSocial", data.hospedeData.NOME_SOCIAL)
+		setValue("apelido", data.hospedeData.APELIDO)
+		setValue("rg", data.hospedeData.RG)
+		setValue("cpf", data.hospedeData.CPF)
+		setValue("nacionalidade", data.hospedeData.NACIONALIDADE)
+		setValue("naturalidade", data.hospedeData.NATURALIDADE)
+		setValue("estadoCivil", data.hospedeData.ESTADO_CIVIL)
+		setValue("dataNascimento", data.hospedeData.DATA_NASCIMENTO.substring(0, 10))
+		setValue("nomeMae", data.hospedeData.NOME_MAE)
+		setValue("nomePai", data.hospedeData.NOME_PAI)
+		setValue("telefone", data.hospedeData.TELEFONE)
+		setValue("profissao", data.hospedeData.PROFISSAO)
+		setValue("tituloEleitor", data.hospedeData.TITULO_ELEITOR)
+		setValue("endereco", data.hospedeData.ENDERECO)
+		setValue("cidade", data.hospedeData.CIDADE)
+		setValue("uf", data.hospedeData.UF)
+		setValue("cep", data.hospedeData.CEP)
+		setValue("dataEntrada", data.hospedeData.DATA_ENTRADA.substring(0, 10))
+		setValue("situacaoFinanceiraDesc", data.situacaoFinanceiraData.DESCRICAO)
+		setValue("quarto", data.hospedagemData.QUARTO)
+		setValue("leito", data.hospedagemData.LEITO)
+		setValue("hospedagemInfo", data.hospedagemData.INFORMACOES)
+		setValue("responsavel", data.hospedeData.RESPONSAVEL)
+		setValue("hospedeStatus", data.hospedeData.STATUS_HOSPEDE)
+		setValue("hospedagemStatus", data.hospedagemData.STATUS_HOSPEDAGEM)
+		setValue("agencia", data.dadosBancariosData.AGENCIA)
+		setValue("conta", data.dadosBancariosData.CONTA)
+		setValue("nomeBanco", data.dadosBancariosData.NOME_BANCO)
+		setValue("numConta", data.dadosBancariosData.NUMERO_CONTA)
+		setValue("grauDependencia", data.dadosMedicos.GRAU_DEPENDENCIA)
+		setValue("nomeMedicamento", data.remediosData.NOME)
+		setValue("freqMedicamento", data.remediosData.FREQUENCIA_USO)
+		setValue("tempoMedicamento", data.remediosData.TEMPO_USO)
+		setValue("dosagemMedicamento", data.remediosData.DOSAGEM)
+		setValue("observacoeMedicamento", data.dadosMedicos.OBSERVACOES)
+		setValue("tipoComplicacao", data.dadosMedicosDoencasAlergiasDietasData.DESCRICAO)
+		setValue("descComplicacao", data.dadosMedicosDoencasAlergiasDietasData.TIPO)
+		//setValue("anexo", new File(data.anexosData.BUCKET_URL, data.anexosData.DESCRIPTION, { type: "text/plain" }))
+		//setValue("descAnexo", data.anexosData.DESCRIPTION)
+		setValue("idANEXO", data.anexosData.idANEXOS)
+		setValue("HOSPEDE_idHOSPEDE", data.dadosBancariosData.HOSPEDE_idHOSPEDE)
+		setValue("idDADOS_BANCARIOS", data.dadosBancariosData.idDADOS_BANCARIOS)
+		setValue("REMEDIOS_idREMEDIOS", data.dadosBancariosData.REMEDIOS_idREMEDIOS)
+		setValue("idDADOS_MEDICOS", data.dadosMedicosDoencasAlergiasDietasData.idDADOS_MEDICOS)
+		setValue("idDOENCAS_ALERGIAS_DIETAS", data.dadosMedicosDoencasAlergiasDietasData.idDOENCAS_ALERGIAS_DIETAS)
+		setValue("idREMEDIOS", data.dadosMedicosDoencasAlergiasDietasData.idREMEDIOS)
+		setValue("idHOSPEDAGEM", data.hospedagemData.idHOSPEDAGEM)
+		setValue("idSITUACAO_FINANCEIRA", data.situacaoFinanceiraData.idSITUACAO_FINANCEIRA)
+	}
 
 	return(
 		<div className="bg-white p-5 rounded-md mx-10 mb-20 shadow-lg">
 			<form className="flex flex-col space-y-3" onSubmit={handleSubmit(onSubmit)}>
 				{/* Inicio da primeira parte do formulário */}
 				{currentStep == 0 && (
-					<div>
-						<h1 className="font-bold">Dados Básicos</h1>
-						<div className="flex flex-col space-y-3">
-							<div className="flex space-x-5">
-								<label className="w-1/4">Nome completo:
-									<input type="text" className="input" {...register("nome")}/>
-								</label>
-								<label>Apelido:
-									<input type="text" className="input" {...register("apelido")}/>
-								</label>
-								<label>Nome Social (se tiver):
-									<input type="text" className="input" {...register("nomeSocial")}/>
-								</label>
-								<label>Nacionalidade:
-									<input type="text" className="input" {...register("nacionalidade")}/>
-								</label>
-								<label>Naturalidade:
-									<input type="text" className="input" {...register("naturalidade")}/>
-								</label>
-							</div>
-							<div className="flex space-x-5">
-								<label className="w-1/4">Nome do Pai:
-									<input type="text" className="input" {...register("nomePai")}/>
-								</label>
-								<label className="w-1/4">Nome da Mãe:
-									<input type="text" className="input" {...register("nomeMae")}/>
-								</label>
-								<label>CPF:
-									<input type="text" className="input" {...register("cpf")}/>
-								</label>
-								<label>RG:
-									<input type="text" className="input" {...register("rg")}/>
-								</label>
-							</div>
-
-							<div className="flex space-x-5">
-								<label>Data de Nascimento:
-									<input type="date" className="input" {...register("dataNascimento")}/>
-								</label>
-								<label>Telefone:
-									<input type="text" className="input" {...register("telefone")}/>
-								</label>
-								<label>Estado civil:
-									<select className="input" {...register("estadoCivil")}>
-										<option hidden={true}></option>
-										<option value="Solteiro(a)">Solteiro(a)</option>
-										<option value="Casado(a)">Casado(a)</option>
-										<option value="Divorciado(a)">Divorciado(a)</option>
-										<option value="Viúvo(a)">Viúvo(a)</option>
-										<option value="Separado(a)">Separado(a)</option>
-									</select>
-								</label>
-								<label>Profissão:
-									<input type="text" className="input" {...register("profissao")}/>
-								</label>
-								<label>Título de Eleitor:
-									<input type="text" className="input" {...register("tituloEleitor")}/>
-								</label>
-							</div>
-						</div>
-						<div className="flex mt-4">
-							<div className="flex flex-col space-y-3">
-								<div className="flex flex-col space-y-3">
-									<h1 className="font-bold">Endereços</h1>
-									<div className="flex space-x-5">
-										<label>CEP:
-											<input type="text" className="input" {...register("cep")}/>
-										</label>
-										<label className="w-3/4">Endereço:
-											<input type="text" className="input" {...register("endereco")}/>
-										</label>
-										<label>Estado:
-											<select className="input" {...register("uf")}>
-												<option hidden={true}></option>
-												<option value="AC">Acre</option>																	
-												<option value="AL">Alagoas</option>
-												<option value="AP">Amapá</option>
-												<option value="AM">Amazonas</option>
-												<option value="BA">Bahia</option>
-												<option value="CE">Ceará</option>
-												<option value="DF">Distrito Federal</option>
-												<option value="ES">Espírito Santo</option>
-												<option value="GO">Goiás</option>
-												<option value="MA">Maranhão</option>
-												<option value="MT">Mato Grosso</option>
-												<option value="MS">Mato Grosso do Sul</option>
-												<option value="MG">Minas Gerais</option>
-												<option value="PA">Pará</option>
-												<option value="PB">Paraíba</option>
-												<option value="PR">Paraná</option>
-												<option value="PE">Pernambuco</option>
-												<option value="PI">Piauí</option>
-												<option value="RJ">Rio de Janeiro</option>
-												<option value="RN">Rio Grande do Norte</option>
-												<option value="RS">Rio Grande do Sul</option>
-												<option value="RO">Rondônia</option>
-												<option value="RR">Roraima</option>
-												<option value="SC">Santa Catarina</option>
-												<option value="SP">São Paulo</option>
-												<option value="SE">Sergipe</option>
-												<option value="TO">Tocantins</option>
-											</select>
-										</label>
-										<label>Cidade:
-											<input type="text" className="input" {...register("cidade")}/>
-										</label>
-									</div>
-								</div>
-								<h1 className="font-bold">Data Entrada</h1>
-								<div className="flex space-x-5">
-									<label>Data:
-										<input type="date" className="input" {...register("dataEntrada")}/>
-									</label>
-								</div>
-							</div>
-						</div>
-						<div className="flex justify-end space-x-3">
-							<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handleNext}>
-								Próximo
-							</button>
-						</div>
+					<>
+					<DadosBasicos register={register} statusList={hospedeStatusList} canEdit={canEdit} />
+					<div className="flex justify-end space-x-3">
+						{hospedeData && (
+							<MyButton buttonText="Editar" buttonType="button" handleClick={() => {setCanEdit(!canEdit)}}/>
+						)}
+						<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
 					</div>
+					</>
 				)}
 				{/* Fim da primeira parte do formulário */}
 
 				{/* Inicio da segunda parte do formulário */}
 				{currentStep == 1 && (
-					<div>
-						<div className="flex flex-col space-y-3">
-							<h1 className="font-bold">Dados Bancários</h1>
-							<div className="space-x-3">
-								<h3>Possui conta bancária?</h3>
-								<select className="input" {...register("possuiConta")} onChange={() => setPossuiConta(!possuiConta)}>
-									<option hidden={true}></option>
-									<option value="1">Sim</option>
-									<option value="0">Não</option>
-								</select>
-							</div>
-							{possuiConta && (
-								<>
-									<div className="flex space-x-5">
-										<label className="w-2/6">Nome do banco:
-											<input type="text" className="input" {...register("nomeBanco")}/>
-										</label>
-										<label className="w-2/6">Agência:
-											<input type="text" className="input" {...register("agencia")}/>
-										</label>
-										<label>Conta:
-											<input type="text" className="input" {...register("conta")}/>
-										</label>
-									</div>
-									{/* <div>
-										<button className="text-lg text-button hover:text-button-hover" >
-											<MdAddCircle className="inline"/> Adicionar mais contas
-										</button>
-										<div className="flex flex-col space-y-3">
-											{maisContas && (
-												<div className="flex space-x-5">
-													<label className="w-2/6">Nome do banco:
-														<input type="text" className="input"/>
-													</label>
-													<label className="w-2/6">Agência:
-														<input type="text" className="input"/>
-													</label>
-													<label>Conta:
-														<input type="text" className="input"/>
-													</label>
-												</div>
-											)}
-										</div>
-									</div> */}
-								</>
-							)}
-							<div>
-								<h1 className="font-bold">Situação Financeira</h1>
-								<button className="text-lg text-button hover:text-button-hover" onClick={() => setSitFin(!sitFin)} hidden={sitFin == true || possuiConta == false}>
-									<MdAddCircle className="inline"/> Adicionar informações
-								</button>
-								{sitFin == true ? (
-									<textarea placeholder="Descrição" className="input w-full resize-none" rows={10} {...register("situacaoFinanceiraDesc")}/>
-								):(<></>)}
-							</div>
-						</div>
+					<>
+						<DadosBancarios register={register} canEdit={canEdit}/>
 						<div className="flex justify-end space-x-3">
-							<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handlePrevius}>
-								Voltar
-							</button>
-							<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handleNext}>
-								Próximo
-							</button>
+							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
+							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
 						</div>
-					</div>
+					</>
 				)}
 				{/* Fim da segunda parte do formulário */}
 
 				{/* Inicio da terceira parte do formulário */}
 				{currentStep == 2 && (
-					<div>
-						<div className="flex flex-col space-y-3">
-							<h1 className="font-bold">Dados Médicos</h1>
-							<div>
-								<h2 className="font-bold">Grau de dependência</h2>
-								<p className="text-sm">Sobre o grau de dependência do hospede, por favor, informe: </p>
-								<div className="space-x-3">
-									<select className="input" {...register("grauDependencia")}>
-										<option hidden={true}></option>
-										<option value="1">1 - Pouco dependente</option>
-										<option value="2">2 - Dependente</option>
-										<option value="3">3 - Muito dependente</option>
-									</select>
-								</div>
-								<small className="text-sm opacity-50">** 1 (Pouco dependente), 2 (Dependente), 3 (Muito dependente)</small>
-							</div>
-							<div>
-								<h2 className="font-bold">Histórico de Medicamentos</h2>
-								<p>Informe os medicamentos que o hospede já utiliza:</p>
-								<div className="flex space-x-3">
-									<label>Nome do Medicamento:
-										<input type="text" className="input" {...register("nomeRemedio")}/>
-									</label>
-									<label>Frequência do Medicamento:
-										<input type="text" className="input" {...register("frequenciaUso")}/>
-									</label>
-									<label>Tempo de Uso:
-										<input type="text" className="input" {...register("tempoUso")}/>
-									</label>
-									<label>Dosagem:
-										<input type="text" className="input" {...register("dosagem")}/>
-									</label>
-								</div>
-								{/* <button className="text-lg text-button hover:text-button-hover">
-									<MdAddCircle className="inline"/> Adicionar mais medicamentos
-								</button> */}
-							</div>
-							<div>
-								<h2 className="font-bold">Observações</h2>
-								<label>Obrservações:
-									<textarea placeholder="Descrição" className="input w-full resize-none" rows={10} {...register("obsMed")}/>
-								</label>
-							</div>
-							<div>
-								<h2 className="font-bold">Doenças, Alergias e Dietas</h2>
-								<p>Informe as doenças e complicações do hospede</p>
-								<div className="flex flex-col">
-									<label className="w-2/5">Tipo:
-										<select className="input" {...register("tipoAlergiaDieta")}>
-											<option hidden={true}></option>
-											<option value="alergia">Alergia</option>
-											<option value="doenca">Doença</option>
-											<option value="dieta">Dieta</option>
-										</select>
-									</label>
-									<label className="w-2/5">Descrição:
-										<input type="text" className="input" {...register("descAlergiaDieta")}/>
-									</label>
-								</div>
-								{/* <button className="text-lg text-button hover:text-button-hover">
-									<MdAddCircle className="inline"/> Adicionar mais informações
-								</button> */}
-							</div>
-							<div className="flex justify-end space-x-3">
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handlePrevius}>
-									Voltar
-								</button>
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handleNext}>
-									Próximo
-								</button>
-							</div>
+					<>
+						<DadosMedicos register={register} canEdit={canEdit}/>
+						<div className="flex justify-end space-x-3">
+							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
+							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
 						</div>
-					</div>
+					</>
 				)}
 				{/* Fim da terceira parte do formulário */}
 
 				{/* Inicio da quarta parte do formulário */}
 				{currentStep == 3 && (
-					<div>
-						<div className="flex flex-col space-y-3">
-							<h1 className="font-bold">Hospedagem</h1>
-							<div>
-								<h2 className="font-bold">Informações do quarto</h2>
-								<p className="text-sm">Por favor, selecione um quarto disponível:</p>
-								<label>Número do Quarto:
-									<input type="text" className="input" {...register("quarto")}/>
-								</label>
-							</div>
-							<div>
-								<h2 className="font-bold">Informações do leito</h2>
-								<p className="text-sm">Por favor, selecione um leito disponível:</p>
-								<label>Número do Leito: 
-									<input type="text" className="input" {...register("leito")}/>
-								</label>
-							</div>
-							<div>
-								<h2 className="font-bold">Informações adicionais</h2>
-								<p className="text-sm">Deseja adicionar informações sobre o hospede? </p>
-								<label>
-									<textarea className="input resize-none" rows={5} {...register("hospedagemInfo")}>
-										</textarea>
-									</label>
-							</div>
-							<div className="flex justify-end space-x-3">
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handlePrevius}>
-									Voltar
-								</button>
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handleNext}>
-									Próximo
-								</button>
-							</div>
+					<>
+						<DadosHospedagem register={register} statusList={hospedagemStatusList} canEdit={canEdit}/>
+						<div className="flex justify-end space-x-3">
+							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
+							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
 						</div>
-					</div>
+					</>
 				)}
 				{/* Fim da quarta parte do formulário */}
 
@@ -415,24 +250,13 @@ export function HospedeForm(){
 							<div>
 								<h2 className="font-bold">Informações do Responsavél</h2>
 								<p className="text-sm">Por favor, informe: </p>
-								<label>ID do Funcionário Responsavél: 
-									<select className="input" {...register("responsavel")}>
-										<option hidden={true}></option>
-										{usersAndDepartments && (
-											usersAndDepartments.map((value) => (
-												<option value={value.idUSUARIO} key={value.idUSUARIO} >{value.nome}</option>
-											))
-										)}
-									</select>
+								<label>Nome do Responsavél relacionado ao hóspede: 
+									<input disabled={!canEdit} type="text" className="input" {...register("responsavel")} />
 								</label>
 							</div>
 							<div className="flex justify-end space-x-3">
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handlePrevius}>
-									Voltar
-								</button>
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handleNext}>
-									Próximo
-								</button>
+								<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
+								<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
 							</div>
 						</div>
 					</div>
@@ -443,29 +267,33 @@ export function HospedeForm(){
 				{currentStep == 5 && (
 					<div>
 						<div className="flex flex-col space-y-3">
-							<h1 className="font-bold">Termos de Aceite</h1>
-							<p>Por favor, informe o responsavél do cadastro</p>
-							<label>ID do Funcionário Responsavél: 
-								<select className="input" {...register("responsavel")} disabled={true}>
-									<option hidden={true}></option>
-									{usersAndDepartments && (
-											usersAndDepartments.map((value) => (
-												<option value={value.idUSUARIO} key={value.idUSUARIO} >{value.nome}</option>
-											))
-										)}
-								</select>
-							</label>
-							<div className="border-2 border-black p-3">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem dolore sequi alias, reprehenderit in, culpa aut sunt eos officia explicabo eum impedit atque maxime nobis aspernatur ea quia deleniti neque!</p>
+							<div className="p-3">
+								{!hospedeData && (
+									<label>Documento e descrição(opcional)
+										<input disabled={!canEdit} type="file" className="input mb-2" {...register("anexo")} />
+										<input disabled={!canEdit} type="text" className="input" {...register("descAnexo")}/>
+									</label>
+								)}
 							</div>
-							<div className="flex justify-end space-x-3">
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" onClick={handlePrevius}>
-									Voltar
-								</button>
-								<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit">
-									Finalizar
-								</button>					
-							</div>
+							{hospedeData && (
+								<div>
+									<ul>
+										<li>Link do anexo: 
+											<a href={"https://google.com"} target="blank" className="text-blue-600 underline">
+												 {hospedeData.anexosData.DESCRIPTION}
+											</a>
+											<button type="button" onClick={() => { console.log("removendo") }} className="block">
+												<MdDelete size={24} className="text-red-600"/>
+											</button>
+											
+										</li>
+									</ul>
+								</div>
+							)}
+						</div>
+						<div className="flex justify-end space-x-3">
+							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
+							<MyButton buttonText="Finalizar" buttonType="submit"/>				
 						</div>
 					</div>
 				)}

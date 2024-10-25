@@ -1,5 +1,5 @@
 import { Actions } from "@/components/Actions";
-import { MdManageAccounts, MdBusinessCenter, MdHotel, MdRestaurant, MdSportsSoccer, MdOutlineLightbulb } from "react-icons/md";
+import { MdManageAccounts, MdBusinessCenter, MdHotel, MdRestaurant, MdSportsSoccer, MdOutlineLightbulb, MdContentPaste, MdOutlineAppRegistration } from "react-icons/md";
 import { TbPill, TbCurrencyReal, TbPhysotherapist } from "react-icons/tb"
 import Link from "next/link";
 import { PageInfoText } from "@/components/PageInfoText";
@@ -36,6 +36,15 @@ export default function Dashboard(){
 				</Link>
 				<Link href="/financeiro">
 					<Actions icon={<TbCurrencyReal size={90}/>} title="Financeiro"/>
+				</Link>
+			</div>
+			<h2 className="text-xl font-bold">Sistema</h2>
+			<div className="text-white flex flex-row gap-5 flex-wrap">
+				<Link href="/sistema/fornecedores">
+					<Actions icon={ <MdContentPaste size={90} /> } title="Fornecedores"/>
+				</Link>
+				<Link href="/sistema/dominios">
+					<Actions icon={  <MdOutlineAppRegistration size={90} /> } title="Dominios de Status"/>
 				</Link>
 			</div>
 		</div>

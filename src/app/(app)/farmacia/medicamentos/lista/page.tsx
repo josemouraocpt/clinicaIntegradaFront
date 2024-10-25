@@ -1,41 +1,69 @@
 "use client"
 import { ContainerFarmacia } from "@/components/ContainerFarmacia";
-import { ItemCard } from "@/components/ItemCard";
-import remedyService from "@/services/remedyService";
+import { EstoqueCard } from "@/components/EstoqueCard";
+import { SearchBar } from "@/components/SearchBar";
+import { SetorInfo } from "@/components/SetorInfo";
+import farmaciaService from "@/services/farmaciaService";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-interface IMedicamentoData{
-    idREMEDIOS: number
-    DOSAGEM: string
-    FREQUENCIA_USO: string
+interface IEstoqueData{
+    idESTOQUE: number
+    USUARIO_idUSUARIO: number
     NOME: string
-    TEMPO_USO: string
-}
+    QUANTIDADE: number
+    VALOR_UNITARIO: number
+    VALOR_TOTAL: number
+    VALIDADE: string
+    DATA_INCLUSAO: string
+    DATA_ALTERACAO: string
+    ALTERADO_POR: string
+    TIPO: string
+} 
 
 export default function ListaMedicamentos(){
     const { user } = useSelector((state) => state.auth);
-    const [data, setData] = useState<Array<IMedicamentoData>>([]);
-    const { getRemedys } = remedyService;
+    const [dataSet, setDataSet] = useState<Array<IEstoqueData>>([]);
+    const [data, setData] = useState<IEstoqueData>();
+    const [selected, setSelected] = useState(false);
+    const { getMedicamentos } = farmaciaService;
 
     useEffect(() => {
         async function fetch() {
-            const res = await getRemedys(user.token)
-            console.log(res.remedies)
-            setData(res.remedies)
+            const res = await getMedicamentos(user.token);
+            setDataSet(res.data);
         }
         fetch()
-    }, [user])
+    }, [user, getMedicamentos]);
+
+    function handleChange(value: string){
+        if(value == ""){
+            return setSelected(false);
+        }
+        setSelected(true);
+        const medicamento = dataSet.filter((med) => {
+            return med.idESTOQUE == Number(value)
+        })
+        setData(medicamento[0]);
+    }
+
     return(
         <div className="min-h-screen">
             <ContainerFarmacia/>
-            <div className="m-10">
-                <h1 className="text-bold text-2xl">Lista de Medicamentos:</h1>
-                <div className="grid grid-cols-2 gap-5 bg-white p-4 rounded-lg shadow-sm">
+            <SetorInfo setor="Medicamentos"/>
+            <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
+                {/* <SearchBar data={data} setAuxData={setAuxData} path="/farmacia/medicamentos/cadastrar" keys={["idESTOQUE","NOME"]} /> */}
+                <select className="input" onChange={e => {handleChange(e.target.value)}}>
+                    <option hidden={true}></option>
+                    <option value=""></option>
+                    {dataSet.map((medicamento) => (
+                        <option value={medicamento.idESTOQUE} key={medicamento.idESTOQUE}>{medicamento.NOME}</option>
+                    ))}
+                </select>
+                <div className={selected == true ? 'flex justify-center' : 'hidden'}>
                     {data && (
-                        data.map((medicamento) => (
-                            <ItemCard key={medicamento.idREMEDIOS} nome={medicamento.NOME}/>
-                        ))
+                        <EstoqueCard data={data} path={`/farmacia/medicamentos/editar/${data?.idESTOQUE}`}/>
                     )}
                 </div>
             </div>

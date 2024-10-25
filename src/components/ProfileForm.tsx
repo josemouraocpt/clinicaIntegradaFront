@@ -1,11 +1,9 @@
 'use client'
 
-import profile from "../assets/img/profile.png";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { useRouter, usePathname } from "next/navigation";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import userService from "@/services/userService";
@@ -26,8 +24,8 @@ const schema = yup.object({
     city: yup.string().required("city obrigatorio"),
     state: yup.string().required("UF obrigatorio"),
     departmentId: yup.number().required("departmentId obrigatorio"),
-    image: yup.boolean().nullable(),
-    userProfileId: yup.number().required("departmentId obrigatorio")
+    userProfileId: yup.number().required("departmentId obrigatorio"),
+	userStatus: yup.string()
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -35,48 +33,37 @@ type FormData = yup.InferType<typeof schema>;
 
 export function ProfileForm(){
 	const { user } = useSelector((state) => state.auth);
-	const [userId, setUserId] = useState<number>();
+	const [userSetores, setUserSetores] = useState();
+	const [userProfiles, setUserProfiles] = useState();
+	const [useStatus, setUserStatus] = useState();
     const router = useRouter();
-	const pathname = usePathname();
-	const { getUserData, updateUser } = userService;
+	const { getUserData, updateUser, getUserSetores, getUserProfiles, getUserStatus } = userService;
 	const [canEdit, setCanEdit] = useState(false);
 	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
 
 	async function onSubmit(data: FormData){
-        const novaData = convertDateToIso(data.birthDate)
-        data.birthDate = novaData
-		//corrigir tipo de data
 		const res = await updateUser(user.user.userId, data, user.token);
-		if(res.message == "Usuário editado com sucesso!"){
+		if(res.type == "SUCCESS"){
 			return router.push("/dashboard")
 		}
 
 	};
 
 	useEffect(() => {
-		async function fetch(userId: number){
-			const res = await getUserData(userId, user.token)
-				if(res.message == "Sucesso"){
-					setValues(res.user)
-				}
+		async function fetch(){
+			const res1 = await getUserData(user.user.userId, user.token)
+			const res2 = await getUserProfiles();
+			const res3 = await getUserSetores();
+			const res4 = await getUserStatus(user.token);
+			setValues(res1.data);
+			setUserProfiles(res2.data);
+			setUserSetores(res3.data);
+			setUserStatus(res4.data);
 		}
-
-		if(pathname.length > 7){
-			setUserId(Number(pathname.substring(8)))
-		}else{
-			setUserId(user.user.userId)
-		}
-		if(userId !== undefined){
-			fetch(userId);
-		}
-	}, [getUserData, setValues, user, userId]);
-
-    function convertDateToIso(string: string){
-        const values = string.split("/")
-        return `${values[2]}-${values[1]}-${values[0]}`
-    }
+		fetch();
+	}, [getUserData, user, getUserProfiles, getUserProfiles, getUserStatus]);
 
 	function formatDate(data: string){
 		return data.substring(0,10)
@@ -98,8 +85,8 @@ export function ProfileForm(){
 		setValue("city", data.CIDADE)
 		setValue("state", data.UF)
 		setValue("departmentId", data.SETOR_idSETOR)
-		setValue("image", data.IMAGEM)
-		setValue("userProfileId", data.PERFIL_USUARIO_idPERFIL_USUARIO)
+		setValue("userProfileId", data.USER_DOMAIN_idUSER_DOMAIN)
+		setValue("userStatus", data.STATUS_USUARIO)
 	}
 
 	return(
@@ -124,7 +111,12 @@ export function ProfileForm(){
 						<label>Setor:
 							<select disabled={!canEdit} className="input" {...register("departmentId")}>
 								<option hidden={true}></option>
-								<option value={1}>Farmácia</option>
+								{userSetores && (
+									//@ts-ignore
+									userSetores.map((setor) => (
+										<option value={setor.idSETOR} key={setor.idSETOR}>{setor.DESCRICAO}</option>
+									))
+								)}
 							</select>
 						</label>
 					</div>
@@ -132,8 +124,12 @@ export function ProfileForm(){
 						<label>Tipo do usuário:
 							<select disabled={!canEdit} className="input" {...register("userProfileId")}>
 								<option hidden={true}></option>
-								<option value={1}>Funcionário</option>
-								<option value={2}>Usuário</option>
+								{userProfiles && (
+									//@ts-ignore
+									userProfiles.map((profile) => (
+										<option value={profile.idUSER_DOMAIN} key={profile.idUSER_DOMAIN}>{profile.DOMAIN_DESCRIPTION}</option>
+									))
+								)}
 							</select>
 						</label>
 						<label>Telefone:
@@ -214,12 +210,18 @@ export function ProfileForm(){
 											<option value="TO">Tocantins</option>
 										</select>
 								</label>
+								<label>Status:
+									<select disabled={!canEdit} className="input" {...register("userStatus")}>
+										<option hidden={true}></option>
+										{useStatus && (
+											//@ts-ignore
+											useStatus.map((status) => (
+												<option value={status.STATUS_VALUE} key={status.idSTATUS_DOMAIN}>{status.STATUS_DESCRIPTION}</option>
+											))
+										)}
+									</select>
+								</label>
 								</div>
-							</div>
-							{/* Imagem */}
-							<div className="w-52 h-40 hidden">
-								<Image src={profile} alt="teste" className="w-full"/>
-								<input readOnly={!canEdit} {...register("image")} type="number" value={0}/>
 							</div>
 						</div>
 				</div>
@@ -230,7 +232,7 @@ export function ProfileForm(){
 						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="button" onClick={() => router.back()}>
 							Voltar
 						</button>
-						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit" disabled={user.user.userId != userId ? true : false}>
+						<button className="bg-button p-2 px-6 rounded-lg text-white text-lg hover:bg-button-hover" type="submit">
 							Salvar
 						</button>
 					</div>

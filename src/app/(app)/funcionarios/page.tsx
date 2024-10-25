@@ -17,20 +17,22 @@ export default function Funcionarios(){
 	useEffect(() => {
 		async function fetchAll(){
 			const res = await getFuncionarios(user.token);
-            setData(res.users)
-			setAuxData(res.users)
+			if(res.type == "SUCCESS"){
+				setData(res.data);
+				setAuxData(res.data);
+			}
 		}
 		if(user.token !== undefined){
 			fetchAll()
 		}
-	}, [user, getFuncionarios]);
+	}, [user, getFuncionarios]); 
 
 	return(
 		<div className="p-4 min-h-screen">
 			<ContainerUsuarios/>
 			<SetorInfo setor="Funcionários"/>
 			<div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
-                <SearchBar data={data} setAuxData={setAuxData} path="/register" type="USUARIO"/>
+                <SearchBar data={data} setAuxData={setAuxData} path="/register" keys={["idUSUARIO","NOME"]} />
                 <div>
                     {auxData && (
                         <div className="grid grid-cols-2">

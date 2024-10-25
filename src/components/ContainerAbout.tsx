@@ -51,24 +51,6 @@ export function ContainerAbout( { icon, title, itens, title2, itens2, icon2, tit
 					</div>
 				</div>
 				
-				<form>
-					<fieldset className="mt-5 ml-60 w-min">
-					  <label for="usuario" className="absolute hidden">Usuario Nome</label>
-						<input type="text" id="usuario" className="h-20 pl-7 pr-96 py-7 border-inp border-2 rounded placeholder:text-info placeholder:text-sm" placeholder="Usuário Nome"></input>
-						
-						<label for="emailUser" className="absolute hidden">Usuario E-mail</label>
-						<input type="email" id="emailUser" className="mt-6 h-20 pl-7 pr-96 py-7 border-inp border-2 rounded placeholder:text-info placeholder:text-sm" placeholder="Usuário E-mail"></input>
-						
-						<label for="mensagem" className="absolute hidden">Escreva sua mensagem...</label>
-						<input type="text" id="mensagem" className="mt-6 h-52 pl-7 pb-48 pr-96 py-7 border-inp border-2 rounded placeholder:text-info placeholder:text-sm" placeholder="Escreva sua mensagem..."></input>
-					
-					</fieldset>
-				</form>
-			</div>
-
-			<div className="flex gap-3.5 justify-end">
-				<button type="button" value="Voltar" className="w-28 h-12 bg-container text-white rounded-xl">Voltar</button>
-				<button type="submit" value="Submit" className="w-28 h-12 bg-container text-white rounded-xl">Enviar</button>
 			</div>
 			
 		</div>
