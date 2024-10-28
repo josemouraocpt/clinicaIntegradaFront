@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
+import { requiredString } from "./ErroPreenchimento";
 
 interface IDominioFormProps{
     action: string
@@ -14,9 +15,9 @@ interface IDominioFormProps{
 
 const schema = yup.object({
     idSTATUS_DOMAIN: yup.number(),
-    STATUS_VALUE: yup.string(),
-    STATUS_TYPE: yup.string(),
-    STATUS_DESCRIPTION: yup.string(),
+    STATUS_VALUE: requiredString('Valor do dominio obrigatório'),
+    STATUS_TYPE: requiredString('Tipo do dominio obrigatório'),
+    STATUS_DESCRIPTION: requiredString('Descrição do dominio obrigatório'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -68,14 +69,17 @@ export function DominioForm({action}: IDominioFormProps){
     return(
         <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label>Tipo do dominio: 
+                <label className="flex flex-col">Tipo do dominio: 
                     <input disabled={!canEdit} type="text" className="input" {...register("STATUS_TYPE")} />
+                    {errors.STATUS_TYPE && <span className="text-red-500">{errors.STATUS_TYPE.message}</span>}
                 </label>
-                <label>Valor do dominio: 
+                <label className="flex flex-col">Valor do dominio: 
                     <input disabled={!canEdit} type="text" className="input" {...register("STATUS_VALUE")} />
+                    {errors.STATUS_VALUE && <span className="text-red-500">{errors.STATUS_VALUE.message}</span>}
                 </label>
-                <label>Descrição do dominio: 
+                <label className="flex flex-col">Descrição do dominio: 
                     <input disabled={!canEdit} type="text" className="input" {...register("STATUS_DESCRIPTION")} />
+                    {errors.STATUS_DESCRIPTION && <span className="text-red-500">{errors.STATUS_DESCRIPTION.message}</span>}
                 </label>
                 <div className="my-2 flex justify-end space-x-2">
                     {action == "EDITAR" && (

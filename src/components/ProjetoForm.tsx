@@ -9,25 +9,26 @@ import { usePathname, useRouter } from "next/navigation";
 import * as yup from "yup";
 import projetoService from "@/services/projetosService";
 import hospedeService from "@/services/hospedeService";
+import { requiredString } from "./ErroPreenchimento";
 
 const schema = yup.object({
-    name: yup.string(),
-    projectDate: yup.string(),
-    scope: yup.string(),
-    activity: yup.string(),
-    restriction: yup.string(),
-    cost: yup.string(),
-    type: yup.string(),
+    name: requiredString('Nome obrigatório'),
+    projectDate: requiredString('Data do projeto obrigatório'),
+    scope: requiredString('Escopo do projeto obrigatório'),
+    activity: requiredString('Atividade obrigatório'),
+    restriction: requiredString('Restrições obrigatório'),
+    cost: requiredString('Custo do projeto obrigatório'),
+    type: requiredString('Tipo do projeto obrigatório'),
     userId: yup.number(),
-    cc: yup.string(),
-    status: yup.string(),
-    presentation: yup.string(),
-    identification: yup.string(),
-    justification: yup.string(),
-    methodology: yup.string(),
-    objectives: yup.string(),
-    public: yup.string(),
-    expectedResults: yup.string(),
+    cc: requiredString('Centro de custo obrigatório'),
+    status: requiredString('Status do projeto obrigatório'),
+    presentation: requiredString('Apresentação obrigatório'),
+    identification: requiredString('Identificação obrigatório'),
+    justification: requiredString('Justificação obrigatório'),
+    methodology: requiredString('Métodologia obrigatório'),
+    objectives: requiredString('Objetivos obrigatório'),
+    public: requiredString('Público beneficiário obrigatório'),
+    expectedResults: requiredString('Resultados esperados obrigatório'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -166,52 +167,67 @@ export function ProjetoForm({action}: IProjetoFormProps){
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-3 gap-4">
                     <div>
-                        <label>Nome do projeto:
+                        <label className="flex flex-col">Nome do projeto:
                             <input disabled={!canEdit} type="text" className="input" {...register("name")}/>
+                            {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                         </label>
-                        <label>Data do projeto:
+                        <label className="flex flex-col">Data do projeto:
                             <input disabled={!canEdit} type="date" className="input" {...register("projectDate")}/>
+                            {errors.projectDate && <span className="text-red-500">{errors.projectDate.message}</span>}
                         </label>
-                        <label>Escopo do projeto:
+                        <label className="flex flex-col">Escopo do projeto:
                             <textarea disabled={!canEdit} className="input"  {...register("scope")} rows={10}></textarea>
+                            {errors.scope && <span className="text-red-500">{errors.scope.message}</span>}
                         </label>
-                        <label>Atividade:
+                        <label className="flex flex-col">Atividade:
                             <textarea disabled={!canEdit} className="input" {...register("activity")} rows={10}></textarea>
+                            {errors.activity && <span className="text-red-500">{errors.activity.message}</span>}
                         </label>
-                        <label>Resultados esperados:
+                        <label className="flex flex-col">Resultados esperados:
                             <textarea disabled={!canEdit} className="input" {...register("expectedResults")} rows={10}></textarea>
+                            {errors.expectedResults && <span className="text-red-500">{errors.expectedResults.message}</span>}
                         </label>
-                        <label>Objetivos:
+                        <label className="flex flex-col">Objetivos:
                             <textarea disabled={!canEdit} className="input" {...register("objectives")} rows={10}></textarea>
+                            {errors.objectives && <span className="text-red-500">{errors.objectives.message}</span>}
                         </label>
-                        <label>Metodologia:
+                        <label className="flex flex-col">Metodologia:
                             <textarea disabled={!canEdit} className="input" {...register("methodology")} rows={10}></textarea>
+                            {errors.methodology && <span className="text-red-500">{errors.methodology.message}</span>}
                         </label>
                     </div>
                     <div>
-                        <label>Custo do projeto:
+                        <label className="flex flex-col">Custo do projeto:
                             <input disabled={!canEdit} type="text" className="input" {...register("cost")}/>
+                            {errors.cost && <span className="text-red-500">{errors.cost.message}</span>}
                         </label>
-                        <label>Tipo do projeto:
+                        <label className="flex flex-col">Tipo do projeto:
                             <input disabled={!canEdit} type="text" className="input" {...register("type")}/>
+                            {errors.type && <span className="text-red-500">{errors.type.message}</span>}
                         </label>
-                        <label>Centro de custo:
+                        <label className="flex flex-col">Centro de custo:
                             <input disabled={!canEdit} type="text" className="input" {...register("cc")}/>
+                            {errors.cc && <span className="text-red-500">{errors.cc.message}</span>}
                         </label>
-                        <label>Público beneficiário:
+                        <label className="flex flex-col">Público beneficiário:
                             <input disabled={!canEdit} type="text" className="input" {...register("public")}/>
+                            {errors.public && <span className="text-red-500">{errors.public.message}</span>}
                         </label>
-                        <label>Identificação:
+                        <label className="flex flex-col">Identificação:
                             <input disabled={!canEdit} type="text" className="input" {...register("identification")}/>
+                            {errors.identification && <span className="text-red-500">{errors.identification.message}</span>}
                         </label>
-                        <label>Justificativa:
+                        <label className="flex flex-col">Justificativa:
                             <textarea disabled={!canEdit} className="input" {...register("justification")} rows={10}></textarea>
+                            {errors.justification && <span className="text-red-500">{errors.justification.message}</span>}
                         </label>
-                        <label>Restrições:
+                        <label className="flex flex-col">Restrições:
                             <textarea disabled={!canEdit} className="input" {...register("restriction")} rows={10}></textarea>
+                            {errors.restriction && <span className="text-red-500">{errors.restriction.message}</span>}
                         </label>
-                        <label>Apresentação:
+                        <label className="flex flex-col">Apresentação:
                             <textarea disabled={!canEdit} className="input" {...register("presentation")} rows={10}></textarea>
+                            {errors.presentation && <span className="text-red-500">{errors.presentation.message}</span>}
                         </label>
                     </div>
                     <div>
@@ -225,6 +241,7 @@ export function ProjetoForm({action}: IProjetoFormProps){
                                     ))
                                 )}
                             </select>
+                            {errors.status && <span className="text-red-500">{errors.status.message}</span>}
                         </label>
                         {action == "EDITAR" && (
                             <div>

@@ -7,14 +7,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import farmaciaService from "@/services/farmaciaService";
+import { requiredString, requiredNumber } from "./ErroPreenchimento";
 
 const schema = yup.object({
     userId: yup.number(),
-    name: yup.string(),
-    quantity: yup.number(),
-    unitValue: yup.string(),
-    expireDate: yup.string(),
-    type: yup.string(),
+    name: requiredString('Nome obrigatório'),
+    quantity: requiredNumber('Quantidade obrigatório','Deve conter apenas números'),
+    unitValue: requiredString('Valor unitário obrigatório'),
+    expireDate: requiredString('Data de valiadade obrigatório'),
+    type: requiredString('Tipo obrigatório'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -109,25 +110,30 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <label>Nome do {type == "MEDICAMENTO" ? "medicamento" : "item"}:
+            <label className="flex flex-col">Nome do {type == "MEDICAMENTO" ? "medicamento" : "item"}:
                 <input disabled={!canEdit} className="input" type="text" {...register("name")} />
+                {errors.name && <span className="text-red-500">{errors.name.message}</span>}
             </label>
-            <label>Quantidade:
+            <label className="flex flex-col">Quantidade:
                 <input disabled={!canEdit} className="input" type="number" {...register("quantity")} />
+                {errors.quantity && <span className="text-red-500">{errors.quantity.message}</span>}
             </label>
-            <label>Valor unitário:
+            <label className="flex flex-col">Valor unitário:
                 <input disabled={!canEdit} className="input" type="text" {...register("unitValue")}/>
+                {errors.unitValue && <span className="text-red-500">{errors.unitValue.message}</span>}
             </label>
-            <label>Data de validade:
+            <label className="flex flex-col">Data de validade:
                 <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
+                {errors.expireDate && <span className="text-red-500">{errors.expireDate.message}</span>}
             </label>
             {type == "MEDICAMENTO" && (
-                <label>Tipo:
+                <label className="flex flex-col">Tipo:
                     <select disabled={!canEdit} className="input" {...register("type")}>
                         <option hidden={true}></option>
                         <option value="MEDICAMENTO">Medicamento</option>
                         <option value="VACINA">Vacina</option>
                     </select>
+                    {errors.type && <span className="text-red-500">{errors.type.message}</span>}
                 </label>
             )}
             {dataBD && (

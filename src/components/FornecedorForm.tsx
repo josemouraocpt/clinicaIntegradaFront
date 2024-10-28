@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
+import { requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
 
 interface IFornecedorFormProps{
     action: string
@@ -14,11 +15,11 @@ interface IFornecedorFormProps{
 
 const schema = yup.object({
     idFORNECEDOR: yup.number(),
-    NOME: yup.string(),
-    EMAIL: yup.string(),
-    TELEFONE: yup.string(),
-    CNPJ: yup.string(),
-    NOME_CONTATO: yup.string(),
+    NOME: requiredString('Nome obrigatório'),
+    EMAIL: requiredEmail('Email obrigatório'),
+    TELEFONE: requiredNumber('Telefone obrigatório','O telefone deve conter apenas números'),
+    CNPJ: requiredNumberString('CNPJ obrigatório').min(14, 'CNPJ inválido').max(14,'CNPJ inválido'),
+    NOME_CONTATO: requiredString('Nome do contato obrigatório'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -72,20 +73,25 @@ export function FornecedorForm({action}: IFornecedorFormProps){
     return(
         <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label>Nome: 
+                <label className="flex flex-col">Nome: 
                     <input disabled={!canEdit} type="text" className="input" {...register("NOME")} />
+                    {errors.NOME && <span className="text-red-500">{errors.NOME.message}</span>}
                 </label>
-                <label>Email: 
+                <label className="flex flex-col">Email: 
                     <input disabled={!canEdit} type="text" className="input" {...register("EMAIL")} />
+                    {errors.EMAIL && <span className="text-red-500">{errors.EMAIL.message}</span>}
                 </label>
-                <label>Telefone: 
+                <label className="flex flex-col">Telefone: 
                     <input disabled={!canEdit} type="text" className="input" {...register("TELEFONE")} />
+                    {errors.TELEFONE && <span className="text-red-500">{errors.TELEFONE.message}</span>}
                 </label>
-                <label>CNPJ: 
+                <label className="flex flex-col">CNPJ: 
                     <input disabled={!canEdit} type="text" className="input" {...register("CNPJ")} />
+                    {errors.CNPJ && <span className="text-red-500">{errors.CNPJ.message}</span>}
                 </label>
-                <label>Nome do contato: 
+                <label className="flex flex-col">Nome do contato: 
                     <input disabled={!canEdit} type="text" className="input" {...register("NOME_CONTATO")} />
+                    {errors.NOME_CONTATO && <span className="text-red-500">{errors.NOME_CONTATO.message}</span>}
                 </label>
                 <div className="my-2 flex justify-end space-x-2">
                     {action == "EDITAR" && (
