@@ -3,15 +3,16 @@
 interface IDadosMedicosProp{
     register: any
     canEdit: boolean
+    errors:any
 }
 
-export function DadosMedicos({register, canEdit}: IDadosMedicosProp){
+export function DadosMedicos({register, canEdit,errors}: IDadosMedicosProp){
     return(
         <div>
             <div className="flex flex-col space-y-3">
                 <h1 className="font-bold">Dados Médicos</h1>
                 <div>
-                    <div className="mt-4">
+                    <div className="mt-4 flex flex-col">
                         <h2 className="font-bold">Grau de dependência</h2>
                         <p className="text-sm">Sobre o grau de dependência do hospede, por favor, informe: </p>
                         <div className="space-x-3">
@@ -23,6 +24,7 @@ export function DadosMedicos({register, canEdit}: IDadosMedicosProp){
                             </select>
                         </div>
                         <small className="text-sm opacity-50">** 1 (Pouco dependente), 2 (Dependente), 3 (Muito dependente)</small>
+                        {errors.grauDependencia && <span className="text-red-500">{errors.grauDependencia.message}</span>}
                     </div>
                     <div>
                         <h2 className="font-bold">Histórico de Medicamentos</h2>
@@ -44,7 +46,7 @@ export function DadosMedicos({register, canEdit}: IDadosMedicosProp){
                     </div>
                     <div>
                         <h2 className="font-bold">Observações</h2>
-                        <label>Obrservações:
+                        <label>Observações:
                             <textarea disabled={!canEdit} placeholder="Descrição" className="input w-full resize-none" rows={2} {...register("observacoeMedicamento")} />
                         </label>
                     </div>

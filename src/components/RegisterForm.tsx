@@ -8,26 +8,28 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import userService from "@/services/userService";
+import {requiredConfirmPassword, requiredPassword, requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
+ 
 
 const schema = yup.object({
-    name: yup.string(),
-	password: yup.string(),
-    confirmPassword: yup.string(),
-	email: yup.string(),
-    nationality: yup.string(),
-    naturalness: yup.string(),
-    institution: yup.string(),
-    phoneNumber: yup.string(),
-    cpf: yup.string(),
-    rg: yup.string(),
-    birthDate: yup.string(),
-    formation: yup.string(),
-    zipCode: yup.string(),
-    address: yup.string(),
-    city: yup.string(),
-    state: yup.string(),
-    departmentId: yup.number(),
-    userProfileId: yup.number(),
+    name: requiredString('Nome obrigatório'),
+	password: requiredPassword('Senha obrigatória'),
+    confirmPassword: requiredConfirmPassword('Senha obrigatória'),
+	email: requiredEmail('Email obrigatório'),
+    nationality: requiredString('Nacionalidade obrigatório'),
+    naturalness: requiredString('Naturalidade obrigatório'),
+    institution: requiredString('Instituição obrigatório'),
+    phoneNumber: requiredNumber('Telefone obrigatório','O telefone deve conter apenas números'),
+    cpf: requiredNumberString('CPF obrigatório').min(11, 'CPF inválido').max(11,'CPF inválido'),
+    rg: requiredNumberString('RG obrigatório','O RG deve conter apenas números').min(9, 'RG inválido').max(9,'RG inválido'),
+    birthDate: requiredString('Data de nascimento obrigatório'),
+    formation: requiredString('Formação obrigatório'),
+    zipCode: requiredNumberString('CEP obrigatório','O CEP deve conter apenas números').min(8, 'CEP inválido').max(8,'CEP inválido'),
+    address: requiredString('Endereço obrigatório'),
+    city: requiredString('Cidade obrigatório'),
+    state: requiredString('Estado obrigatório'),
+    departmentId: requiredString('Setor obrigatório'),
+    userProfileId: requiredString('Tipo do usuário obrigatório'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -72,20 +74,24 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Nome:
                             <input {...register("name")} type="text" className="input"/>
+                            {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                         </label>
                         <label>E-mail:
                             <input {...register("email")} type="email" className="input"/>
+                            {errors.email && <span className="text-red-500">{errors.email.message}</span>}
                         </label>
                         <label>Senha:
                             <input {...register("password")} type="password" className="input"/>
+                            {errors.password && <span className="text-red-500">{errors.password.message}</span>}
                         </label>
                         <label>Confirmação de senha:
                             <input {...register("confirmPassword")} type="password" className="input"/>
+                            {errors.confirmPassword && <span className="text-red-500 nowrap">{errors.confirmPassword.message}</span>}
                         </label>
                         <label>Setor:
                             <select className="input" {...register("departmentId")}>
                                 <option hidden={true}></option>
-                                {setores.length >= 1 && (
+                                {setores?.length >= 1 && (
                                     setores.map((value) => (
                                         <option value={value.idSETOR} key={value.idSETOR}>{value.DESCRICAO}</option>
                                     ))
@@ -97,7 +103,7 @@ export function RegisterForm(){
                         <label>Tipo do usuário:
                             <select className="input" {...register("userProfileId")}>
                                 <option hidden={true}></option>
-                                {profiles.length >= 1 && (
+                                {profiles?.length >= 1 && (
                                     profiles.map((value) => (
                                         <option value={value.idUSER_DOMAIN} key={value.idUSER_DOMAIN}>{value.DOMAIN_DESCRIPTION}</option>
                                     ))
@@ -106,12 +112,15 @@ export function RegisterForm(){
                         </label>
                         <label>Telefone:
                             <input {...register("phoneNumber")} type="text" className="input"/>
+                            {errors.phoneNumber && <span className="text-red-500 nowrap">{errors.phoneNumber.message}</span>}
                         </label>
                         <label>CPF:
                             <input {...register("cpf")} type="text" className="input"/>
+                            {errors.cpf && <span className="text-red-500 nowrap">{errors.cpf.message}</span>}
                         </label>
                         <label>RG:
                             <input {...register("rg")} type="text" className="input"/>
+                            {errors.rg && <span className="text-red-500 nowrap">{errors.rg.message}</span>}
                         </label>
                     </div>
                 </div>
@@ -120,18 +129,23 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Data de Nascimento:
                             <input {...register("birthDate")} type="date" className="input"/>
+                            {errors.birthDate && <span className="text-red-500 nowrap">{errors.birthDate.message}</span>}
                         </label>
                         <label>Nacionalidade:
                             <input {...register("nationality")} type="text" className="input"/>
+                            {errors.nationality && <span className="text-red-500 nowrap">{errors.nationality.message}</span>}
                         </label>
-                        <label>Naturalidae:
+                        <label>Naturalidade:
                             <input {...register("naturalness")} type="text" className="input"/>
+                            {errors.naturalness && <span className="text-red-500 nowrap">{errors.naturalness.message}</span>}
                         </label>
                         <label>Formação:
                             <input {...register("formation")} type="text" className="input"/>
+                            {errors.formation && <span className="text-red-500 nowrap">{errors.formation.message}</span>}
                         </label>
                         <label>Instituição de Ensino:
                             <input {...register("institution")} type="text" className="input"/>
+                            {errors.institution && <span className="text-red-500 nowrap">{errors.institution.message}</span>}
                         </label>
                     </div>
                 </div>
@@ -143,12 +157,15 @@ export function RegisterForm(){
                                 <div className="flex flex-row space-x-5">
                                     <label>CEP:
                                         <input {...register("zipCode")} type="text" className="input"/>
+                                        {errors.zipCode && <span className="text-red-500 nowrap">{errors.zipCode.message}</span>}
                                     </label>
                                     <label>Endereço:
                                         <input {...register("address")} type="text" className="input"/>
+                                        {errors.address && <span className="text-red-500 nowrap">{errors.address.message}</span>}
                                     </label>
                                     <label>Cidade:
                                         <input {...register("city")} type="text" className="input"/>
+                                        {errors.city && <span className="text-red-500 nowrap">{errors.city.message}</span>}
                                     </label>
                                     <label>Estado:
                                         <select className="input" {...register("state")}>
@@ -181,6 +198,7 @@ export function RegisterForm(){
                                             <option value="SE">Sergipe</option>
                                             <option value="TO">Tocantins</option>
                                         </select>
+                                        {errors.state && <span className="text-red-500 nowrap">{errors.state.message}</span>}
                                 </label>
                                 </div>
                             </div>

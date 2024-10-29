@@ -8,10 +8,11 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "@/slices/authSlice";
+import { requiredEmail, requiredPassword } from "./ErroPreenchimento";
 
 const schema = yup.object({
-	email: yup.string().required("Insira o e-mail").email("Insira um e-mail válido"),
-	password: yup.string().required("Insira a senha")
+	email: requiredEmail('Email obrigatório'),
+	password: requiredPassword('Senha obrigatória'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -39,9 +40,9 @@ export function LoginForm(){
     return(
         <form className="flex flex-col space-y-3 mt-3" onSubmit={handleSubmit(onSubmit)}>
             <input placeholder="Email" {...register("email")} className="input"/>
-            <span>{errors.email?.message}</span>
+                {errors.email && <span className="text-red-500">{errors.email.message}</span>}
             <input placeholder="Senha" {...register("password")} className="input" type="password" />
-            <span>{errors.password?.message}</span>
+                {errors.password && <span className="text-red-500">{errors.password.message}</span>}
             <MyButton buttonText="Entrar" buttonType="submit"/>
         </form>
     )

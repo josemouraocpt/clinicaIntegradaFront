@@ -8,15 +8,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import cozinhaService from "@/services/cozinhaService";
 import { useEffect, useState } from "react";
 import { MyButton } from "./MyButton";
+import { requiredString } from "./ErroPreenchimento";
 
 const schema = yup.object({
-    date: yup.string(),
-    time: yup.string(),
-    name: yup.string(),
-    description: yup.string(),
+    date: requiredString('Data do cardápio obrigatório'),
+    time: requiredString('Horário do cardápio obrigatório'),
+    name: requiredString('Título do cardápio obrigatório'),
+    description: requiredString('Descrição do cardápio obrigatório'),
     userId: yup.number(),
-    type: yup.string(),
-    status: yup.string(),
+    type: requiredString('Tipo do cardápio obrigatório'),
+    status: requiredString('Status do cardápio obrigatório'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -82,26 +83,31 @@ export function CardapioForm({action}: ICardapioProps){
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label>Título do cardápio:
+                <label className="flex flex-col">Título do cardápio:
                     <input className="input" readOnly={!canEdit} type="text" {...register("name")} />
+                    {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                 </label>
-                <label>Data do cardápio:
+                <label className="flex flex-col">Data do cardápio:
                     <input className="input" readOnly={!canEdit} type="date" {...register("date")} />
+                    {errors.date && <span className="text-red-500">{errors.date.message}</span>}
                 </label>
-                <label>Horario do cardárpio:
+                <label className="flex flex-col">Horário do cardárpio:
                     <input className="input" readOnly={!canEdit} type="text" {...register("time")} />
+                    {errors.time && <span className="text-red-500">{errors.time.message}</span>}
                 </label>
-                <label>Descrição do cardápio:
+                <label className="flex flex-col">Descrição do cardápio:
                     <textarea className="input" readOnly={!canEdit} rows={10} {...register("description")}/>
+                    {errors.description && <span className="text-red-500">{errors.description.message}</span>}
                 </label>
-                <label>Tipo do cardárpio:
+                <label className="flex flex-col">Tipo do cardárpio:
                     <select className="input" {...register("type")} disabled={!canEdit}>
                         <option hidden={true}></option>
                         <option value="PADRAO">Cardápio Padrão</option>
                         <option value="ESPECIAL">Cardápio Especial</option>
                     </select>
+                    {errors.type && <span className="text-red-500">{errors.type.message}</span>}
                 </label>
-                <label>Status do cardárpio:
+                <label className="flex flex-col">Status do cardárpio:
                     <select className="input" {...register("status")} disabled={!canEdit}>
                         <option hidden={true}></option>
                         {status && (
@@ -111,6 +117,7 @@ export function CardapioForm({action}: ICardapioProps){
                             ))
                         )}
                     </select>
+                    {errors.status && <span className="text-red-500">{errors.status.message}</span>}
                 </label>
                 <div className='flex space-x-2 items-center justify-end m-4'>
                     {action == "EDITAR" ? (
