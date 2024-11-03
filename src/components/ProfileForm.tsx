@@ -17,7 +17,7 @@ const schema = yup.object({
     institution: requiredString('Instituição obrigatório'),
     phoneNumber: requiredNumber('Telefone obrigatório','O telefone deve conter apenas números'),
     cpf: requiredNumberString('CPF obrigatório').min(11, 'CPF inválido').max(11,'CPF inválido'),
-    rg: requiredNumberString('RG obrigatório','O RG deve conter apenas números').min(9, 'RG inválido').max(9,'RG inválido'),
+    rg: requiredNumberString('RG obrigatório','O RG deve conter apenas números').min(8, 'RG inválido').max(9,'RG inválido'),
     birthDate: requiredString('Data de nascimento obrigatório'),
 	formation: requiredString('Formação obrigatório'),
     zipCode: requiredNumberString('CEP obrigatório','O CEP deve conter apenas números').min(8, 'CEP inválido').max(8,'CEP inválido'),
