@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { MyButton } from "@/components/MyButton";
+import { toast } from "sonner";
 
 const schema = yup.object({
     userId: yup.number(),
@@ -67,8 +68,12 @@ export default function DetalhesUsuario(){
 	async function onSubmit(data: FormData){
 		const res = await updateUserStatus(data, user.token);
 		if(res.type == "SUCCESS"){
+			toast.success("Ação realizada com sucesso!");{}
 			return router.push("/funcionarios")
-		}
+		}else {
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
+        }
 
 	};
 

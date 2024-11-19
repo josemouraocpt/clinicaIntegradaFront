@@ -14,6 +14,7 @@ import hospedeService from "@/services/hospedeService";
 import { MyButton } from "./MyButton";
 import { MdDelete } from "react-icons/md";
 import { requiredString, requiredNumberString, requiredNumber } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 interface IHospedeFormProps{
 	action: string
@@ -106,9 +107,11 @@ export function HospedeForm({action}: IHospedeFormProps){
 		if(action == "CRIAR"){
 			const res = await createHospedeFull(data, user.token);
 			if(res.type == "SUCCESS"){
+				toast.success("Ação realizada com sucesso!");{}
 				router.push("/dashboard")
-			}else{
-				console.log(res.error)
+			} else {
+				toast.error("Algo não está certo.Tente novamente!");
+				return;
 			}
 		}else{
 			if(!data.anexo) {
@@ -117,9 +120,11 @@ export function HospedeForm({action}: IHospedeFormProps){
 			}
 			const res = await editHospedeById(Number(pathname.substring(10)),data, user.token);
 			if(res.type == "SUCCESS"){
+				toast.success("Ação realizada com sucesso!");{}
 				router.push("/dashboard")
-			}else{
-				console.log(res.error)
+			} else {
+				toast.error("Algo não está certo.Tente novamente!");
+				return;
 			}
 		}
 	};

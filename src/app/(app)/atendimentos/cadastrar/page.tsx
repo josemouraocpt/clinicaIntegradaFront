@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
 import * as yup from "yup";
 
 const schema = yup.object({
@@ -39,7 +40,11 @@ export default function CadastrarAtendimento(){
     async function onSubmit(data: FormData){
         const res = await createAtendimento(data, user.token);
         if(res.type == "SUCCESS"){
+            toast.success("Ação realizada com sucesso!");{}
             router.push("/atendimentos")
+        } else {
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
         }
 	};
 

@@ -10,6 +10,7 @@ import * as yup from "yup";
 import projetoService from "@/services/projetosService";
 import hospedeService from "@/services/hospedeService";
 import { requiredString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const schema = yup.object({
     name: requiredString('Nome obrigatório'),
@@ -94,7 +95,11 @@ export function ProjetoForm({action}: IProjetoFormProps){
         if(action == "CRIAR"){
             const res = await createProjeto(data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/projetos")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const res = await editProjeto(Number(pathname.substring(17)), data, user.token);
@@ -102,7 +107,11 @@ export function ProjetoForm({action}: IProjetoFormProps){
                 const res = await addParticipante(hospedesList, user.token);
             }
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/projetos")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
         

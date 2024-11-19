@@ -4,12 +4,15 @@ import { Roboto } from 'next/font/google';
 import dynamic from 'next/dynamic';
 import Spinner from '@/components/Spinner';
 import { useEffect, useState } from 'react';
+import { Toaster } from 'sonner';
 
 const roboto = Roboto({ subsets: ['latin'], weight: '400' });
 
 const DynamicProvider = dynamic(() => import('@/components/ProviderComponent'), {
   ssr: false,
 });
+
+
 
 export default function RootLayout({
   children,
@@ -27,6 +30,7 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={`${roboto.className} bg-background`}>
         {isLoading ? <Spinner /> : <DynamicProvider>{children}</DynamicProvider>}
+        <Toaster position="top-center" richColors/>
       </body>
     </html>
   );

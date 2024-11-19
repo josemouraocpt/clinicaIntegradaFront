@@ -8,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { toast } from "sonner";
 import * as yup from "yup";
 
 interface IRemedio {
@@ -304,7 +305,11 @@ export default function Ficha(){
     async function handleDelete(id: number){
         const res = await deleteHospedeDadosMedicos(id, user.token);
         if(res.type == "SUCCESS"){
+            toast.success("Ação realizada com sucesso!");{}
             router.push("/hospedes");
+        } else {
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
         }
     }
 
