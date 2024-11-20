@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
 import { requiredString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 interface IDominioFormProps{
     action: string
@@ -36,12 +37,20 @@ export function DominioForm({action}: IDominioFormProps){
         if(action == "EDITAR"){
             const res = await editDominio(data.idSTATUS_DOMAIN, data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/sistema/dominios")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const res = await createDominio(data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/sistema/dominios")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 	};

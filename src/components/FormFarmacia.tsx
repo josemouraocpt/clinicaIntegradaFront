@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import farmaciaService from "@/services/farmaciaService";
 import { requiredString, requiredNumber } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const schema = yup.object({
     userId: yup.number(),
@@ -45,7 +46,11 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
                 res = await createItem(data, user.token);
             }
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/farmacia");
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             //@ts-ignore
@@ -70,7 +75,11 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
                 res = await editItem(Number(pathname.substring(23)), dataToUpdate, user.token);
             }
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/farmacia");
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 

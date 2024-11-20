@@ -9,6 +9,7 @@ import cozinhaService from "@/services/cozinhaService";
 import { useEffect, useState } from "react";
 import { MyButton } from "./MyButton";
 import { requiredString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const schema = yup.object({
     date: requiredString('Data do cardápio obrigatório'),
@@ -41,25 +42,39 @@ export function CardapioForm({action}: ICardapioProps){
         if(action == "CRIAR"){
             const res = await createCardapio(data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/cozinha")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const res = await editCardapio(Number(pathname.substring(26)), data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/cozinha")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 	};
 
     useEffect(() => {
         async function fetch(){
-            const res = await getCardapioStatus(user.token);
+            try{
+                const res = await getCardapioStatus(user.token);
             if(action == "EDITAR"){
                 const res2 = await getCardapioById(Number(pathname.substring(26)), user.token);
                 setCadapioData(res2.data[0]);
             }
             setStatus(res.data);
+        }catch (error) {
+            alert(`Erro: ${error.message || "Algo deu errado ao buscar os dados do cardápio."}`);
+            console.error("Erro ao buscar dados:", error); 
         }
+    }
+            
         setValue("userId", user.user.userId);
         if(action == "CRIAR"){
             setCanEdit(!canEdit);

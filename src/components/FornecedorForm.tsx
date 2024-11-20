@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
 import { requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 interface IFornecedorFormProps{
     action: string
@@ -38,12 +39,20 @@ export function FornecedorForm({action}: IFornecedorFormProps){
         if(action == "EDITAR"){
             const res = await editFornecedor(data.idFORNECEDOR, data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/sistema/fornecedores")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const res = await createFornecedor(data,  user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/sistema/fornecedores")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 	};

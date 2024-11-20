@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import atividadesService from "@/services/atividadesService";
 import { requiredString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const schema = yup.object({
     name: requiredString('Nome da atividade obrigatório'),
@@ -45,12 +46,20 @@ export function AtividadeForm({action}: IAtividadeFormProps){
             data.attachment = data.attachment[0].name;
             const res = await createAtividade(data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/atividades")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const res = await editAtiviadade(Number(pathname.substring(20)),data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/atividades")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 

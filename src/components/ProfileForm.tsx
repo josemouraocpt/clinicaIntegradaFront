@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import userService from "@/services/userService";
 import { requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const schema = yup.object({
     name: requiredString('Nome obrigatório'),
@@ -47,8 +48,12 @@ export function ProfileForm(){
 	async function onSubmit(data: FormData){
 		const res = await updateUser(user.user.userId, data, user.token);
 		if(res.type == "SUCCESS"){
+			toast.success("Ação realizada com sucesso!");{}
 			return router.push("/dashboard")
-		}
+        } else {
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
+        }
 
 	};
 

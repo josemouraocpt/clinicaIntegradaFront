@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import * as yup from "yup";
 import { MyButton } from "./MyButton";
 import { requiredString, requiredNumber } from "./ErroPreenchimento";
+import { toast } from "sonner";
 interface IEstoqueFormProps{
     action: string
 }
@@ -39,7 +40,11 @@ export function EstoqueForm({action}: IEstoqueFormProps){
         if(action == "CRIAR"){
             const res = await createMercadoria(data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/cozinha")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             //@ts-ignore
@@ -59,7 +64,11 @@ export function EstoqueForm({action}: IEstoqueFormProps){
             }
             const res = await editMercadoria(Number(pathname.substring(24)),dataToUpdate, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/cozinha")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
         

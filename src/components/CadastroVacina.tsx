@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { requiredString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const schema = yup.object({
     idStock: requiredString('Medicamento no estoque obrigatório'), 
@@ -44,7 +45,11 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
         if(action == "CRIAR"){
             const res = await createVacina(data, user.token)
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/farmacia");
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const changeDate = new Date().toISOString().split("T")[0]
@@ -64,7 +69,11 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
             }
             const res = await editVacina(Number(pathname.substring(25)), dataToUpdate, user.token)
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/farmacia");
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 
