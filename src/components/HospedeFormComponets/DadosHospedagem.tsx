@@ -8,7 +8,11 @@ interface IDadosHospedagemProps{
 }
 
 
+<<<<<<< HEAD
 export function DadosHospedagem({register, statusList, canEdit, errors}: IDadosHospedagemProps){
+=======
+export function DadosHospedagem({register, statusList, canEdit,errors}: IDadosHospedagemProps){
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
     return(
         <div>
             <div className="flex flex-col space-y-3">
@@ -18,6 +22,7 @@ export function DadosHospedagem({register, statusList, canEdit, errors}: IDadosH
                     <p className="text-sm">Por favor, selecione um quarto disponível:</p>
                     <label>Número do Quarto:
                         <input disabled={!canEdit} type="text" className="input" {...register("quarto")}/>
+                        {errors.quarto && <span className="text-red-500">{errors.quarto.message}</span>}
                     </label>
                     <span className="text-red-500">{errors.quarto?.message}</span>
                 </div>
@@ -26,6 +31,7 @@ export function DadosHospedagem({register, statusList, canEdit, errors}: IDadosH
                     <p className="text-sm">Por favor, selecione um leito disponível:</p>
                     <label>Número do Leito: 
                         <input disabled={!canEdit} type="text" className="input" {...register("leito")}/>
+                        {errors.leito && <span className="text-red-500">{errors.leito.message}</span>}
                     </label>
                     <span className="text-red-500">{errors.leito?.message}</span>
                 </div>

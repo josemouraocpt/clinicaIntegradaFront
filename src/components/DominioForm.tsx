@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
+import { requiredString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 interface IDominioFormProps{
     action: string
@@ -14,9 +16,15 @@ interface IDominioFormProps{
 
 const schema = yup.object({
     idSTATUS_DOMAIN: yup.number(),
+<<<<<<< HEAD
     STATUS_VALUE: yup.string().required('O valor é obrigatório'),
     STATUS_TYPE: yup.string().required('O tipo é obrigatório'),
     STATUS_DESCRIPTION: yup.string().required('A descrição é obrigatória'),
+=======
+    STATUS_VALUE: requiredString('Valor do dominio obrigatório'),
+    STATUS_TYPE: requiredString('Tipo do dominio obrigatório'),
+    STATUS_DESCRIPTION: requiredString('Descrição do dominio obrigatório'),
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -35,12 +43,20 @@ export function DominioForm({action}: IDominioFormProps){
         if(action == "EDITAR"){
             const res = await editDominio(data.idSTATUS_DOMAIN, data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/sistema/dominios")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const res = await createDominio(data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/sistema/dominios")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 	};
@@ -69,6 +85,7 @@ export function DominioForm({action}: IDominioFormProps){
     return(
         <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
             <form onSubmit={handleSubmit(onSubmit)}>
+<<<<<<< HEAD
                 <div>
                     <label>Tipo do dominio: 
                         <input disabled={!canEdit} type="text" className="input" {...register("STATUS_TYPE")} />
@@ -87,6 +104,20 @@ export function DominioForm({action}: IDominioFormProps){
                     </label>
                     <span className="text-red-500">{errors.STATUS_DESCRIPTION?.message}</span>
                 </div>
+=======
+                <label className="flex flex-col">Tipo do dominio: 
+                    <input disabled={!canEdit} type="text" className="input" {...register("STATUS_TYPE")} />
+                    {errors.STATUS_TYPE && <span className="text-red-500">{errors.STATUS_TYPE.message}</span>}
+                </label>
+                <label className="flex flex-col">Valor do dominio: 
+                    <input disabled={!canEdit} type="text" className="input" {...register("STATUS_VALUE")} />
+                    {errors.STATUS_VALUE && <span className="text-red-500">{errors.STATUS_VALUE.message}</span>}
+                </label>
+                <label className="flex flex-col">Descrição do dominio: 
+                    <input disabled={!canEdit} type="text" className="input" {...register("STATUS_DESCRIPTION")} />
+                    {errors.STATUS_DESCRIPTION && <span className="text-red-500">{errors.STATUS_DESCRIPTION.message}</span>}
+                </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                 <div className="my-2 flex justify-end space-x-2">
                     {action == "EDITAR" && (
                         <MyButton buttonText="Editar" buttonType="button" handleClick={() => { setCanEdit(!canEdit) }}/>

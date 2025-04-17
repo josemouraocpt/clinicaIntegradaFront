@@ -9,10 +9,13 @@ import { usePathname, useRouter } from "next/navigation";
 import * as yup from "yup";
 import projetoService from "@/services/projetosService";
 import hospedeService from "@/services/hospedeService";
+import { requiredString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const priceRegexBR = /^(R\$ ?)?\d{1,3}(\.\d{3})*,\d{2}$/;
 
 const schema = yup.object({
+<<<<<<< HEAD
     name: yup.string().required('O nome é obrigatório'),
     projectDate: yup.string().required('A data do projeto é obrigatória'),
     scope: yup.string().required('O escopo é obrigatório'),
@@ -30,6 +33,25 @@ const schema = yup.object({
     objectives: yup.string().required('O objetivo é obrigatório'),
     public: yup.string().required('O publico é obrigatório'),
     expectedResults: yup.string().required('O resultado é obrigatório'),
+=======
+    name: requiredString('Nome obrigatório'),
+    projectDate: requiredString('Data do projeto obrigatório'),
+    scope: requiredString('Escopo do projeto obrigatório'),
+    activity: requiredString('Atividade obrigatório'),
+    restriction: requiredString('Restrições obrigatório'),
+    cost: requiredString('Custo do projeto obrigatório'),
+    type: requiredString('Tipo do projeto obrigatório'),
+    userId: yup.number(),
+    cc: requiredString('Centro de custo obrigatório'),
+    status: requiredString('Status do projeto obrigatório'),
+    presentation: requiredString('Apresentação obrigatório'),
+    identification: requiredString('Identificação obrigatório'),
+    justification: requiredString('Justificação obrigatório'),
+    methodology: requiredString('Métodologia obrigatório'),
+    objectives: requiredString('Objetivos obrigatório'),
+    public: requiredString('Público beneficiário obrigatório'),
+    expectedResults: requiredString('Resultados esperados obrigatório'),
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -95,7 +117,11 @@ export function ProjetoForm({action}: IProjetoFormProps){
         if(action == "CRIAR"){
             const res = await createProjeto(data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/projetos")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const res = await editProjeto(Number(pathname.substring(17)), data, user.token);
@@ -103,7 +129,11 @@ export function ProjetoForm({action}: IProjetoFormProps){
                 const res = await addParticipante(hospedesList, user.token);
             }
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/projetos")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
         
@@ -169,6 +199,7 @@ export function ProjetoForm({action}: IProjetoFormProps){
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-3 gap-4">
                     <div>
+<<<<<<< HEAD
                         <div>
                             <label>Nome do projeto:
                                 <input disabled={!canEdit} type="text" className="input" {...register("name")}/>
@@ -261,6 +292,70 @@ export function ProjetoForm({action}: IProjetoFormProps){
                                 <span className="text-red-500">{errors.presentation?.message}</span>
                             </label>
                         </div>
+=======
+                        <label className="flex flex-col">Nome do projeto:
+                            <input disabled={!canEdit} type="text" className="input" {...register("name")}/>
+                            {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Data do projeto:
+                            <input disabled={!canEdit} type="date" className="input" {...register("projectDate")}/>
+                            {errors.projectDate && <span className="text-red-500">{errors.projectDate.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Escopo do projeto:
+                            <textarea disabled={!canEdit} className="input"  {...register("scope")} rows={10}></textarea>
+                            {errors.scope && <span className="text-red-500">{errors.scope.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Atividade:
+                            <textarea disabled={!canEdit} className="input" {...register("activity")} rows={10}></textarea>
+                            {errors.activity && <span className="text-red-500">{errors.activity.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Resultados esperados:
+                            <textarea disabled={!canEdit} className="input" {...register("expectedResults")} rows={10}></textarea>
+                            {errors.expectedResults && <span className="text-red-500">{errors.expectedResults.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Objetivos:
+                            <textarea disabled={!canEdit} className="input" {...register("objectives")} rows={10}></textarea>
+                            {errors.objectives && <span className="text-red-500">{errors.objectives.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Metodologia:
+                            <textarea disabled={!canEdit} className="input" {...register("methodology")} rows={10}></textarea>
+                            {errors.methodology && <span className="text-red-500">{errors.methodology.message}</span>}
+                        </label>
+                    </div>
+                    <div>
+                        <label className="flex flex-col">Custo do projeto:
+                            <input disabled={!canEdit} type="text" className="input" {...register("cost")}/>
+                            {errors.cost && <span className="text-red-500">{errors.cost.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Tipo do projeto:
+                            <input disabled={!canEdit} type="text" className="input" {...register("type")}/>
+                            {errors.type && <span className="text-red-500">{errors.type.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Centro de custo:
+                            <input disabled={!canEdit} type="text" className="input" {...register("cc")}/>
+                            {errors.cc && <span className="text-red-500">{errors.cc.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Público beneficiário:
+                            <input disabled={!canEdit} type="text" className="input" {...register("public")}/>
+                            {errors.public && <span className="text-red-500">{errors.public.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Identificação:
+                            <input disabled={!canEdit} type="text" className="input" {...register("identification")}/>
+                            {errors.identification && <span className="text-red-500">{errors.identification.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Justificativa:
+                            <textarea disabled={!canEdit} className="input" {...register("justification")} rows={10}></textarea>
+                            {errors.justification && <span className="text-red-500">{errors.justification.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Restrições:
+                            <textarea disabled={!canEdit} className="input" {...register("restriction")} rows={10}></textarea>
+                            {errors.restriction && <span className="text-red-500">{errors.restriction.message}</span>}
+                        </label>
+                        <label className="flex flex-col">Apresentação:
+                            <textarea disabled={!canEdit} className="input" {...register("presentation")} rows={10}></textarea>
+                            {errors.presentation && <span className="text-red-500">{errors.presentation.message}</span>}
+                        </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                     </div>
                     <div>
                         <label>Status do projeto:
@@ -273,7 +368,11 @@ export function ProjetoForm({action}: IProjetoFormProps){
                                     ))
                                 )}
                             </select>
+<<<<<<< HEAD
                             <span className="text-red-500">{errors.status?.message}</span>
+=======
+                            {errors.status && <span className="text-red-500">{errors.status.message}</span>}
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                         </label>
                         {action == "EDITAR" && (
                             <div>

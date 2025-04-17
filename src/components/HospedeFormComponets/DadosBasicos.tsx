@@ -7,12 +7,17 @@ interface IDadosBasicosProps{
     errors: any
 }
 
+<<<<<<< HEAD
 export function DadosBasicos({register, statusList, canEdit, errors}: IDadosBasicosProps){
+=======
+export function DadosBasicos({register, statusList, canEdit, errors }: IDadosBasicosProps){
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
     return(
         <div>
             <h1 className="font-bold">Dados Básicos</h1>
             <div className="flex flex-col space-y-3">
                 <div className="flex space-x-5">
+<<<<<<< HEAD
                     <div>
                         <label className="w-1/4">Nome completo:
                             <input disabled={!canEdit} type="text" className="input" {...register("nome")}/>
@@ -20,25 +25,37 @@ export function DadosBasicos({register, statusList, canEdit, errors}: IDadosBasi
                         <span className="text-red-500">{errors.nome?.message}</span>
                     </div>
                     <label>Apelido:
+=======
+                    <label className="w-1/4">Nome completo:
+                        <input disabled={!canEdit} type="text" className="input" {...register("nome")}/>
+                        {errors.nome && <span className="text-red-500">{errors.nome.message}</span>}
+                    </label>
+                    <label>Apelido(Opcional):
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                         <input disabled={!canEdit} type="text" className="input" {...register("apelido")}/>
                     </label>
-                    <label>Nome Social (se tiver):
+                    <label>Nome Social (Opcional):
                         <input disabled={!canEdit} type="text" className="input" {...register("nomeSocial")}/>
                     </label>
                     <label>Nacionalidade:
                         <input disabled={!canEdit} type="text" className="input" {...register("nacionalidade")}/>
+                        {errors.nacionalidade && <span className="text-red-500">{errors.nacionalidade.message}</span>}
                     </label>
                     <label>Naturalidade:
                         <input disabled={!canEdit} type="text" className="input" {...register("naturalidade")}/>
+                        {errors.naturalidade && <span className="text-red-500">{errors.naturalidade.message}</span>}
                     </label>
                 </div>
                 <div className="flex space-x-5">
                     <label className="w-1/4">Nome do Pai:
                         <input disabled={!canEdit} type="text" className="input" {...register("nomePai")}/>
+                        {errors.nomePai && <span className="text-red-500">{errors.nomePai.message}</span>}
                     </label>
                     <label className="w-1/4">Nome da Mãe:
                         <input disabled={!canEdit} type="text" className="input" {...register("nomeMae")}/>
+                        {errors.nomeMae && <span className="text-red-500">{errors.nomeMae.message}</span>}
                     </label>
+<<<<<<< HEAD
                     <div>
                         <label>CPF:
                             <input disabled={!canEdit} type="text" className="input" {...register("cpf")}/>
@@ -66,6 +83,27 @@ export function DadosBasicos({register, statusList, canEdit, errors}: IDadosBasi
                         </label>
                         <span className="text-red-500">{errors.telefone?.message}</span>
                     </div>
+=======
+                    <label>CPF:
+                        <input disabled={!canEdit} type="text" className="input" {...register("cpf")}/>
+                        {errors.cpf && <span className="text-red-500">{errors.cpf.message}</span>}
+                    </label>
+                    <label>RG:
+                        <input disabled={!canEdit} type="text" className="input" {...register("rg")}/>
+                        {errors.rg && <span className="text-red-500">{errors.rg.message}</span>}
+                    </label>
+                </div>
+
+                <div className="flex space-x-5">
+                    <label>Data de Nascimento:
+                        <input disabled={!canEdit} type="date" className="input" {...register("dataNascimento")}/>
+                        {errors.dataNascimento && <span className="text-red-500">{errors.dataNascimento.message}</span>}
+                    </label>
+                    <label>Telefone:
+                        <input disabled={!canEdit} type="text" className="input" {...register("telefone")}/>
+                        {errors.telefone && <span className="text-red-500">{errors.telefone.message}</span>}
+                    </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                     <label>Estado civil:
                         <select disabled={!canEdit} className="input" {...register("estadoCivil")}>
                             <option hidden={true}></option>
@@ -75,16 +113,25 @@ export function DadosBasicos({register, statusList, canEdit, errors}: IDadosBasi
                             <option value="Viúvo(a)">Viúvo(a)</option>
                             <option value="Separado(a)">Separado(a)</option>
                         </select>
+                        {errors.estadoCivil && <span className="text-red-500">{errors.estadoCivil.message}</span>}
                     </label>
                     <label>Profissão:
                         <input disabled={!canEdit} type="text" className="input" {...register("profissao")}/>
+                        {errors.profissao && <span className="text-red-500">{errors.profissao.message}</span>}
                     </label>
+<<<<<<< HEAD
                     <div>
                         <label>Título de Eleitor:
                             <input disabled={!canEdit} type="text" className="input" {...register("tituloEleitor")}/>
                         </label>
                         <span className="text-red-500">{errors.tituloEleitor?.message}</span>
                     </div>
+=======
+                    <label>Título de Eleitor:
+                        <input disabled={!canEdit} type="text" className="input" {...register("tituloEleitor")}/>
+                        {errors.tituloEleitor && <span className="text-red-500">{errors.tituloEleitor.message}</span>}
+                    </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                 </div>
             </div>
             <div className="flex mt-4">
@@ -94,12 +141,19 @@ export function DadosBasicos({register, statusList, canEdit, errors}: IDadosBasi
                         <div className="flex space-x-5">
                            <div>
                             <label>CEP:
+<<<<<<< HEAD
                                     <input disabled={!canEdit} type="text" className="input" {...register("cep")}/>
                                 </label>
                                 <span className="text-red-500">{errors.cep?.message}</span>
                            </div>
+=======
+                                <input disabled={!canEdit} type="text" className="input" {...register("cep")}/>
+                                {errors.cep && <span className="text-red-500">{errors.cep.message}</span>}
+                            </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                             <label className="w-3/4">Endereço:
                                 <input disabled={!canEdit} type="text" className="input" {...register("endereco")}/>
+                                {errors.endereco && <span className="text-red-500">{errors.endereco.message}</span>}
                             </label>
                             <label>Estado:
                                 <select disabled={!canEdit} className="input" {...register("uf")}>
@@ -132,9 +186,11 @@ export function DadosBasicos({register, statusList, canEdit, errors}: IDadosBasi
                                     <option value="SE">Sergipe</option>
                                     <option value="TO">Tocantins</option>
                                 </select>
+                                {errors.uf && <span className="text-red-500">{errors.uf.message}</span>}
                             </label>
                             <label>Cidade:
                                 <input disabled={!canEdit} type="text" className="input" {...register("cidade")}/>
+                                {errors.cidade && <span className="text-red-500">{errors.cidade.message}</span>}
                             </label>
                         </div>
                     </div>
@@ -144,6 +200,7 @@ export function DadosBasicos({register, statusList, canEdit, errors}: IDadosBasi
                             <div className="flex space-x-5">
                                 <label>Data:
                                     <input disabled={!canEdit} type="date" className="input" {...register("dataEntrada")}/>
+                                
                                 </label>
                             </div>
                             <span className="text-red-500">{errors.dataEntrada?.message}</span>

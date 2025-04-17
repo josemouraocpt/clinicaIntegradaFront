@@ -7,16 +7,26 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import farmaciaService from "@/services/farmaciaService";
+import { requiredString, requiredNumber } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const priceRegex = /^\d+(?:[.,]\d{2})?$/;
 
 const schema = yup.object({
     userId: yup.number(),
+<<<<<<< HEAD
     name: yup.string().required('O nome é obrigatório'),
     quantity: yup.number().required('A quantidade é obrigatória'),
     unitValue: yup.string().required('O valor é obrigatório').matches(priceRegex, 'O preço deve ser um número'),
     expireDate: yup.string().required('A data de validade é obrigatória'),
     type: yup.string(),
+=======
+    name: requiredString('Nome obrigatório'),
+    quantity: requiredNumber('Quantidade obrigatório','Deve conter apenas números'),
+    unitValue: requiredString('Valor unitário obrigatório'),
+    expireDate: requiredString('Data de valiadade obrigatório'),
+    type: requiredString('Tipo obrigatório'),
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -46,7 +56,11 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
                 res = await createItem(data, user.token);
             }
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/farmacia");
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             //@ts-ignore
@@ -71,7 +85,11 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
                 res = await editItem(Number(pathname.substring(23)), dataToUpdate, user.token);
             }
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/farmacia");
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 
@@ -112,6 +130,7 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
         <form onSubmit={handleSubmit(onSubmit)}>
+<<<<<<< HEAD
             <div>
                 <label>Nome do {type == "MEDICAMENTO" ? "medicamento" : "item"}:
                     <input disabled={!canEdit} className="input" type="text" {...register("name")} />
@@ -136,13 +155,32 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
                 </label>
                 <span className="text-red-500">{errors.expireDate?.message}</span>
             </div>
+=======
+            <label className="flex flex-col">Nome do {type == "MEDICAMENTO" ? "medicamento" : "item"}:
+                <input disabled={!canEdit} className="input" type="text" {...register("name")} />
+                {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+            </label>
+            <label className="flex flex-col">Quantidade:
+                <input disabled={!canEdit} className="input" type="number" {...register("quantity")} />
+                {errors.quantity && <span className="text-red-500">{errors.quantity.message}</span>}
+            </label>
+            <label className="flex flex-col">Valor unitário:
+                <input disabled={!canEdit} className="input" type="text" {...register("unitValue")}/>
+                {errors.unitValue && <span className="text-red-500">{errors.unitValue.message}</span>}
+            </label>
+            <label className="flex flex-col">Data de validade:
+                <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
+                {errors.expireDate && <span className="text-red-500">{errors.expireDate.message}</span>}
+            </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
             {type == "MEDICAMENTO" && (
-                <label>Tipo:
+                <label className="flex flex-col">Tipo:
                     <select disabled={!canEdit} className="input" {...register("type")}>
                         <option hidden={true}></option>
                         <option value="MEDICAMENTO">Medicamento</option>
                         <option value="VACINA">Vacina</option>
                     </select>
+                    {errors.type && <span className="text-red-500">{errors.type.message}</span>}
                 </label>
             )}
             {dataBD && (

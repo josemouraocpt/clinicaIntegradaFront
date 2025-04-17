@@ -13,6 +13,8 @@ import { DadosHospedagem } from "./HospedeFormComponets/DadosHospedagem";
 import hospedeService from "@/services/hospedeService";
 import { MyButton } from "./MyButton";
 import { MdDelete } from "react-icons/md";
+import { requiredString, requiredNumberString, requiredNumber } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 interface IHospedeFormProps{
 	action: string
@@ -28,6 +30,7 @@ const contaRegex = /^\d{1,12}-[\dXx]$/;
 
 
 const schema = yup.object({
+<<<<<<< HEAD
 	nome: yup.string().required('O nome é obrigatório'),
 	nomeSocial: yup.string(),
 	apelido: yup.string(),
@@ -58,11 +61,44 @@ const schema = yup.object({
 	nomeBanco: yup.string(),
 	numConta: yup.string().matches(contaRegex, 'Deve estar no padrão 1234567-8'),
 	grauDependencia: yup.string(),
+=======
+	nome: requiredString('Nome obrigatório'),
+	nomeSocial: yup.string(),
+	apelido: yup.string(),
+	rg: requiredNumberString('RG obrigatório','O RG deve conter apenas números').min(8, 'RG inválido').max(9,'RG inválido'),
+	cpf: requiredNumberString('CPF obrigatório').min(11, 'CPF inválido').max(11,'CPF inválido'),
+	nacionalidade: requiredString('Nacionalidade obrigatório'),
+	naturalidade: requiredString('Naturalidade obrigatório'),
+	estadoCivil: requiredString('Estado Civil obrigatório'),
+	dataNascimento: requiredString('Data de nascimento obrigatório'),
+	nomeMae: requiredString('Nome da mãe obrigatório'),
+	nomePai: requiredString('Nome do pai obrigatório'),
+	telefone: requiredNumber('Telefone obrigatório','O telefone deve conter apenas números'),
+	profissao: requiredString('Profissão obrigatório'),
+	tituloEleitor: requiredString('Título de eleitor obrigatório'),
+	endereco: requiredString('Endereço obrigatório'),
+	cidade: requiredString('Cidade obrigatório'),
+	uf: requiredString('Estado obrigatório'),
+	cep: requiredNumberString('CEP obrigatório','O CEP deve conter apenas números').min(8, 'CEP inválido').max(8,'CEP inválido'),
+	dataEntrada: yup.string(),
+	situacaoFinanceiraDesc: requiredString('Situação financeira obrigatório'),
+	quarto: requiredString('Número do quarto obrigatório'),
+	leito: requiredString('Número do leito obrigatório'),
+	hospedagemInfo: yup.string(),
+	responsavel: requiredString('Nome do responsável obrigatório'),
+	hospedeStatus: yup.string(),
+	hospedagemStatus: yup.string(),
+	agencia: requiredString('Agência obrigatório'),
+	conta: requiredString('Conta obrigatório'),
+	nomeBanco: requiredString('Nome Banco obrigatório'),
+	numConta: requiredString('Número da conta obrigatório'),
+	grauDependencia: requiredString('Grau de dependência obrigatório'),
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 	nomeMedicamento: yup.string(),
 	freqMedicamento: yup.string(),
 	tempoMedicamento: yup.string(),
 	dosagemMedicamento: yup.string(),
-	observacoeMedicamento: yup.string(),
+	observacoeMedicamento:yup.string(),
 	tipoComplicacao: yup.string(),
 	descComplicacao: yup.string(),
 	anexo: yup.mixed(),
@@ -86,7 +122,6 @@ export function HospedeForm({action}: IHospedeFormProps){
 	const pathname = usePathname();
 	const { user } = useSelector((state) => state.auth);
 	const { createHospedeFull, getHospedeStatus, editHospedeById, getHospedeById } = hospedeService;
-
 	const [hospedeStatusList, setHospedeStatusList] = useState([]);
 	const [hospedagemStatusList, setHospedagemStatusList] = useState([]);
 	const [canEdit, setCanEdit] = useState(false);
@@ -97,6 +132,11 @@ export function HospedeForm({action}: IHospedeFormProps){
 		resolver: yupResolver(schema)
 	});
 
+	// const handleNext = handleSubmit((data) => {
+	// 	setCurrentStep(state => state + 1);
+	//   }, () => {
+	// 	console.log("Corrija os erros antes de prosseguir.");
+	// });
 	function handleNext(){
 		setCurrentStep(state => state + 1);
 	};
@@ -112,9 +152,11 @@ export function HospedeForm({action}: IHospedeFormProps){
 		if(action == "CRIAR"){
 			const res = await createHospedeFull(data, user.token);
 			if(res.type == "SUCCESS"){
+				toast.success("Ação realizada com sucesso!");{}
 				router.push("/dashboard")
-			}else{
-				console.log(res.error)
+			} else {
+				toast.error("Algo não está certo.Tente novamente!");
+				return;
 			}
 		}else{
 			if(!data.anexo) {
@@ -123,9 +165,11 @@ export function HospedeForm({action}: IHospedeFormProps){
 			}
 			const res = await editHospedeById(Number(pathname.substring(10)),data, user.token);
 			if(res.type == "SUCCESS"){
+				toast.success("Ação realizada com sucesso!");{}
 				router.push("/dashboard")
-			}else{
-				console.log(res.error)
+			} else {
+				toast.error("Algo não está certo.Tente novamente!");
+				return;
 			}
 		}
 	};
@@ -235,7 +279,11 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da primeira parte do formulário */}
 				{currentStep == 0 && (
 					<>
+<<<<<<< HEAD
 					<DadosBasicos register={register} statusList={hospedeStatusList} canEdit={canEdit} errors={errors} />
+=======
+					<DadosBasicos errors= {errors} register={register} statusList={hospedeStatusList} canEdit={canEdit} />
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 					<div className="flex justify-end space-x-3">
 						{hospedeData && (
 							<MyButton buttonText="Editar" buttonType="button" handleClick={() => {setCanEdit(!canEdit)}}/>
@@ -249,7 +297,11 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da segunda parte do formulário */}
 				{currentStep == 1 && (
 					<>
+<<<<<<< HEAD
 						<DadosBancarios register={register} canEdit={canEdit} errors={errors}/>
+=======
+						<DadosBancarios errors={errors} register={register} canEdit={canEdit}/>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 						<div className="flex justify-end space-x-3">
 							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
 							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
@@ -261,7 +313,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da terceira parte do formulário */}
 				{currentStep == 2 && (
 					<>
-						<DadosMedicos register={register} canEdit={canEdit}/>
+						<DadosMedicos errors={errors} register={register} canEdit={canEdit}/>
 						<div className="flex justify-end space-x-3">
 							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
 							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
@@ -273,7 +325,11 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da quarta parte do formulário */}
 				{currentStep == 3 && (
 					<>
+<<<<<<< HEAD
 						<DadosHospedagem register={register} statusList={hospedagemStatusList} canEdit={canEdit} errors={errors}/>
+=======
+						<DadosHospedagem errors={errors} register={register} statusList={hospedagemStatusList} canEdit={canEdit}/>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 						<div className="flex justify-end space-x-3">
 							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
 							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
@@ -292,6 +348,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 								<p className="text-sm">Por favor, informe: </p>
 								<label>Nome do Responsável relacionado ao hóspede: 
 									<input disabled={!canEdit} type="text" className="input" {...register("responsavel")} />
+									{errors.responsavel && <span className="text-red-500">{errors.responsavel.message}</span>}
 								</label>
 							</div>
 							<div className="flex justify-end space-x-3">
@@ -327,6 +384,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 											</button>
 											
 										</li>
+										
 									</ul>
 								</div>
 							)}

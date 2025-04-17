@@ -8,18 +8,32 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import * as yup from "yup";
 import { MyButton } from "./MyButton";
+<<<<<<< HEAD
 interface IEstoqueFormProps{ 
+=======
+import { requiredString, requiredNumber } from "./ErroPreenchimento";
+import { toast } from "sonner";
+interface IEstoqueFormProps{
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
     action: string
 }
 const priceRegex = /^\d+(?:[.,]\d{2})?$/;
 
 const schema = yup.object({
     userId: yup.number(),
+<<<<<<< HEAD
     name: yup.string().required('O nome é obrigatório'),
     quantity: yup.number().required('A quantidade é obrigatória'),
     unitValue: yup.string().required('O preço é obrigatório').matches(priceRegex, 'O preço deve ser um número'),
     expireDate: yup.string().required('A data de validade é obrigatória'),
     type: yup.string(),
+=======
+    name: requiredString('Nome obrigatório'),
+    quantity: requiredNumber('Quantidade obrigatório','Deve conter apenas números'),
+    unitValue: requiredString('Valor unitário obrigatório'),
+    expireDate: requiredString('Data de valiadade obrigatório'),
+    type: requiredString('Tipo obrigatório'),
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -39,7 +53,11 @@ export function EstoqueForm({action}: IEstoqueFormProps){
         if(action == "CRIAR"){
             const res = await createMercadoria(data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/cozinha")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             //@ts-ignore
@@ -59,7 +77,11 @@ export function EstoqueForm({action}: IEstoqueFormProps){
             }
             const res = await editMercadoria(Number(pathname.substring(24)),dataToUpdate, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/cozinha")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
         
@@ -91,6 +113,7 @@ export function EstoqueForm({action}: IEstoqueFormProps){
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
             <form onSubmit={handleSubmit(onSubmit)}>
+<<<<<<< HEAD
                 <div>
                     <label>Nome da mercadoria:
                         <input disabled={!canEdit} className="input" type="text" {...register("name")} />
@@ -115,6 +138,24 @@ export function EstoqueForm({action}: IEstoqueFormProps){
                     </label>
                     <span className="text-red-500">{errors.expireDate?.message}</span>
                 </div>
+=======
+                <label className="flex flex-col">Nome da mercadoria:
+                    <input disabled={!canEdit} className="input" type="text" {...register("name")} />
+                    {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+                </label>
+                <label className="flex flex-col">Quantidade:
+                    <input disabled={!canEdit} className="input" type="number" {...register("quantity")} />
+                    {errors.quantity && <span className="text-red-500">{errors.quantity.message}</span>}
+                </label>
+                <label className="flex flex-col">Valor unitário:
+                    <input disabled={!canEdit} className="input" type="text" {...register("unitValue")}/>
+                    {errors.unitValue && <span className="text-red-500">{errors.unitValue.message}</span>}
+                </label>
+                <label className="flex flex-col">Data de validade:
+                    <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
+                    {errors.expireDate && <span className="text-red-500">{errors.expireDate.message}</span>}
+                </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                 {mercadoriaData && (
                     <div className="my-5">
                         <label>Valor total:

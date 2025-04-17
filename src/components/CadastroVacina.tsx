@@ -7,8 +7,11 @@ import farmaciaService from "@/services/farmaciaService";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
+import { requiredString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 const schema = yup.object({
+<<<<<<< HEAD
     idStock: yup.number().required('O medicamento é obrigatório'),  
     idSupplier: yup.number().required('O fornecedor é obrigatório'), 
     name: yup.string().required('O nome é obrigatório'), 
@@ -19,6 +22,18 @@ const schema = yup.object({
     crafter: yup.string().required('O fabricante é obrigatório'), 
     storageType: yup.string().required('O tipo de armazenamento é obrigatório'), 
     storageCondition: yup.string().required('A condiçaõ de armazenamento é obrigatório'),
+=======
+    idStock: requiredString('Medicamento no estoque obrigatório'), 
+    idSupplier: requiredString('Fornecedores obrigatório'),
+    name: requiredString('Nome obrigatório'),
+    dosage: requiredString('Dosagem obrigatório'), 
+    expireDate: requiredString('Data de validade obrigatório'), 
+    batch: requiredString('Número do lote obrigatório'), 
+    fabricationDate: requiredString('Data de fabricação obrigatório'), 
+    crafter: requiredString('Fabricante obrigatório'),
+    storageType: requiredString('Tipo de armazenamento obrigatório'),
+    storageCondition: requiredString('Condição de armazenamento obrigatório'),
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
     changeBy: yup.number()
 });
 
@@ -43,7 +58,11 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
         if(action == "CRIAR"){
             const res = await createVacina(data, user.token)
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/farmacia");
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const changeDate = new Date().toISOString().split("T")[0]
@@ -63,7 +82,11 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
             }
             const res = await editVacina(Number(pathname.substring(25)), dataToUpdate, user.token)
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 router.push("/farmacia");
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 
@@ -111,6 +134,7 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
             <div className='bg-white p-5 rounded-md mb-20 shadow-lg'>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-2 gap-4">
+<<<<<<< HEAD
                         <div>
                             <label>Nome da vacina:
                                 <input disabled={!canEdit} type="text" className='input' {...register("name")}/>
@@ -187,6 +211,64 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
                             </label>
                             <span className="text-red-500">{errors.idSupplier?.message}</span>
                         </div>
+=======
+                        <label>Nome da vacina:
+                            <input disabled={!canEdit} type="text" className='input' {...register("name")}/>
+                            {errors.name && <span className="text-red-500">{errors.name.message}</span>}
+                        </label>
+                        <label>Fabricante:
+                            <input disabled={!canEdit} type="text" className='input' {...register("crafter")}/>
+                            {errors.crafter && <span className="text-red-500">{errors.crafter.message}</span>}
+                        </label>
+                        <label>Dosagem:
+                            <input disabled={!canEdit} type="text" className='input' {...register("dosage")}/>
+                            {errors.dosage && <span className="text-red-500">{errors.dosage.message}</span>}
+                        </label>
+                        <label>Data de Validade:
+                            <input disabled={!canEdit} type="date" className='input' {...register("expireDate")}/>
+                            {errors.expireDate && <span className="text-red-500">{errors.expireDate.message}</span>}
+                        </label>
+                        <label>Tipo de armazenamento:
+                            <input disabled={!canEdit} type="text" className='input' {...register("storageType")}/>
+                            {errors.storageType && <span className="text-red-500">{errors.storageType.message}</span>}
+                        </label>
+                        <label>Número do lote:
+                            <input disabled={!canEdit} type="text" className='input' {...register("batch")}/>
+                            {errors.batch && <span className="text-red-500">{errors.batch.message}</span>}
+                        </label>
+                        <label>Condição de armazenamento:
+                            <input disabled={!canEdit} type="text" className='input' {...register("storageCondition")}/>
+                            {errors.storageCondition && <span className="text-red-500">{errors.storageCondition.message}</span>}
+                        </label>
+                        <label>Data da fabricação:
+                            <input disabled={!canEdit} type="date" className='input' {...register("fabricationDate")}/>
+                            {errors.fabricationDate && <span className="text-red-500">{errors.fabricationDate.message}</span>}
+                        </label>
+                        <label>Medicamento no estoque:
+                            <select className="input" {...register("idStock")} disabled={!canEdit}>
+                                <option hidden={true}></option>
+                                {medicamentos && (
+                                    //@ts-ignore
+                                    medicamentos.map((medicamento) => (
+                                        <option value={medicamento.idESTOQUE} key={medicamento.idESTOQUE}>{medicamento.NOME}</option>
+                                    ))
+                                )}
+                            </select>
+                            {errors.idStock && <span className="text-red-500">{errors.idStock.message}</span>}
+                        </label>
+                        <label>Fornecedores:
+                            <select className="input" {...register("idSupplier")} disabled={!canEdit}>
+                                <option hidden={true}></option>
+                                {fornecedores && (
+                                    //@ts-ignore
+                                    fornecedores.map((fornecedor) => (
+                                        <option value={fornecedor.idFORNECEDOR} key={fornecedor.idFORNECEDOR}>{fornecedor.NOME}</option>
+                                    ))
+                                )}
+                            </select>
+                            {errors.idSupplier && <span className="text-red-500">{errors.idSupplier.message}</span>}
+                        </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                     </div>
                     <div className='flex space-x-2 items-center justify-end my-2'>   
                         {action == "EDITAR" ? (

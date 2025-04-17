@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
+import { requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
+import { toast } from "sonner";
 
 interface IFornecedorFormProps{
     action: string
@@ -17,11 +19,19 @@ const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/;
 
 const schema = yup.object({
     idFORNECEDOR: yup.number(),
+<<<<<<< HEAD
     NOME: yup.string().required('O nome é obrigatório'),
     EMAIL: yup.string().required('O e-mail é obrigatório').email('Deve ser um e-mail válido'),
     TELEFONE: yup.string().required('O telefone é obrigatório').matches(phoneRegex, 'Deve estar no padrão 31912345678'),
     CNPJ: yup.string().required('O CNPJ é obrigatório').matches(cnpjRegex, 'Deve estar no padrão 00.000.000/0001-00'),
     NOME_CONTATO: yup.string().required('O nome do contato é obrigatório'),
+=======
+    NOME: requiredString('Nome obrigatório'),
+    EMAIL: requiredEmail('Email obrigatório'),
+    TELEFONE: requiredNumber('Telefone obrigatório','O telefone deve conter apenas números'),
+    CNPJ: requiredNumberString('CNPJ obrigatório').min(14, 'CNPJ inválido').max(14,'CNPJ inválido'),
+    NOME_CONTATO: requiredString('Nome do contato obrigatório'),
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -40,12 +50,20 @@ export function FornecedorForm({action}: IFornecedorFormProps){
         if(action == "EDITAR"){
             const res = await editFornecedor(data.idFORNECEDOR, data, user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/sistema/fornecedores")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }else{
             const res = await createFornecedor(data,  user.token);
             if(res.type == "SUCCESS"){
+                toast.success("Ação realizada com sucesso!");{}
                 return router.push("/sistema/fornecedores")
+            } else {
+                toast.error("Algo não está certo.Tente novamente!");
+                return;
             }
         }
 	};
@@ -76,6 +94,7 @@ export function FornecedorForm({action}: IFornecedorFormProps){
     return(
         <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
             <form onSubmit={handleSubmit(onSubmit)}>
+<<<<<<< HEAD
                 <div>
                     <label>Nome: 
                         <input disabled={!canEdit} type="text" className="input" {...register("NOME")} />
@@ -106,6 +125,28 @@ export function FornecedorForm({action}: IFornecedorFormProps){
                     </label>
                     <span className="text-red-500">{errors.NOME_CONTATO?.message}</span>
                 </div>
+=======
+                <label className="flex flex-col">Nome: 
+                    <input disabled={!canEdit} type="text" className="input" {...register("NOME")} />
+                    {errors.NOME && <span className="text-red-500">{errors.NOME.message}</span>}
+                </label>
+                <label className="flex flex-col">Email: 
+                    <input disabled={!canEdit} type="text" className="input" {...register("EMAIL")} />
+                    {errors.EMAIL && <span className="text-red-500">{errors.EMAIL.message}</span>}
+                </label>
+                <label className="flex flex-col">Telefone: 
+                    <input disabled={!canEdit} type="text" className="input" {...register("TELEFONE")} />
+                    {errors.TELEFONE && <span className="text-red-500">{errors.TELEFONE.message}</span>}
+                </label>
+                <label className="flex flex-col">CNPJ: 
+                    <input disabled={!canEdit} type="text" className="input" {...register("CNPJ")} />
+                    {errors.CNPJ && <span className="text-red-500">{errors.CNPJ.message}</span>}
+                </label>
+                <label className="flex flex-col">Nome do contato: 
+                    <input disabled={!canEdit} type="text" className="input" {...register("NOME_CONTATO")} />
+                    {errors.NOME_CONTATO && <span className="text-red-500">{errors.NOME_CONTATO.message}</span>}
+                </label>
+>>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                 <div className="my-2 flex justify-end space-x-2">
                     {action == "EDITAR" && (
                         <MyButton buttonText="Editar" buttonType="button" handleClick={() => { setCanEdit(!canEdit) }}/>
