@@ -51,7 +51,7 @@ export default function Especial(){
                         </div>
                     ) : (
                         <div className="text-center p-4">
-                            <p className="text-gray-500">Nenhum cardápio especial encontrado</p>
+                           
                         </div>
                     )}
                 </div>

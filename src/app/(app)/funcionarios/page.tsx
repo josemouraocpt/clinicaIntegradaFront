@@ -48,7 +48,7 @@ export default function Funcionarios(){
                         </div>
                     ) : (
                         <div className="text-center p-4">
-                            <p className="text-gray-500">Nenhum funcionário encontrado</p>
+                           
                         </div>
                     )}
                 </div>

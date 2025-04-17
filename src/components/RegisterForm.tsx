@@ -50,12 +50,12 @@ export function RegisterForm(){
     const [visibility2, setVisibility2] = useState("password")
 
 	async function onSubmit(data: FormData){
-        const res  = await dispatch(singUp(data))
+        const res  = await dispatch(singUp(data));
         if(res.type == "/register/rejected"){
-            toast.error("Falha em si registrar. Verifique suas credenciais.");
+            toast.error(res.payload);
             return
         }else{
-            toast.success("Registro realizado com sucesso!");{}
+            toast.success("Registro realizado com sucesso!");
             router.push('/dashboard')
         } 
 	};
@@ -98,7 +98,7 @@ export function RegisterForm(){
                             <input {...register("confirmPassword")} type="password" className="input"/>
                             {errors.confirmPassword && <span className="text-red-500 nowrap">{errors.confirmPassword.message}</span>}
                         </label>
-                        {/* <label>Setor:
+                        <label>Setor:
                             <select className="input" {...register("departmentId")}>
                                 <option hidden={true}></option>
                                 {setores?.length >= 1 && (
@@ -107,10 +107,10 @@ export function RegisterForm(){
                                     ))
                                 )}
                             </select>
-                        </label> */}
+                        </label>
                     </div>
                     <div className="flex flex-row space-x-5">
-                        {/* <label>Tipo do usuário:
+                        <label>Tipo do usuário:
                             <select className="input" {...register("userProfileId")}>
                                 <option hidden={true}></option>
                                 {profiles?.length >= 1 && (
@@ -119,7 +119,7 @@ export function RegisterForm(){
                                     ))
                                 )}
                             </select>
-                        </label> */}
+                        </label>
                         <label>Telefone:
                             <input {...register("phoneNumber")} type="text" className="input"/>
                             {errors.phoneNumber && <span className="text-red-500 nowrap">{errors.phoneNumber.message}</span>}

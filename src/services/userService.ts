@@ -174,7 +174,6 @@ async function deleteUser(userID: number, token: string) {
 
 async function updateUserStatus(data: any, token: string) {
     try {
-        console.log(data)
         const res = await fetch('http://localhost:3001/usuarios/editar/status', {
             method: "PUT",
 			headers: {

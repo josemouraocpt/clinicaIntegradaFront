@@ -21,7 +21,7 @@ const schema = yup.object({
     quantity: requiredNumber('Quantidade obrigatório','Deve conter apenas números'),
     unitValue: requiredString('Valor unitário obrigatório'),
     expireDate: requiredString('Data de valiadade obrigatório'),
-    type: requiredString('Tipo obrigatório'),
+    type: yup.string(),
 });
 
 type FormData = yup.InferType<typeof schema>;

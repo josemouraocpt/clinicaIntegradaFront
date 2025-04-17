@@ -52,7 +52,7 @@ export default function Padrao(){
                         </div>
                     ) : (
                         <div className="text-center p-4">
-                            <p className="text-gray-500">Nenhum cardápio padrão encontrado</p>
+                            
                         </div>
                     )}
                 </div>

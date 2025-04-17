@@ -41,7 +41,7 @@ export function HospedeCard({data}: IHospedeCardProps){
 	}
 
 	async function handleDelete(id: number){
-        const res = await deleteHospede(id, user.token);
+        const res = await deleteHospede(id, user.token, user.user.userId);
         if(res.type == "SUCCESS"){
             router.push("/hospedes");
         }

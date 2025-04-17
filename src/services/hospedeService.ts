@@ -214,14 +214,15 @@ async function editHospedeById(hospedeId:number, data:any, token: string) {
     }
 }
 
-async function deleteHospede(hospedeId:number, token: string) {
+async function deleteHospede(hospedeId:number, token: string, userId: number) {
     try {
         const res = await fetch(`http://localhost:3001/hospedes/remover/${hospedeId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
                 "Authorization": token
-			}
+			},
+            body: JSON.stringify({userId: userId})
         });
         const response = await res.json();
         if(response.type == "ERROR"){
