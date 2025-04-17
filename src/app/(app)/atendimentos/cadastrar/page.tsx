@@ -14,13 +14,13 @@ import * as yup from "yup";
 const schema = yup.object({
     hospedeId: yup.number(),
     usuarioId: yup.number(),
-    tipo: yup.string(),
-    dataAtendimento: yup.string(),
-    motivo: yup.string(),
-    procedimento: yup.string(),
+    tipo: yup.string().required(),
+    dataAtendimento: yup.string().required(),
+    motivo: yup.string().required(),
+    procedimento: yup.string().required(),
     recomendacoes: yup.string(),
-    nomeMedico: yup.string(),
-    docMedico: yup.string(),
+    nomeMedico: yup.string().required(),
+    docMedico: yup.string().required(),
     anexo: yup.mixed(),
 });
 

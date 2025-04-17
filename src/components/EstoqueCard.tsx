@@ -63,7 +63,9 @@ export function EstoqueCard({path, data}: IEstoqueCardProps){
                     <li>Valor total: R$ {data.VALOR_TOTAL}</li>
                     <li>Data da inclusão: {new Date(data.DATA_INCLUSAO.substring(0, 10)).toLocaleDateString("pt-BR")}</li>
                     <li>Alterado por: {data.ALTERADO_POR}</li>
-                    <li>Data da alteração: {new Date(data.DATA_ALTERACAO.substring(0, 10)).toLocaleDateString("pt-BR")}</li>
+                    {data.DATA_ALTERACAO && (
+                        <li>Data da alteração: {new Date(data.DATA_ALTERACAO.substring(0, 10)).toLocaleDateString("pt-BR")}</li>
+                    )}
                 </ul>
             </div>
             <div className="flex justify-end">

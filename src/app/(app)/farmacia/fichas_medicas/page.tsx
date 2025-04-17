@@ -40,11 +40,15 @@ export default function fichasMedicas(){
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
                 <SearchBar data={data} setAuxData={setAuxData} keys={["idHOSPEDE","NOME_COMPLETO"]} />
                 <div>
-                    {auxData && (
+                    {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2"> 
                             {auxData.map((obj) => (
                                 <RegistrosCard key={obj.idHOSPEDE} data={obj}/>
                             ))}
+                        </div>
+                    ) : (
+                        <div className="text-center p-4">
+                            
                         </div>
                     )}
                 </div>

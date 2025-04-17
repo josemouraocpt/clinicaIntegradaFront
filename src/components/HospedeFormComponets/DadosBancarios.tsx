@@ -2,9 +2,10 @@
 interface IDadosBancariosProps{
     register: any
     canEdit: boolean
+    errors: any
 }
 
-export function DadosBancarios({register, canEdit}:IDadosBancariosProps){
+export function DadosBancarios({register, canEdit, errors}:IDadosBancariosProps){
     return(
         <div>
             <div className="flex flex-col space-y-3">
@@ -13,15 +14,21 @@ export function DadosBancarios({register, canEdit}:IDadosBancariosProps){
                     <label className="w-2/6">Nome do banco:
                         <input disabled={!canEdit} type="text" className="input" {...register("nomeBanco")}/>
                     </label>
-                    <label className="w-2/6">Agência:
-                        <input disabled={!canEdit} type="text" className="input" {...register("agencia")}/>
-                    </label>
-                    <label>Conta:
+                    <div>
+                        <label className="w-2/6">Agência:
+                            <input disabled={!canEdit} type="text" className="input" {...register("agencia")}/>
+                        </label>
+                        <span className="text-red-500">{errors.agencia?.message}</span>
+                    </div>
+                    {/* <label>Conta:
                         <input disabled={!canEdit} type="text" className="input" {...register("conta")}/>
-                    </label>
-                    <label>Número da conta:
-                        <input disabled={!canEdit} type="text" className="input" {...register("numConta")}/>
-                    </label>
+                    </label> */}
+                    <div>
+                        <label>Número da conta:
+                            <input disabled={!canEdit} type="text" className="input" {...register("numConta")}/>
+                        </label>
+                        <span className="text-red-500">{errors.numConta?.message}</span>
+                    </div>
                 </div>      
                 <div>
                     <h1 className="font-bold">Situação Financeira</h1>

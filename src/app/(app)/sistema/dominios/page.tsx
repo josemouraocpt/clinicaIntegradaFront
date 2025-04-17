@@ -8,9 +8,16 @@ import { useEffect, useState } from "react";
 import { MdDeleteForever, MdRemoveRedEye } from "react-icons/md";
 import { useSelector } from "react-redux";
 
+interface IDominioData {
+    idSTATUS_DOMAIN: number;
+    STATUS_TYPE: string;
+    STATUS_VALUE: string;
+    STATUS_DESCRIPTION: string;
+}
+
 export default function Dominios(){
     const { user } = useSelector((state) => state.auth);
-	const [data, setData] = useState([]);
+	const [data, setData] = useState<IDominioData[]>([]);
 	const { getAllDominio, deleteDominio } = sistemaService;
     const router = useRouter();
 
@@ -41,15 +48,17 @@ export default function Dominios(){
                     <MyButton buttonText="Criar" buttonType="button" handleClick={() => { router.push("/sistema/dominios/cadastrar") }}/>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                    {data.length > 0 && (
-                        data.map((obj) => (
-                            <ul key={obj.idSTATUS_DOMAIN} className="bg-background max-w-[40vw] p-5 rounded-md shadow-md my-4">
-                                <li>Tipo: {obj.STATUS_TYPE}</li>
-                                <li>Valor: {obj.STATUS_VALUE}</li>
-                                <li>Descrição: {obj.STATUS_DESCRIPTION}</li>
-                                <li><button type="button" onClick={() => handleDelete(Number(obj.idSTATUS_DOMAIN))}><MdDeleteForever size={24} className="text-button inline"/></button> <a href={`/sistema/dominios/editar/${obj.idSTATUS_DOMAIN}`}><MdRemoveRedEye size={24} className="text-button inline" /></a></li>
-                            </ul>
-                        ))
+                    {data && data.length > 0 ? data.map((obj) => (
+                        <ul key={obj.idSTATUS_DOMAIN} className="bg-background max-w-[40vw] p-5 rounded-md shadow-md my-4">
+                            <li>Tipo: {obj.STATUS_TYPE}</li>
+                            <li>Valor: {obj.STATUS_VALUE}</li>
+                            <li>Descrição: {obj.STATUS_DESCRIPTION}</li>
+                            <li><button type="button" onClick={() => handleDelete(Number(obj.idSTATUS_DOMAIN))}><MdDeleteForever size={24} className="text-button inline"/></button> <a href={`/sistema/dominios/editar/${obj.idSTATUS_DOMAIN}`}><MdRemoveRedEye size={24} className="text-button inline" /></a></li>
+                        </ul>
+                    )) : (
+                        <div className="col-span-2 text-center p-4">
+                            <p className="text-gray-500">Nenhum domínio cadastrado</p>
+                        </div>
                     )}
                 </div>
             </div>

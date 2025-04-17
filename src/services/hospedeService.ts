@@ -2,7 +2,7 @@
 
 async function getHospedes(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/hospedes/todos', {
+        const res = await fetch('http://localhost:3001/hospedes', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -62,7 +62,7 @@ async function createHospedeFull(data: any,  token: string){
                 status: data.hospedeStatus
             },
             dadosBancariosData: {
-                conta: data.conta,
+                conta: 1,
                 nomeBanco: data.nomeBanco,
                 agencia: data.agencia,
                 numeroConta: data.numConta

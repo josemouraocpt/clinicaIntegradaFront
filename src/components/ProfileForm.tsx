@@ -8,23 +8,28 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import userService from "@/services/userService";
 
+const cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+const cepRegex = /^\d{5}-\d{3}$/;
+const rgRegex = /^\d{1,2}\.?\d{3}\.?\d{3}-?[\dXx]$/;
+const phoneRegex = /^(\+?55\s?)?(\(?\d{2}\)?\s?)?(9\d{4}|\d{4})-?\d{4}$/;
+
 const schema = yup.object({
-    name: yup.string().required("name obrigatorio"),
-	email: yup.string().required("Insira o e-mail").email("Insira um e-mail válido"),
-    nationality: yup.string().required("nationality obrigatorio"),
-    naturalness: yup.string().required("naturalness obrigatorio"),
-    institution: yup.string().required("Instituição obrigatorio"),
-    phoneNumber: yup.string().required("phoneNumber obrigatorio"),
-    cpf: yup.string().required("CPF obrigatorio"),
-    rg: yup.string().required("RG obrigatorio"),
-    birthDate: yup.string().required("Data de nascimento obrigatorio"),
-    formation: yup.string().required("Formação obrigatorio"),
-    zipCode: yup.string().required("zipCode obrigatorio"),
-    address: yup.string().required("Endereço obrigatorio"),
-    city: yup.string().required("city obrigatorio"),
-    state: yup.string().required("UF obrigatorio"),
-    departmentId: yup.number().required("departmentId obrigatorio"),
-    userProfileId: yup.number().required("departmentId obrigatorio"),
+    name: yup.string().required("O nome é obrigatório"),
+	email: yup.string().required('O e-mail é obrigatório').email('Informe um e-mail válido'),
+    nationality: yup.string().required('A nacionaliade é obrigatória'),
+    naturalness: yup.string().required('A naturalidade é obrigatória'),
+    institution: yup.string(),
+    phoneNumber: yup.string().required('O telefone é obrigatório').matches(phoneRegex, 'Deve estar no padrão 31912345678'),
+    cpf: yup.string().required('O CPF é obrigatório').matches(cpfRegex, 'Deve estar no padrão 000.000.000-00'),
+    rg: yup.string().required('O RG é obrigatório').matches(rgRegex, 'Deve estar no padrão 00000000'),
+    birthDate: yup.string().required('A data de nascimento obrigatória'),
+    formation: yup.string(),
+    zipCode: yup.string().required('O CEP é obrigatório').matches(cepRegex, 'Deve estar no padrão 00000-000'),
+    address: yup.string().required('O endereço é obrigatório'),
+    city: yup.string().required('A cidade é obrigatória'),
+    state: yup.string().required('O estado é obrigatório'),
+    departmentId: yup.string().required('O departamento é obrigatório'),
+    userProfileId: yup.string().required('O tipo de perfil é obrigatório'),
 	userStatus: yup.string()
 });
 
@@ -70,6 +75,7 @@ export function ProfileForm(){
 	}
 
 	function setValues(data: any){
+		if(!data) return;
 		setValue("name", data.NOME)
 		setValue("email", data.EMAIL)
 		setValue("nationality", data.NACIONALIDADE)
@@ -98,9 +104,11 @@ export function ProfileForm(){
 					<div className="flex flex-row space-x-5">
 						<label>Nome:
 							<input readOnly={!canEdit} {...register("name")} type="text" className="input"/>
+							<span className="text-red-500">{errors.name?.message}</span>
 						</label>
 						<label>E-mail:
 							<input readOnly={!canEdit} {...register("email")} type="email" className="input"/>
+							<span className="text-red-500">{errors.email?.message}</span>
 						</label>
 						{/* <label>Senha:
 							<input readOnly={!canEdit} {...register("password")} type="password" className="input"/>
@@ -118,6 +126,7 @@ export function ProfileForm(){
 									))
 								)}
 							</select>
+							<span className="text-red-500">{errors.departmentId?.message}</span>
 						</label>
 					</div>
 					<div className="flex flex-row space-x-5">
@@ -131,15 +140,19 @@ export function ProfileForm(){
 									))
 								)}
 							</select>
+							<span className="text-red-500">{errors.userProfileId?.message}</span>
 						</label>
 						<label>Telefone:
 							<input readOnly={!canEdit} {...register("phoneNumber")} type="text" className="input"/>
+							<span className="text-red-500">{errors.phoneNumber?.message}</span>
 						</label>
 						<label>CPF:
 							<input readOnly={!canEdit} {...register("cpf")} type="text" className="input"/>
+							<span className="text-red-500">{errors.cpf?.message}</span>
 						</label>
 						<label>RG:
 							<input readOnly={!canEdit} {...register("rg")} type="text" className="input"/>
+							<span className="text-red-500">{errors.rg?.message}</span>
 						</label>
 					</div>
 				</div>
@@ -148,18 +161,23 @@ export function ProfileForm(){
 					<div className="flex flex-row space-x-5">
 						<label>Data de Nascimento:
 							<input readOnly={!canEdit} {...register("birthDate")} type="date" className="input"/>
+							<span className="text-red-500">{errors.birthDate?.message}</span>
 						</label>
 						<label>Nacionalidade:
 							<input readOnly={!canEdit} {...register("nationality")} type="text" className="input"/>
+							<span className="text-red-500">{errors.nationality?.message}</span>
 						</label>
 						<label>Naturalidae:
 							<input readOnly={!canEdit} {...register("naturalness")} type="text" className="input"/>
+							<span className="text-red-500">{errors.naturalness?.message}</span>
 						</label>
 						<label>Formação:
 							<input readOnly={!canEdit} {...register("formation")} type="text" className="input"/>
+							<span className="text-red-500">{errors.formation?.message}</span>
 						</label>
 						<label>Instituição de Ensino:
 							<input readOnly={!canEdit} {...register("institution")} type="text" className="input"/>
+							<span className="text-red-500">{errors.institution?.message}</span>
 						</label>
 					</div>
 				</div>
@@ -171,12 +189,15 @@ export function ProfileForm(){
 								<div className="flex flex-row space-x-5">
 									<label>CEP:
 										<input readOnly={!canEdit} {...register("zipCode")} type="text" className="input"/>
+										<span className="text-red-500">{errors.zipCode?.message}</span>
 									</label>
 									<label>Endereço:
 										<input readOnly={!canEdit} {...register("address")} type="text" className="input"/>
+										<span className="text-red-500">{errors.address?.message}</span>
 									</label>
 									<label>Cidade:
 										<input readOnly={!canEdit} {...register("city")} type="text" className="input"/>
+										<span className="text-red-500">{errors.city?.message}</span>
 									</label>
 									<label>Estado:
 										<select disabled={!canEdit} className="input" {...register("state")}>
@@ -209,6 +230,7 @@ export function ProfileForm(){
 											<option value="SE">Sergipe</option>
 											<option value="TO">Tocantins</option>
 										</select>
+										<span className="text-red-500">{errors.state?.message}</span>
 								</label>
 								<label>Status:
 									<select disabled={!canEdit} className="input" {...register("userStatus")}>
@@ -220,6 +242,7 @@ export function ProfileForm(){
 											))
 										)}
 									</select>
+									<span className="text-red-500">{errors.userStatus?.message}</span>
 								</label>
 								</div>
 							</div>

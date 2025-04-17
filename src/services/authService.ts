@@ -11,11 +11,11 @@ async function register(data: any) {
         });
         const response = await res.json();
         
-        if(response.message == "Erro ao criar registro em USUARIO"){
+        if(response.type == "ERROR"){
             return { error: response.message }
         }else{
-            if(!window.localStorage.getItem("user")){
-				localStorage.setItem("user", JSON.stringify(response))
+            if(!window.sessionStorage.getItem("user")){
+				sessionStorage.setItem("user", JSON.stringify(response))
 			}
         }
         return response
@@ -27,7 +27,7 @@ async function register(data: any) {
 
 async function login(data: any) {
     try {
-        const res = await fetch("http://localhost:3001/usuarios/registro", {
+        const res = await fetch("http://localhost:3001/usuarios/login", {
             method: "POST",
 			body: JSON.stringify(data),
 			headers: {
@@ -35,27 +35,48 @@ async function login(data: any) {
 			}
         });
         const response = await res.json();
-        if(response.message == "Email e(ou) senha inválidos!"){
+        if(response.type == "ERROR"){
             return { error: response.message }
         }else{
-            localStorage.setItem("user", JSON.stringify(response))
+            sessionStorage.setItem("user", JSON.stringify(response))
         }
         return response
     } catch (error) {
-        console.log(error);
+        return {error: error}
+    }
+}
+
+async function recuperarSenha(data: any) {
+    try {
+        const res = await fetch("http://localhost:3001/usuarios/recuperar", {
+            method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				"Content-Type": "application/json"
+			}
+        });
+        const response = await res.json();
+        if(response.type == "ERROR"){
+            return response
+        }else{
+            sessionStorage.setItem("user", JSON.stringify(response))
+        }
+        return response
+    } catch (error) {
         return {error: error}
     }
 }
 
 function logout() {
-    localStorage.removeItem("user")
+    sessionStorage.removeItem("user")
 }
 
 
 const authService = {
     register,
     login,
-    logout
+    logout,
+    recuperarSenha
 }
 
 export default authService;

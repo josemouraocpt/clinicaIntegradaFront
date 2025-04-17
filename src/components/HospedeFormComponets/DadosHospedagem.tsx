@@ -4,10 +4,11 @@ interface IDadosHospedagemProps{
     register: any
     statusList: any
     canEdit: boolean
+    errors: any
 }
 
 
-export function DadosHospedagem({register, statusList, canEdit}: IDadosHospedagemProps){
+export function DadosHospedagem({register, statusList, canEdit, errors}: IDadosHospedagemProps){
     return(
         <div>
             <div className="flex flex-col space-y-3">
@@ -18,6 +19,7 @@ export function DadosHospedagem({register, statusList, canEdit}: IDadosHospedage
                     <label>Número do Quarto:
                         <input disabled={!canEdit} type="text" className="input" {...register("quarto")}/>
                     </label>
+                    <span className="text-red-500">{errors.quarto?.message}</span>
                 </div>
                 <div>
                     <h2 className="font-bold">Informações do leito</h2>
@@ -25,6 +27,7 @@ export function DadosHospedagem({register, statusList, canEdit}: IDadosHospedage
                     <label>Número do Leito: 
                         <input disabled={!canEdit} type="text" className="input" {...register("leito")}/>
                     </label>
+                    <span className="text-red-500">{errors.leito?.message}</span>
                 </div>
                 <div>
                     <h2 className="font-bold">Informações adicionais</h2>
@@ -40,6 +43,7 @@ export function DadosHospedagem({register, statusList, canEdit}: IDadosHospedage
                             ))}
                         </select>
                     </label>
+                    <span className="text-red-500">{errors.hospedagemStatus?.message}</span>
                 </div>
             </div>
         </div>

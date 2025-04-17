@@ -57,7 +57,9 @@ export function VacinaCard({data}: IVacinaProps){
             </div>
             <div className="my-2">
                 <h3>Alterado por: {data.ALTERADO_POR}</h3>
-                <h3>Data da alteração: {new Date(data.DATA_ALTERACAO.substring(0, 10)).toLocaleDateString("pt-BR")}</h3>
+                {data.DATA_ALTERACAO && (
+                    <h3>Data da alteração: {new Date(data.DATA_ALTERACAO.substring(0, 10)).toLocaleDateString("pt-BR")}</h3>
+                )}
             </div>
             <div className="flex justify-end"> 
                 <ActionsBox path={`/farmacia/vacinas/editar/${data.idFARMACOS}`} deleteFunc={() => { handleDelete(data.idFARMACOS) }}/>

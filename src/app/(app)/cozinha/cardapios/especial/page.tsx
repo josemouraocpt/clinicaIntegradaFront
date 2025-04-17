@@ -43,11 +43,15 @@ export default function Especial(){
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
                 <SearchBar data={data} setAuxData={setAuxData} path="/cozinha/cardapios/cadastro" keys={["idCARDAPIO", "NOME"]} />
                 <div>
-                    {auxData && (
+                    {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2">
                             {auxData.map((obj) => (
                                 <CardapioCard key={obj.idCARDAPIO} data={obj} path={`/cozinha/cardapios/editar/${obj.idCARDAPIO}`}/>
                             ))}
+                        </div>
+                    ) : (
+                        <div className="text-center p-4">
+                            <p className="text-gray-500">Nenhum cardápio especial encontrado</p>
                         </div>
                     )}
                 </div>

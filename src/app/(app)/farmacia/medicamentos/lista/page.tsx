@@ -57,9 +57,9 @@ export default function ListaMedicamentos(){
                 <select className="input" onChange={e => {handleChange(e.target.value)}}>
                     <option hidden={true}></option>
                     <option value=""></option>
-                    {dataSet.map((medicamento) => (
+                    {dataSet && dataSet.length > 0 ? dataSet.map((medicamento) => (
                         <option value={medicamento.idESTOQUE} key={medicamento.idESTOQUE}>{medicamento.NOME}</option>
-                    ))}
+                    )) : <option disabled>Nenhum medicamento encontrado</option>}
                 </select>
                 <div className={selected == true ? 'flex justify-center' : 'hidden'}>
                     {data && (

@@ -67,7 +67,7 @@ async function getCardapioById(cardapioId:number, token: string) {
 
 async function getMercadorias(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/cozinha/estoque/todos', {
+        const res = await fetch('http://localhost:3001/cozinha/estoque', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",

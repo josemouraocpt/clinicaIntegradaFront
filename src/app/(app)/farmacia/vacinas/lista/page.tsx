@@ -46,11 +46,15 @@ export default function ListaVacinas(){
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
                 <SearchBar data={data} setAuxData={setAuxData} path="/farmacia/vacinas/cadastrar" keys={["idFARMACOS","NOME"]} />
                 <div>
-                    {auxData && (
+                    {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2 gap-6"> 
                             {auxData.map((obj) => (
                                 <VacinaCard data={obj} key={obj.idFARMACOS}/>
                             ))}
+                        </div>
+                    ) : (
+                        <div className="text-center p-4">
+                            
                         </div>
                     )}
                 </div>

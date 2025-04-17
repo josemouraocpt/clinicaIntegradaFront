@@ -8,16 +8,17 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import * as yup from "yup";
 import { MyButton } from "./MyButton";
-interface IEstoqueFormProps{
+interface IEstoqueFormProps{ 
     action: string
 }
+const priceRegex = /^\d+(?:[.,]\d{2})?$/;
 
 const schema = yup.object({
     userId: yup.number(),
-    name: yup.string(),
-    quantity: yup.number(),
-    unitValue: yup.string(),
-    expireDate: yup.string(),
+    name: yup.string().required('O nome é obrigatório'),
+    quantity: yup.number().required('A quantidade é obrigatória'),
+    unitValue: yup.string().required('O preço é obrigatório').matches(priceRegex, 'O preço deve ser um número'),
+    expireDate: yup.string().required('A data de validade é obrigatória'),
     type: yup.string(),
 });
 
@@ -79,6 +80,7 @@ export function EstoqueForm({action}: IEstoqueFormProps){
     }, [user, getMercadoriaById]);
 
     function setValues(data: any){
+        if(!data) return;
         setValue("name", data.NOME);
         setValue("expireDate", data.VALIDADE.substring(0, 10));
         setValue("quantity", data.QUANTIDADE);
@@ -89,18 +91,30 @@ export function EstoqueForm({action}: IEstoqueFormProps){
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label>Nome da mercadoria:
-                    <input disabled={!canEdit} className="input" type="text" {...register("name")} />
-                </label>
-                <label>Quantidade:
-                    <input disabled={!canEdit} className="input" type="number" {...register("quantity")} />
-                </label>
-                <label>Valor unitário:
-                    <input disabled={!canEdit} className="input" type="text" {...register("unitValue")}/>
-                </label>
-                <label>Data de validade:
-                    <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
-                </label>
+                <div>
+                    <label>Nome da mercadoria:
+                        <input disabled={!canEdit} className="input" type="text" {...register("name")} />
+                    </label>
+                    <span className="text-red-500">{errors.name?.message}</span>
+                </div>
+                <div>
+                    <label>Quantidade:
+                        <input disabled={!canEdit} className="input" type="number" {...register("quantity")} />
+                    </label>
+                    <span className="text-red-500">{errors.quantity?.message}</span>
+                </div>
+                <div>
+                    <label>Valor unitário:
+                        <input disabled={!canEdit} className="input" type="text" {...register("unitValue")}/>
+                    </label>
+                    <span className="text-red-500">{errors.unitValue?.message}</span>
+                </div>
+                <div>
+                    <label>Data de validade:
+                        <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
+                    </label>
+                    <span className="text-red-500">{errors.expireDate?.message}</span>
+                </div>
                 {mercadoriaData && (
                     <div className="my-5">
                         <label>Valor total:
@@ -109,9 +123,11 @@ export function EstoqueForm({action}: IEstoqueFormProps){
                         <label>Data da inclusão:
                             <input readOnly={true} className="input" type="date" value={mercadoriaData.DATA_INCLUSAO.substring(0, 10)} />
                         </label>
-                        <label>Data da alteração:
-                            <input readOnly={true} className="input" type="date" value={mercadoriaData.DATA_ALTERACAO.substring(0, 10)} />
-                        </label>
+                        {mercadoriaData.DATA_ALTERACAO && (
+                            <label>Data da alteração:
+                                <input readOnly={true} className="input" type="date" value={mercadoriaData.DATA_ALTERACAO.substring(0, 10)} />
+                            </label>
+                        )}
                         <label>Alterado por:
                             <input readOnly={true} className="input" type="text" value={mercadoriaData.ALTERADO_POR} />
                         </label>

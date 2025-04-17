@@ -44,11 +44,15 @@ export default function LancarPresenca(){
 			<div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
                 <SearchBar data={data} setAuxData={setAuxData} path="/atividades/cadastrar" keys={["idATIVIDADES","NOME"]}/>
                 <div>
-                    {auxData && (
+                    {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2">
                             {auxData.map((obj) => (
                                 <AtividadeCard path={`/atividades/lancar/${obj.idATIVIDADES}`} key={obj.idATIVIDADES} data={obj}/>
                             ))}
+                        </div>
+                    ) : (
+                        <div className="text-center p-4">
+                            
                         </div>
                     )}
                 </div>

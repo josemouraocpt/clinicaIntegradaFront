@@ -2,7 +2,7 @@
 
 async function getMedicamentos(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/farmacia/medicamentos/todos', {
+        const res = await fetch('http://localhost:3001/farmacia/medicamentos', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -44,7 +44,7 @@ async function getItens(token: string) {
 
 async function getVacinas(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/farmacia/vacinas/todos', {
+        const res = await fetch('http://localhost:3001/farmacia/vacinas', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",

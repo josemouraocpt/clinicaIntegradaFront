@@ -369,7 +369,7 @@ export default function Ficha(){
                             <h2 className="font-bold">Observações</h2>
                             <textarea disabled={!canEdit} placeholder="Descrição" className="input w-full resize-none" rows={2} {...register("OBSERVACOES")}/>
                         </div>
-                        <div className="my-4">
+                        <div className="my-4" hidden={!(hospedeData.length > 1)}>
                             <MyButton buttonText="Remover" buttonType="button" handleClick={() => { handleDelete(getValues("idDADOS_MEDICOS")) }}/>
                         </div>
                     </div>

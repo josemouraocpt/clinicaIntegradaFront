@@ -45,14 +45,16 @@ export default function HospedesLista(){
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
                 <SearchBar data={data} setAuxData={setAuxData} path="/hospedes/cadastro" keys={["idHOSPEDE","NOME_COMPLETO"]}/>
                 <div>
-                    {auxData.length > 0 ? (
+                    {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2">
                             {auxData.map((obj) => (
                                 <HospedeCard key={obj.idHOSPEDE} data={obj}/>
                             ))}
                         </div>
                     ) : (
-                        <></>
+                        <div className="text-center p-4">
+                            
+                        </div>
                     )}
                 </div>
             </div>

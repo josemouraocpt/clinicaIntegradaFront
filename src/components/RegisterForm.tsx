@@ -8,27 +8,35 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import userService from "@/services/userService";
+import { FaEye } from "react-icons/fa6";
+import { FaEyeSlash } from "react-icons/fa6";
+
+const cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+const cepRegex = /^\d{5}-\d{3}$/;
+const rgRegex = /^\d{1,2}\.?\d{3}\.?\d{3}-?[\dXx]$/;
+const phoneRegex = /^(\+?55\s?)?(\(?\d{2}\)?\s?)?(9\d{4}|\d{4})-?\d{4}$/;
 
 const schema = yup.object({
-    name: yup.string(),
-	password: yup.string(),
-    confirmPassword: yup.string(),
-	email: yup.string(),
-    nationality: yup.string(),
-    naturalness: yup.string(),
+    name: yup.string().required("O nome é obrigatório"),
+	password: yup.string().required("A senha é obrigatória"),
+    confirmPassword: yup.string().required("A confirmação da senha é obrigatória").oneOf([yup.ref('password')], 'As senhas devem ser iguais'),
+	email: yup.string().required('O e-mail é obrigatório').email('Informe um e-mail válido'),
+    nationality: yup.string().required('A nacionaliade é obrigatória'),
+    naturalness: yup.string().required('A naturalidade é obrigatória'),
     institution: yup.string(),
-    phoneNumber: yup.string(),
-    cpf: yup.string(),
-    rg: yup.string(),
-    birthDate: yup.string(),
+    phoneNumber: yup.string().required('O telefone é obrigatório').matches(phoneRegex, 'Deve estar no padrão 31912345678'),
+    cpf: yup.string().required('O CPF é obrigatório').matches(cpfRegex, 'Deve estar no padrão 000.000.000-00'),
+    rg: yup.string().required('O RG é obrigatório').matches(rgRegex, 'Deve estar no padrão 00000000'),
+    birthDate: yup.string().required('A data de nascimento obrigatória'),
     formation: yup.string(),
-    zipCode: yup.string(),
-    address: yup.string(),
-    city: yup.string(),
-    state: yup.string(),
-    departmentId: yup.number(),
-    userProfileId: yup.number(),
+    zipCode: yup.string().required('O CEP é obrigatório').matches(cepRegex, 'Deve estar no padrão 00000-000'),
+    address: yup.string().required('O endereço é obrigatório'),
+    city: yup.string().required('A cidade é obrigatória'),
+    state: yup.string().required('O estado é obrigatório'),
+    departmentId: yup.string().required('O departamento é obrigatório'),
+    userProfileId: yup.string().required('O tipo de perfil é obrigatório'),
 });
+
 
 type FormData = yup.InferType<typeof schema>;
 
@@ -42,14 +50,16 @@ export function RegisterForm(){
 	const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
+    const [visibility1, setVisibility1] = useState("password")
+    const [visibility2, setVisibility2] = useState("password")
 
 	async function onSubmit(data: FormData){
         const res  = await dispatch(singUp(data))
         if(res.type == "/register/rejected"){
-            return
+            return alert(res.payload)
         }else{
             router.push('/dashboard')
-        }
+        } 
 	};
 
 	useEffect(() => {
@@ -63,6 +73,10 @@ export function RegisterForm(){
         fetch()
 	}, [dispatch]);
 
+    function visibility(callback: any, text: string){
+        callback(text)
+    }
+
     return(
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col space-y-3">
@@ -72,15 +86,33 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Nome:
                             <input {...register("name")} type="text" className="input"/>
+                            <span className="text-red-500">{errors.name?.message}</span>
                         </label>
                         <label>E-mail:
                             <input {...register("email")} type="email" className="input"/>
+                            <span className="text-red-500">{errors.email?.message}</span>
                         </label>
                         <label>Senha:
-                            <input {...register("password")} type="password" className="input"/>
+                            <div className="flex items-center gap-x-2 
+                            ">
+                                <input {...register("password")} type={visibility1} className="input"/>
+                                {visibility1 == "password" ? 
+                                (<FaEye size={28} onClick={()=>visibility(setVisibility1,"text")} />) : 
+                                (<FaEyeSlash size={28} onClick={()=>visibility(setVisibility1,"password")} />)
+                                }
+                            </div>
+                            <span className="text-red-500">{errors.password?.message}</span>
                         </label>
                         <label>Confirmação de senha:
-                            <input {...register("confirmPassword")} type="password" className="input"/>
+                            <div className="flex items-center gap-x-2 
+                            ">
+                                <input {...register("confirmPassword")} type={visibility2} className="input"/>
+                                {visibility2 == "password" ? 
+                                (<FaEye size={28} onClick={()=>visibility(setVisibility2,"text")} />) : 
+                                (<FaEyeSlash size={28} onClick={()=>visibility(setVisibility2,"password")} />)
+                                }
+                            </div>
+                            <span className="text-red-500">{errors.confirmPassword?.message}</span>
                         </label>
                         <label>Setor:
                             <select className="input" {...register("departmentId")}>
@@ -91,6 +123,7 @@ export function RegisterForm(){
                                     ))
                                 )}
                             </select>
+                            <span className="text-red-500">{errors.departmentId?.message}</span>
                         </label>
                     </div>
                     <div className="flex flex-row space-x-5">
@@ -103,15 +136,19 @@ export function RegisterForm(){
                                     ))
                                 )}
                             </select>
+                            <span className="text-red-500">{errors.userProfileId?.message}</span>
                         </label>
                         <label>Telefone:
                             <input {...register("phoneNumber")} type="text" className="input"/>
+                            <span className="text-red-500">{errors.phoneNumber?.message}</span>
                         </label>
                         <label>CPF:
                             <input {...register("cpf")} type="text" className="input"/>
+                            <span className="text-red-500">{errors.cpf?.message}</span>
                         </label>
                         <label>RG:
                             <input {...register("rg")} type="text" className="input"/>
+                            <span className="text-red-500">{errors.rg?.message}</span>
                         </label>
                     </div>
                 </div>
@@ -120,18 +157,23 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Data de Nascimento:
                             <input {...register("birthDate")} type="date" className="input"/>
+                            <span className="text-red-500">{errors.birthDate?.message}</span>
                         </label>
                         <label>Nacionalidade:
                             <input {...register("nationality")} type="text" className="input"/>
+                            <span className="text-red-500">{errors.nationality?.message}</span>
                         </label>
                         <label>Naturalidae:
                             <input {...register("naturalness")} type="text" className="input"/>
+                            <span className="text-red-500">{errors.naturalness?.message}</span>
                         </label>
                         <label>Formação:
                             <input {...register("formation")} type="text" className="input"/>
+                            <span className="text-red-500">{errors.formation?.message}</span>
                         </label>
                         <label>Instituição de Ensino:
                             <input {...register("institution")} type="text" className="input"/>
+                            <span className="text-red-500">{errors.institution?.message}</span>
                         </label>
                     </div>
                 </div>
@@ -143,12 +185,15 @@ export function RegisterForm(){
                                 <div className="flex flex-row space-x-5">
                                     <label>CEP:
                                         <input {...register("zipCode")} type="text" className="input"/>
+                                        <span className="text-red-500">{errors.zipCode?.message}</span>
                                     </label>
                                     <label>Endereço:
                                         <input {...register("address")} type="text" className="input"/>
+                                        <span className="text-red-500">{errors.address?.message}</span>
                                     </label>
                                     <label>Cidade:
                                         <input {...register("city")} type="text" className="input"/>
+                                        <span className="text-red-500">{errors.city?.message}</span>
                                     </label>
                                     <label>Estado:
                                         <select className="input" {...register("state")}>
@@ -181,6 +226,7 @@ export function RegisterForm(){
                                             <option value="SE">Sergipe</option>
                                             <option value="TO">Tocantins</option>
                                         </select>
+                                        <span className="text-red-500">{errors.state?.message}</span>
                                 </label>
                                 </div>
                             </div>

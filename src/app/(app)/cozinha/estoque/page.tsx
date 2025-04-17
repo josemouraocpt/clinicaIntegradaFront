@@ -47,11 +47,15 @@ export default function Estoque(){
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
                 <SearchBar data={data} setAuxData={setAuxData} path='/cozinha/estoque/cadastrar' keys={["idESTOQUE", "NOME"]} />
                 <div>
-                    {auxData && (
+                    {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2">
                             {auxData.map((obj) => (
                                 <EstoqueCard key={obj.idESTOQUE} data={obj} path={`/cozinha/estoque/editar/${obj.idESTOQUE}`}/>
                             ))}
+                        </div>
+                    ) : (
+                        <div className="text-center p-4">
+                            
                         </div>
                     )}
                 </div>

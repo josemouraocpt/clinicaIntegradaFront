@@ -18,37 +18,45 @@ interface IHospedeFormProps{
 	action: string
 }
 
+const cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+const cepRegex = /^\d{5}-\d{3}$/;
+const rgRegex = /^\d{1,2}\.?\d{3}\.?\d{3}-?[\dXx]$/;
+const phoneRegex = /^(\+?55\s?)?(\(?\d{2}\)?\s?)?(9\d{4}|\d{4})-?\d{4}$/;
+const tituloEleitorRegex = /^\d{12}$/;
+const fourDigitRegex = /^\d{4}$/;
+const contaRegex = /^\d{1,12}-[\dXx]$/;
+
+
 const schema = yup.object({
-	nome: yup.string(),
+	nome: yup.string().required('O nome é obrigatório'),
 	nomeSocial: yup.string(),
 	apelido: yup.string(),
-	rg: yup.string() ,
-	cpf: yup.string() ,
+	rg: yup.string().required('O RG é obrigatório').matches(rgRegex, 'Deve estar no padrão 00000000'),
+	cpf: yup.string().required('O CPF é obrigatório').matches(cpfRegex, 'Deve estar no padrão 000.000.000-00'),
 	nacionalidade: yup.string(),
 	naturalidade: yup.string() ,
 	estadoCivil: yup.string() ,
-	dataNascimento: yup.string() ,
+	dataNascimento: yup.string().required('A data de nascimento é obrigatória'),
 	nomeMae: yup.string() ,
 	nomePai: yup.string(),
-	telefone: yup.string(),
+	telefone: yup.string().matches(phoneRegex, 'Deve estar no padrão 31912345678'),
 	profissao: yup.string() ,
-	tituloEleitor: yup.string() ,
+	tituloEleitor: yup.string().matches(tituloEleitorRegex, 'Deve estar no padrão 123456789012'),
 	endereco: yup.string() ,
 	cidade: yup.string(),
 	uf: yup.string() ,
-	cep: yup.string(),
-	dataEntrada: yup.string(),
+	cep: yup.string().matches(cepRegex, 'Deve estar no padrão 00000-000'),
+	dataEntrada: yup.string().required('A data de entrada é obrigatória'),
 	situacaoFinanceiraDesc: yup.string(),
-	quarto: yup.string(),
-	leito: yup.string(),
+	quarto: yup.string().required('O quarto é obrigatório'),
+	leito: yup.string().required('O leito é obrigatório'),
 	hospedagemInfo: yup.string(),
 	responsavel: yup.string(),
-	hospedeStatus: yup.string(),
-	hospedagemStatus: yup.string(),
-	agencia: yup.string(),
-	conta: yup.string(),
+	hospedeStatus: yup.string().required('O status do hospede é obrigatório'),
+	hospedagemStatus: yup.string().required('O status da hospedagem é obrigatório'),
+	agencia: yup.string().matches(fourDigitRegex, 'Deve estar no padrão 1234'),
 	nomeBanco: yup.string(),
-	numConta: yup.string(),
+	numConta: yup.string().matches(contaRegex, 'Deve estar no padrão 1234567-8'),
 	grauDependencia: yup.string(),
 	nomeMedicamento: yup.string(),
 	freqMedicamento: yup.string(),
@@ -83,6 +91,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 	const [hospedagemStatusList, setHospedagemStatusList] = useState([]);
 	const [canEdit, setCanEdit] = useState(false);
 	const [hospedeData, setHospedeData] = useState();
+	const [hasError, setHasError] = useState(false);
 
 	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -95,6 +104,8 @@ export function HospedeForm({action}: IHospedeFormProps){
 	function handlePrevius(){
 		setCurrentStep(state => state - 1)
 	};
+
+
 
 
 	async function onSubmit(data: FormData){
@@ -138,55 +149,84 @@ export function HospedeForm({action}: IHospedeFormProps){
 
 
 	function setValues(data: any){
-		setValue("nome", data.hospedeData.NOME_COMPLETO)
-		setValue("nomeSocial", data.hospedeData.NOME_SOCIAL)
-		setValue("apelido", data.hospedeData.APELIDO)
-		setValue("rg", data.hospedeData.RG)
-		setValue("cpf", data.hospedeData.CPF)
-		setValue("nacionalidade", data.hospedeData.NACIONALIDADE)
-		setValue("naturalidade", data.hospedeData.NATURALIDADE)
-		setValue("estadoCivil", data.hospedeData.ESTADO_CIVIL)
-		setValue("dataNascimento", data.hospedeData.DATA_NASCIMENTO.substring(0, 10))
-		setValue("nomeMae", data.hospedeData.NOME_MAE)
-		setValue("nomePai", data.hospedeData.NOME_PAI)
-		setValue("telefone", data.hospedeData.TELEFONE)
-		setValue("profissao", data.hospedeData.PROFISSAO)
-		setValue("tituloEleitor", data.hospedeData.TITULO_ELEITOR)
-		setValue("endereco", data.hospedeData.ENDERECO)
-		setValue("cidade", data.hospedeData.CIDADE)
-		setValue("uf", data.hospedeData.UF)
-		setValue("cep", data.hospedeData.CEP)
-		setValue("dataEntrada", data.hospedeData.DATA_ENTRADA.substring(0, 10))
-		setValue("situacaoFinanceiraDesc", data.situacaoFinanceiraData.DESCRICAO)
-		setValue("quarto", data.hospedagemData.QUARTO)
-		setValue("leito", data.hospedagemData.LEITO)
-		setValue("hospedagemInfo", data.hospedagemData.INFORMACOES)
-		setValue("responsavel", data.hospedeData.RESPONSAVEL)
-		setValue("hospedeStatus", data.hospedeData.STATUS_HOSPEDE)
-		setValue("hospedagemStatus", data.hospedagemData.STATUS_HOSPEDAGEM)
-		setValue("agencia", data.dadosBancariosData.AGENCIA)
-		setValue("conta", data.dadosBancariosData.CONTA)
-		setValue("nomeBanco", data.dadosBancariosData.NOME_BANCO)
-		setValue("numConta", data.dadosBancariosData.NUMERO_CONTA)
-		setValue("grauDependencia", data.dadosMedicos.GRAU_DEPENDENCIA)
-		setValue("nomeMedicamento", data.remediosData.NOME)
-		setValue("freqMedicamento", data.remediosData.FREQUENCIA_USO)
-		setValue("tempoMedicamento", data.remediosData.TEMPO_USO)
-		setValue("dosagemMedicamento", data.remediosData.DOSAGEM)
-		setValue("observacoeMedicamento", data.dadosMedicos.OBSERVACOES)
-		setValue("tipoComplicacao", data.dadosMedicosDoencasAlergiasDietasData.DESCRICAO)
-		setValue("descComplicacao", data.dadosMedicosDoencasAlergiasDietasData.TIPO)
-		//setValue("anexo", new File(data.anexosData.BUCKET_URL, data.anexosData.DESCRIPTION, { type: "text/plain" }))
-		//setValue("descAnexo", data.anexosData.DESCRIPTION)
-		setValue("idANEXO", data.anexosData.idANEXOS)
-		setValue("HOSPEDE_idHOSPEDE", data.dadosBancariosData.HOSPEDE_idHOSPEDE)
-		setValue("idDADOS_BANCARIOS", data.dadosBancariosData.idDADOS_BANCARIOS)
-		setValue("REMEDIOS_idREMEDIOS", data.dadosBancariosData.REMEDIOS_idREMEDIOS)
-		setValue("idDADOS_MEDICOS", data.dadosMedicosDoencasAlergiasDietasData.idDADOS_MEDICOS)
-		setValue("idDOENCAS_ALERGIAS_DIETAS", data.dadosMedicosDoencasAlergiasDietasData.idDOENCAS_ALERGIAS_DIETAS)
-		setValue("idREMEDIOS", data.dadosMedicosDoencasAlergiasDietasData.idREMEDIOS)
-		setValue("idHOSPEDAGEM", data.hospedagemData.idHOSPEDAGEM)
-		setValue("idSITUACAO_FINANCEIRA", data.situacaoFinanceiraData.idSITUACAO_FINANCEIRA)
+		if (!data) return;
+
+		if (data.hospedeData) {
+			setValue("nome", data.hospedeData.NOME_COMPLETO)
+			setValue("nomeSocial", data.hospedeData.NOME_SOCIAL)
+			setValue("apelido", data.hospedeData.APELIDO)
+			setValue("rg", data.hospedeData.RG)
+			setValue("cpf", data.hospedeData.CPF)
+			setValue("nacionalidade", data.hospedeData.NACIONALIDADE)
+			setValue("naturalidade", data.hospedeData.NATURALIDADE)
+			setValue("estadoCivil", data.hospedeData.ESTADO_CIVIL)
+			setValue("dataNascimento", data.hospedeData.DATA_NASCIMENTO.substring(0, 10))
+			setValue("dataEntrada",data.hospedeData.DATA_ENTRADA.substring(0, 10))
+			setValue("nomeMae", data.hospedeData.NOME_MAE)
+			setValue("nomePai", data.hospedeData.NOME_PAI)
+			setValue("telefone", data.hospedeData.TELEFONE)
+			setValue("profissao", data.hospedeData.PROFISSAO)
+			setValue("tituloEleitor", data.hospedeData.TITULO_ELEITOR)
+			setValue("endereco", data.hospedeData.ENDERECO)
+			setValue("cidade", data.hospedeData.CIDADE)
+			setValue("uf", data.hospedeData.UF)
+			setValue("cep", data.hospedeData.CEP)
+			setValue("responsavel", data.hospedeData.RESPONSAVEL)
+			setValue("hospedeStatus", data.hospedeData.STATUS_HOSPEDE)
+		}
+
+		if (data.hospedagemData) {
+			setValue("quarto", data.hospedagemData.QUARTO)
+			setValue("leito", data.hospedagemData.LEITO)
+			setValue("hospedagemInfo", data.hospedagemData.INFORMACOES)
+			setValue("hospedagemStatus", data.hospedagemData.STATUS_HOSPEDAGEM)
+			setValue("idHOSPEDAGEM", data.hospedagemData.idHOSPEDAGEM)
+		}
+
+		if (data.situacaoFinanceiraData) {
+			setValue("situacaoFinanceiraDesc", data.situacaoFinanceiraData.DESCRICAO)
+			setValue("idSITUACAO_FINANCEIRA", data.situacaoFinanceiraData.idSITUACAO_FINANCEIRA)
+		}
+
+		if (data.dadosBancariosData) {
+			setValue("agencia", data.dadosBancariosData.AGENCIA)
+			setValue("nomeBanco", data.dadosBancariosData.NOME_BANCO)
+			setValue("numConta", data.dadosBancariosData.NUMERO_CONTA)
+			setValue("HOSPEDE_idHOSPEDE", data.dadosBancariosData.HOSPEDE_idHOSPEDE)
+			setValue("idDADOS_BANCARIOS", data.dadosBancariosData.idDADOS_BANCARIOS)
+			setValue("REMEDIOS_idREMEDIOS", data.dadosBancariosData.REMEDIOS_idREMEDIOS)
+		}
+
+		if (data.dadosMedicos) {
+			setValue("grauDependencia", data.dadosMedicos.GRAU_DEPENDENCIA)
+			setValue("observacoeMedicamento", data.dadosMedicos.OBSERVACOES)
+		}
+
+		if (data.remediosData) {
+			setValue("nomeMedicamento", data.remediosData.NOME)
+			setValue("freqMedicamento", data.remediosData.FREQUENCIA_USO)
+			setValue("tempoMedicamento", data.remediosData.TEMPO_USO)
+			setValue("dosagemMedicamento", data.remediosData.DOSAGEM)
+		}
+
+		if (data.dadosMedicosDoencasAlergiasDietasData) {
+			setValue("tipoComplicacao", data.dadosMedicosDoencasAlergiasDietasData.TIPO)
+			setValue("descComplicacao", data.dadosMedicosDoencasAlergiasDietasData.DESCRICAO)
+			setValue("idDADOS_MEDICOS", data.dadosMedicosDoencasAlergiasDietasData.idDADOS_MEDICOS)
+			setValue("idDOENCAS_ALERGIAS_DIETAS", data.dadosMedicosDoencasAlergiasDietasData.idDOENCAS_ALERGIAS_DIETAS)
+			setValue("idREMEDIOS", data.dadosMedicosDoencasAlergiasDietasData.idREMEDIOS)
+		}
+
+		if (data.anexosData) {
+			setValue("idANEXO", data.anexosData.idANEXOS)
+		}
+	}
+
+	if(Object.keys(errors).length >= 1){
+		if(hasError == false){
+			setHasError(!hasError)
+			alert("Existem erros nos campos, gentileza realizar a correção.")
+		}
 	}
 
 	return(
@@ -195,7 +235,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da primeira parte do formulário */}
 				{currentStep == 0 && (
 					<>
-					<DadosBasicos register={register} statusList={hospedeStatusList} canEdit={canEdit} />
+					<DadosBasicos register={register} statusList={hospedeStatusList} canEdit={canEdit} errors={errors} />
 					<div className="flex justify-end space-x-3">
 						{hospedeData && (
 							<MyButton buttonText="Editar" buttonType="button" handleClick={() => {setCanEdit(!canEdit)}}/>
@@ -209,7 +249,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da segunda parte do formulário */}
 				{currentStep == 1 && (
 					<>
-						<DadosBancarios register={register} canEdit={canEdit}/>
+						<DadosBancarios register={register} canEdit={canEdit} errors={errors}/>
 						<div className="flex justify-end space-x-3">
 							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
 							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
@@ -233,7 +273,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da quarta parte do formulário */}
 				{currentStep == 3 && (
 					<>
-						<DadosHospedagem register={register} statusList={hospedagemStatusList} canEdit={canEdit}/>
+						<DadosHospedagem register={register} statusList={hospedagemStatusList} canEdit={canEdit} errors={errors}/>
 						<div className="flex justify-end space-x-3">
 							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
 							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
@@ -248,9 +288,9 @@ export function HospedeForm({action}: IHospedeFormProps){
 						<div className="flex flex-col space-y-3">
 							<h1 className="font-bold">Responsavél</h1>
 							<div>
-								<h2 className="font-bold">Informações do Responsavél</h2>
+								<h2 className="font-bold">Informações do Responsável</h2>
 								<p className="text-sm">Por favor, informe: </p>
-								<label>Nome do Responsavél relacionado ao hóspede: 
+								<label>Nome do Responsável relacionado ao hóspede: 
 									<input disabled={!canEdit} type="text" className="input" {...register("responsavel")} />
 								</label>
 							</div>

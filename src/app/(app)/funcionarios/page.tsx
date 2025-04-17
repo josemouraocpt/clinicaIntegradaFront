@@ -8,10 +8,16 @@ import userService from "@/services/userService";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
+interface IFuncionarioData {
+    idUSUARIO: number;
+    NOME: string;
+    // Add other properties as needed
+}
+
 export default function Funcionarios(){
 	const { user } = useSelector((state) => state.auth);
-	const [data, setData] = useState([]);
-	const [auxData, setAuxData] = useState([]);
+	const [data, setData] = useState<IFuncionarioData[]>([]);
+	const [auxData, setAuxData] = useState<IFuncionarioData[]>([]);
 	const { getFuncionarios } = userService;
 	
 	useEffect(() => {
@@ -34,11 +40,15 @@ export default function Funcionarios(){
 			<div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
                 <SearchBar data={data} setAuxData={setAuxData} path="/register" keys={["idUSUARIO","NOME"]} />
                 <div>
-                    {auxData && (
+                    {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2">
                             {auxData.map((obj) => (
                                 <CardFuncionarios key={obj.idUSUARIO} data={obj}/>
                             ))}
+                        </div>
+                    ) : (
+                        <div className="text-center p-4">
+                            <p className="text-gray-500">Nenhum funcionário encontrado</p>
                         </div>
                     )}
                 </div>

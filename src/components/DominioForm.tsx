@@ -14,9 +14,9 @@ interface IDominioFormProps{
 
 const schema = yup.object({
     idSTATUS_DOMAIN: yup.number(),
-    STATUS_VALUE: yup.string(),
-    STATUS_TYPE: yup.string(),
-    STATUS_DESCRIPTION: yup.string(),
+    STATUS_VALUE: yup.string().required('O valor é obrigatório'),
+    STATUS_TYPE: yup.string().required('O tipo é obrigatório'),
+    STATUS_DESCRIPTION: yup.string().required('A descrição é obrigatória'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -58,7 +58,8 @@ export function DominioForm({action}: IDominioFormProps){
         }
     }, [user, getDominio]);
 
-    function setValues(data: any){
+    function setValues(data: any) {
+        if (!data) return;
         setValue("idSTATUS_DOMAIN", data.idSTATUS_DOMAIN);
         setValue("STATUS_TYPE", data.STATUS_TYPE);
         setValue("STATUS_VALUE", data.STATUS_VALUE);
@@ -68,15 +69,24 @@ export function DominioForm({action}: IDominioFormProps){
     return(
         <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label>Tipo do dominio: 
-                    <input disabled={!canEdit} type="text" className="input" {...register("STATUS_TYPE")} />
-                </label>
-                <label>Valor do dominio: 
-                    <input disabled={!canEdit} type="text" className="input" {...register("STATUS_VALUE")} />
-                </label>
-                <label>Descrição do dominio: 
-                    <input disabled={!canEdit} type="text" className="input" {...register("STATUS_DESCRIPTION")} />
-                </label>
+                <div>
+                    <label>Tipo do dominio: 
+                        <input disabled={!canEdit} type="text" className="input" {...register("STATUS_TYPE")} />
+                    </label>
+                    <span className="text-red-500">{errors.STATUS_TYPE?.message}</span>
+                </div>
+                <div>
+                    <label>Valor do dominio: 
+                        <input disabled={!canEdit} type="text" className="input" {...register("STATUS_VALUE")} />
+                    </label>
+                    <span className="text-red-500">{errors.STATUS_VALUE?.message}</span>
+                </div>
+                <div>
+                    <label>Descrição do dominio: 
+                        <input disabled={!canEdit} type="text" className="input" {...register("STATUS_DESCRIPTION")} />
+                    </label>
+                    <span className="text-red-500">{errors.STATUS_DESCRIPTION?.message}</span>
+                </div>
                 <div className="my-2 flex justify-end space-x-2">
                     {action == "EDITAR" && (
                         <MyButton buttonText="Editar" buttonType="button" handleClick={() => { setCanEdit(!canEdit) }}/>

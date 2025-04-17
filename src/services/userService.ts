@@ -48,7 +48,7 @@ async function updateUser(userID: number, data: any, token: string) {
 async function getUsersAndDepartments(token: string) {
     try {
         const res = await fetch('http://localhost:3001/usuarios/setores', {
-            method: "GET",
+            method: "GET", 
 			headers: {
 				"Content-Type": "application/json",
                 "Authorization": token

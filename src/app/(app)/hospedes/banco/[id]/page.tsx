@@ -223,7 +223,7 @@ export default function Banco(){
                             <input disabled={!canEdit} type="text" className="input" {...register("NUMERO_CONTA")}/>
                         </label>
                     </div>
-                    <div className="my-4">
+                    <div className="my-4" hidden={!(hospedeData.length > 1)}>
                         <MyButton buttonText="Remover" buttonType="button" handleClick={() => { handleDeleteBanco(getValues("idDADOS_BANCARIOS")) }}/>
                     </div>
                     {(count >= 1 || hospedeData.length > 1) &&(
@@ -276,9 +276,9 @@ export default function Banco(){
                         <h1 className="font-bold">Situação Financeira</h1>
                         <textarea disabled={!canEdit} placeholder="Descrição" className="input w-full resize-none" rows={2} {...register("DESCRICAO")}/>
                     </div>
-                    <div className="my-4">
+                    {/* <div className="my-4" hidden={!(hospedeData.length > 1)}>
                         <MyButton buttonText="Remover" buttonType="button" handleClick={() => { handleDeleteSituacao(getValues("idSITUACAO_FINANCEIRA")) }}/>
-                    </div>
+                    </div> */}
                     {count == 3 && (
                         <h1>Não é possivel incluir mais que 3 contas.</h1>
                     )}

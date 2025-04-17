@@ -10,13 +10,13 @@ import { useEffect, useState } from "react";
 import { MyButton } from "./MyButton";
 
 const schema = yup.object({
-    date: yup.string(),
-    time: yup.string(),
-    name: yup.string(),
-    description: yup.string(),
+    date: yup.string().required('A data do cardápio é obrigatória'),
+    time: yup.string().required('O horário do cardapio é obrigatório'),
+    name: yup.string().required('O nome do cardapio é obrigatório'),
+    description: yup.string().required('A descrição é obrigatória'),
     userId: yup.number(),
-    type: yup.string(),
-    status: yup.string(),
+    type: yup.string().required('O tipo do cardapio é obrigatório'),
+    status: yup.string().required('O status do cardapio é obrigatório'),
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -82,36 +82,54 @@ export function CardapioForm({action}: ICardapioProps){
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label>Título do cardápio:
-                    <input className="input" readOnly={!canEdit} type="text" {...register("name")} />
-                </label>
-                <label>Data do cardápio:
-                    <input className="input" readOnly={!canEdit} type="date" {...register("date")} />
-                </label>
-                <label>Horario do cardárpio:
-                    <input className="input" readOnly={!canEdit} type="text" {...register("time")} />
-                </label>
-                <label>Descrição do cardápio:
-                    <textarea className="input" readOnly={!canEdit} rows={10} {...register("description")}/>
-                </label>
-                <label>Tipo do cardárpio:
-                    <select className="input" {...register("type")} disabled={!canEdit}>
-                        <option hidden={true}></option>
-                        <option value="PADRAO">Cardápio Padrão</option>
-                        <option value="ESPECIAL">Cardápio Especial</option>
-                    </select>
-                </label>
-                <label>Status do cardárpio:
-                    <select className="input" {...register("status")} disabled={!canEdit}>
-                        <option hidden={true}></option>
-                        {status && (
-                            //@ts-ignore
-                            status.map((value) => (
-                                <option value={value.STATUS_VALUE} key={value.idSTATUS_DOMAIN}>{value.STATUS_DESCRIPTION}</option>
-                            ))
-                        )}
-                    </select>
-                </label>
+                <div>
+                    <label>Título do cardápio:
+                        <input className="input" readOnly={!canEdit} type="text" {...register("name")} />
+                    </label>
+                    <span className="text-red-500">{errors.name?.message}</span>
+                </div>
+                <div>
+                    <label>Data do cardápio:
+                        <input className="input" readOnly={!canEdit} type="date" {...register("date")} />
+                    </label>
+                    <span className="text-red-500">{errors.date?.message}</span>
+                </div>
+                <div>
+                    <label>Horario do cardárpio:
+                        <input className="input" readOnly={!canEdit} type="time" {...register("time")} />
+                    </label>
+                    <span className="text-red-500">{errors.time?.message}</span>
+                </div>
+                <div>
+                    <label>Descrição do cardápio:
+                        <textarea className="input" readOnly={!canEdit} rows={10} {...register("description")}/>
+                    </label>
+                    <span className="text-red-500">{errors.description?.message}</span>
+                </div>
+                <div>
+                    <label>Tipo do cardárpio:
+                        <select className="input" {...register("type")} disabled={!canEdit}>
+                            <option hidden={true}></option>
+                            <option value="PADRAO">Cardápio Padrão</option>
+                            <option value="ESPECIAL">Cardápio Especial</option>
+                        </select>
+                    </label>
+                    <span className="text-red-500">{errors.type?.message}</span>
+                </div>
+                <div>
+                    <label>Status do cardárpio:
+                        <select className="input" {...register("status")} disabled={!canEdit}>
+                            <option hidden={true}></option>
+                            {status && (
+                                //@ts-ignore
+                                status.map((value) => (
+                                    <option value={value.STATUS_VALUE} key={value.idSTATUS_DOMAIN}>{value.STATUS_DESCRIPTION}</option>
+                                ))
+                            )}
+                        </select>
+                    </label>
+                    <span className="text-red-500">{errors.status?.message}</span>
+                </div>
                 <div className='flex space-x-2 items-center justify-end m-4'>
                     {action == "EDITAR" ? (
                         <>
