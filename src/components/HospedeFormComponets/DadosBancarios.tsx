@@ -15,36 +15,14 @@ export function DadosBancarios({register, canEdit, errors}:IDadosBancariosProps)
                         <input disabled={!canEdit} type="text" className="input" {...register("nomeBanco")}/>
                         {errors.nomeBanco && <span className="text-red-500">{errors.nomeBanco.message}</span>}
                     </label>
-<<<<<<< HEAD
-                    <div>
-                        <label className="w-2/6">Agência:
-                            <input disabled={!canEdit} type="text" className="input" {...register("agencia")}/>
-                        </label>
-                        <span className="text-red-500">{errors.agencia?.message}</span>
-                    </div>
-                    {/* <label>Conta:
-                        <input disabled={!canEdit} type="text" className="input" {...register("conta")}/>
-                    </label> */}
-                    <div>
-                        <label>Número da conta:
-                            <input disabled={!canEdit} type="text" className="input" {...register("numConta")}/>
-                        </label>
-                        <span className="text-red-500">{errors.numConta?.message}</span>
-                    </div>
-=======
                     <label className="w-2/6">Agência:
                         <input disabled={!canEdit} type="text" className="input" {...register("agencia")}/>
                         {errors.agencia && <span className="text-red-500">{errors.agencia.message}</span>}
-                    </label>
-                    <label>Conta:
-                        <input disabled={!canEdit} type="text" className="input" {...register("conta")}/>
-                        {errors.conta && <span className="text-red-500">{errors.conta.message}</span>}
                     </label>
                     <label>Número da conta:
                         <input disabled={!canEdit} type="text" className="input" {...register("numConta")}/>
                         {errors.numConta && <span className="text-red-500">{errors.numConta.message}</span>}
                     </label>
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                 </div>      
                 <div>
                     <h1 className="font-bold">Situação Financeira</h1>

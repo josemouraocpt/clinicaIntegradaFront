@@ -15,25 +15,6 @@ import { toast } from "sonner";
 const priceRegexBR = /^(R\$ ?)?\d{1,3}(\.\d{3})*,\d{2}$/;
 
 const schema = yup.object({
-<<<<<<< HEAD
-    name: yup.string().required('O nome é obrigatório'),
-    projectDate: yup.string().required('A data do projeto é obrigatória'),
-    scope: yup.string().required('O escopo é obrigatório'),
-    activity: yup.string().required('A atividade é obrigatória'),
-    restriction: yup.string().required('A restrição é obrigatória'),
-    cost: yup.string().required('O custo é obrigatório').matches(priceRegexBR, 'O preço deve ser um número'),
-    type: yup.string().required('O tipo é obrigatório'),
-    userId: yup.number(),
-    cc: yup.string().required('O centro de custo é obrigatório'),
-    status: yup.string().required('O status é obrigatório'),
-    presentation: yup.string().required('A apresentação é obrigatória'),
-    identification: yup.string().required('A identificação é obrigatória'),
-    justification: yup.string().required('A justificativa é obrigatória'),
-    methodology: yup.string().required('A metodologia é obrigatória'),
-    objectives: yup.string().required('O objetivo é obrigatório'),
-    public: yup.string().required('O publico é obrigatório'),
-    expectedResults: yup.string().required('O resultado é obrigatório'),
-=======
     name: requiredString('Nome obrigatório'),
     projectDate: requiredString('Data do projeto obrigatório'),
     scope: requiredString('Escopo do projeto obrigatório'),
@@ -51,7 +32,6 @@ const schema = yup.object({
     objectives: requiredString('Objetivos obrigatório'),
     public: requiredString('Público beneficiário obrigatório'),
     expectedResults: requiredString('Resultados esperados obrigatório'),
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -173,7 +153,7 @@ export function ProjetoForm({action}: IProjetoFormProps){
         setValue("name", data.NOME);
         setValue("objectives", data.OBJETIVOS);
         setValue("presentation", data.APRESENTACAO);
-        setValue("projectDate", data.DATA_PROJETO ? data.DATA_PROJETO.substring(0, 10));
+        setValue("projectDate", data.DATA_PROJETO.substring(0, 10));
         setValue("public", data.PUBLICO_BENEFICIARIO);
         setValue("restriction", data.RESTRICAO);
         setValue("scope", data.ESCOPO);
@@ -199,100 +179,6 @@ export function ProjetoForm({action}: IProjetoFormProps){
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-3 gap-4">
                     <div>
-<<<<<<< HEAD
-                        <div>
-                            <label>Nome do projeto:
-                                <input disabled={!canEdit} type="text" className="input" {...register("name")}/>
-                            </label>
-                            <span className="text-red-500">{errors.name?.message}</span>
-                        </div>
-                       <div>
-                        <label>Data do projeto:
-                                <input disabled={!canEdit} type="date" className="input" {...register("projectDate")}/>
-                                <span className="text-red-500">{errors.projectDate?.message}</span>
-                            </label>
-                       </div>
-                        <div>
-                            <label>Escopo do projeto:
-                                <textarea disabled={!canEdit} className="input"  {...register("scope")} rows={10}></textarea>
-                                <span className="text-red-500">{errors.scope?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Atividade:
-                                <textarea disabled={!canEdit} className="input" {...register("activity")} rows={10}></textarea>
-                                <span className="text-red-500">{errors.activity?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Resultados esperados:
-                                <textarea disabled={!canEdit} className="input" {...register("expectedResults")} rows={10}></textarea>
-                                <span className="text-red-500">{errors.expectedResults?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Objetivos:
-                                <textarea disabled={!canEdit} className="input" {...register("objectives")} rows={10}></textarea>
-                                <span className="text-red-500">{errors.objectives?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Metodologia:
-                                <textarea disabled={!canEdit} className="input" {...register("methodology")} rows={10}></textarea>
-                                <span className="text-red-500">{errors.methodology?.message}</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <label>Custo do projeto:
-                                <input disabled={!canEdit} type="text" className="input" {...register("cost")}/>
-                                <span className="text-red-500">{errors.cost?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Tipo do projeto:
-                                <input disabled={!canEdit} type="text" className="input" {...register("type")}/>
-                                <span className="text-red-500">{errors.type?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Centro de custo:
-                                <input disabled={!canEdit} type="text" className="input" {...register("cc")}/>
-                                <span className="text-red-500">{errors.cc?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Público beneficiário:
-                                <input disabled={!canEdit} type="text" className="input" {...register("public")}/>
-                                <span className="text-red-500">{errors.public?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Identificação:
-                                <input disabled={!canEdit} type="text" className="input" {...register("identification")}/>
-                                <span className="text-red-500">{errors.identification?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Justificativa:
-                                <textarea disabled={!canEdit} className="input" {...register("justification")} rows={10}></textarea>
-                                <span className="text-red-500">{errors.justification?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Restrições:
-                                <textarea disabled={!canEdit} className="input" {...register("restriction")} rows={10}></textarea>
-                                <span className="text-red-500">{errors.restriction?.message}</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label>Apresentação:
-                                <textarea disabled={!canEdit} className="input" {...register("presentation")} rows={10}></textarea>
-                                <span className="text-red-500">{errors.presentation?.message}</span>
-                            </label>
-                        </div>
-=======
                         <label className="flex flex-col">Nome do projeto:
                             <input disabled={!canEdit} type="text" className="input" {...register("name")}/>
                             {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -355,7 +241,6 @@ export function ProjetoForm({action}: IProjetoFormProps){
                             <textarea disabled={!canEdit} className="input" {...register("presentation")} rows={10}></textarea>
                             {errors.presentation && <span className="text-red-500">{errors.presentation.message}</span>}
                         </label>
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                     </div>
                     <div>
                         <label>Status do projeto:
@@ -368,11 +253,7 @@ export function ProjetoForm({action}: IProjetoFormProps){
                                     ))
                                 )}
                             </select>
-<<<<<<< HEAD
-                            <span className="text-red-500">{errors.status?.message}</span>
-=======
                             {errors.status && <span className="text-red-500">{errors.status.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                         </label>
                         {action == "EDITAR" && (
                             <div>

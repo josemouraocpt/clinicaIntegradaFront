@@ -12,15 +12,6 @@ import { requiredString } from "./ErroPreenchimento";
 import { toast } from "sonner";
 
 const schema = yup.object({
-<<<<<<< HEAD
-    date: yup.string().required('A data do cardápio é obrigatória'),
-    time: yup.string().required('O horário do cardapio é obrigatório'),
-    name: yup.string().required('O nome do cardapio é obrigatório'),
-    description: yup.string().required('A descrição é obrigatória'),
-    userId: yup.number(),
-    type: yup.string().required('O tipo do cardapio é obrigatório'),
-    status: yup.string().required('O status do cardapio é obrigatório'),
-=======
     date: requiredString('Data do cardápio obrigatório'),
     time: requiredString('Horário do cardápio obrigatório'),
     name: requiredString('Título do cardápio obrigatório'),
@@ -28,7 +19,6 @@ const schema = yup.object({
     userId: yup.number(),
     type: requiredString('Tipo do cardápio obrigatório'),
     status: requiredString('Status do cardápio obrigatório'),
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -108,56 +98,6 @@ export function CardapioForm({action}: ICardapioProps){
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
             <form onSubmit={handleSubmit(onSubmit)}>
-<<<<<<< HEAD
-                <div>
-                    <label>Título do cardápio:
-                        <input className="input" readOnly={!canEdit} type="text" {...register("name")} />
-                    </label>
-                    <span className="text-red-500">{errors.name?.message}</span>
-                </div>
-                <div>
-                    <label>Data do cardápio:
-                        <input className="input" readOnly={!canEdit} type="date" {...register("date")} />
-                    </label>
-                    <span className="text-red-500">{errors.date?.message}</span>
-                </div>
-                <div>
-                    <label>Horario do cardárpio:
-                        <input className="input" readOnly={!canEdit} type="time" {...register("time")} />
-                    </label>
-                    <span className="text-red-500">{errors.time?.message}</span>
-                </div>
-                <div>
-                    <label>Descrição do cardápio:
-                        <textarea className="input" readOnly={!canEdit} rows={10} {...register("description")}/>
-                    </label>
-                    <span className="text-red-500">{errors.description?.message}</span>
-                </div>
-                <div>
-                    <label>Tipo do cardárpio:
-                        <select className="input" {...register("type")} disabled={!canEdit}>
-                            <option hidden={true}></option>
-                            <option value="PADRAO">Cardápio Padrão</option>
-                            <option value="ESPECIAL">Cardápio Especial</option>
-                        </select>
-                    </label>
-                    <span className="text-red-500">{errors.type?.message}</span>
-                </div>
-                <div>
-                    <label>Status do cardárpio:
-                        <select className="input" {...register("status")} disabled={!canEdit}>
-                            <option hidden={true}></option>
-                            {status && (
-                                //@ts-ignore
-                                status.map((value) => (
-                                    <option value={value.STATUS_VALUE} key={value.idSTATUS_DOMAIN}>{value.STATUS_DESCRIPTION}</option>
-                                ))
-                            )}
-                        </select>
-                    </label>
-                    <span className="text-red-500">{errors.status?.message}</span>
-                </div>
-=======
                 <label className="flex flex-col">Título do cardápio:
                     <input className="input" readOnly={!canEdit} type="text" {...register("name")} />
                     {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -194,7 +134,6 @@ export function CardapioForm({action}: ICardapioProps){
                     </select>
                     {errors.status && <span className="text-red-500">{errors.status.message}</span>}
                 </label>
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                 <div className='flex space-x-2 items-center justify-end m-4'>
                     {action == "EDITAR" ? (
                         <>

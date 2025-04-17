@@ -8,11 +8,7 @@ interface IDadosHospedagemProps{
 }
 
 
-<<<<<<< HEAD
-export function DadosHospedagem({register, statusList, canEdit, errors}: IDadosHospedagemProps){
-=======
 export function DadosHospedagem({register, statusList, canEdit,errors}: IDadosHospedagemProps){
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
     return(
         <div>
             <div className="flex flex-col space-y-3">

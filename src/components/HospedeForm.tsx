@@ -30,38 +30,6 @@ const contaRegex = /^\d{1,12}-[\dXx]$/;
 
 
 const schema = yup.object({
-<<<<<<< HEAD
-	nome: yup.string().required('O nome é obrigatório'),
-	nomeSocial: yup.string(),
-	apelido: yup.string(),
-	rg: yup.string().required('O RG é obrigatório').matches(rgRegex, 'Deve estar no padrão 00000000'),
-	cpf: yup.string().required('O CPF é obrigatório').matches(cpfRegex, 'Deve estar no padrão 000.000.000-00'),
-	nacionalidade: yup.string(),
-	naturalidade: yup.string() ,
-	estadoCivil: yup.string() ,
-	dataNascimento: yup.string().required('A data de nascimento é obrigatória'),
-	nomeMae: yup.string() ,
-	nomePai: yup.string(),
-	telefone: yup.string().matches(phoneRegex, 'Deve estar no padrão 31912345678'),
-	profissao: yup.string() ,
-	tituloEleitor: yup.string().matches(tituloEleitorRegex, 'Deve estar no padrão 123456789012'),
-	endereco: yup.string() ,
-	cidade: yup.string(),
-	uf: yup.string() ,
-	cep: yup.string().matches(cepRegex, 'Deve estar no padrão 00000-000'),
-	dataEntrada: yup.string().required('A data de entrada é obrigatória'),
-	situacaoFinanceiraDesc: yup.string(),
-	quarto: yup.string().required('O quarto é obrigatório'),
-	leito: yup.string().required('O leito é obrigatório'),
-	hospedagemInfo: yup.string(),
-	responsavel: yup.string(),
-	hospedeStatus: yup.string().required('O status do hospede é obrigatório'),
-	hospedagemStatus: yup.string().required('O status da hospedagem é obrigatório'),
-	agencia: yup.string().matches(fourDigitRegex, 'Deve estar no padrão 1234'),
-	nomeBanco: yup.string(),
-	numConta: yup.string().matches(contaRegex, 'Deve estar no padrão 1234567-8'),
-	grauDependencia: yup.string(),
-=======
 	nome: requiredString('Nome obrigatório'),
 	nomeSocial: yup.string(),
 	apelido: yup.string(),
@@ -89,11 +57,9 @@ const schema = yup.object({
 	hospedeStatus: yup.string(),
 	hospedagemStatus: yup.string(),
 	agencia: requiredString('Agência obrigatório'),
-	conta: requiredString('Conta obrigatório'),
 	nomeBanco: requiredString('Nome Banco obrigatório'),
 	numConta: requiredString('Número da conta obrigatório'),
 	grauDependencia: requiredString('Grau de dependência obrigatório'),
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 	nomeMedicamento: yup.string(),
 	freqMedicamento: yup.string(),
 	tempoMedicamento: yup.string(),
@@ -132,11 +98,6 @@ export function HospedeForm({action}: IHospedeFormProps){
 		resolver: yupResolver(schema)
 	});
 
-	// const handleNext = handleSubmit((data) => {
-	// 	setCurrentStep(state => state + 1);
-	//   }, () => {
-	// 	console.log("Corrija os erros antes de prosseguir.");
-	// });
 	function handleNext(){
 		setCurrentStep(state => state + 1);
 	};
@@ -279,11 +240,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da primeira parte do formulário */}
 				{currentStep == 0 && (
 					<>
-<<<<<<< HEAD
-					<DadosBasicos register={register} statusList={hospedeStatusList} canEdit={canEdit} errors={errors} />
-=======
 					<DadosBasicos errors= {errors} register={register} statusList={hospedeStatusList} canEdit={canEdit} />
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 					<div className="flex justify-end space-x-3">
 						{hospedeData && (
 							<MyButton buttonText="Editar" buttonType="button" handleClick={() => {setCanEdit(!canEdit)}}/>
@@ -297,11 +254,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da segunda parte do formulário */}
 				{currentStep == 1 && (
 					<>
-<<<<<<< HEAD
-						<DadosBancarios register={register} canEdit={canEdit} errors={errors}/>
-=======
 						<DadosBancarios errors={errors} register={register} canEdit={canEdit}/>
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 						<div className="flex justify-end space-x-3">
 							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
 							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
@@ -325,11 +278,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{/* Inicio da quarta parte do formulário */}
 				{currentStep == 3 && (
 					<>
-<<<<<<< HEAD
-						<DadosHospedagem register={register} statusList={hospedagemStatusList} canEdit={canEdit} errors={errors}/>
-=======
 						<DadosHospedagem errors={errors} register={register} statusList={hospedagemStatusList} canEdit={canEdit}/>
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 						<div className="flex justify-end space-x-3">
 							<MyButton buttonText="Voltar" buttonType="button" handleClick={handlePrevius}/>
 							<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>

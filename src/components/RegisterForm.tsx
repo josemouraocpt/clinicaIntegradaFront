@@ -8,35 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import userService from "@/services/userService";
-<<<<<<< HEAD
-import { FaEye } from "react-icons/fa6";
-import { FaEyeSlash } from "react-icons/fa6";
-
-const cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
-const cepRegex = /^\d{5}-\d{3}$/;
-const rgRegex = /^\d{1,2}\.?\d{3}\.?\d{3}-?[\dXx]$/;
-const phoneRegex = /^(\+?55\s?)?(\(?\d{2}\)?\s?)?(9\d{4}|\d{4})-?\d{4}$/;
-
-const schema = yup.object({
-    name: yup.string().required("O nome é obrigatório"),
-	password: yup.string().required("A senha é obrigatória"),
-    confirmPassword: yup.string().required("A confirmação da senha é obrigatória").oneOf([yup.ref('password')], 'As senhas devem ser iguais'),
-	email: yup.string().required('O e-mail é obrigatório').email('Informe um e-mail válido'),
-    nationality: yup.string().required('A nacionaliade é obrigatória'),
-    naturalness: yup.string().required('A naturalidade é obrigatória'),
-    institution: yup.string(),
-    phoneNumber: yup.string().required('O telefone é obrigatório').matches(phoneRegex, 'Deve estar no padrão 31912345678'),
-    cpf: yup.string().required('O CPF é obrigatório').matches(cpfRegex, 'Deve estar no padrão 000.000.000-00'),
-    rg: yup.string().required('O RG é obrigatório').matches(rgRegex, 'Deve estar no padrão 00000000'),
-    birthDate: yup.string().required('A data de nascimento obrigatória'),
-    formation: yup.string(),
-    zipCode: yup.string().required('O CEP é obrigatório').matches(cepRegex, 'Deve estar no padrão 00000-000'),
-    address: yup.string().required('O endereço é obrigatório'),
-    city: yup.string().required('A cidade é obrigatória'),
-    state: yup.string().required('O estado é obrigatório'),
-    departmentId: yup.string().required('O departamento é obrigatório'),
-    userProfileId: yup.string().required('O tipo de perfil é obrigatório'),
-=======
 import {requiredConfirmPassword, requiredPassword, requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
 import { toast } from "sonner";
  
@@ -60,7 +31,6 @@ const schema = yup.object({
     state: requiredString('Estado obrigatório'),
     departmentId: requiredString('Setor obrigatório'),
     userProfileId: requiredString('Tipo do usuário obrigatório'),
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 
@@ -82,12 +52,8 @@ export function RegisterForm(){
 	async function onSubmit(data: FormData){
         const res  = await dispatch(singUp(data))
         if(res.type == "/register/rejected"){
-<<<<<<< HEAD
-            return alert(res.payload)
-=======
             toast.error("Falha em si registrar. Verifique suas credenciais.");
             return
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
         }else{
             toast.success("Registro realizado com sucesso!");{}
             router.push('/dashboard')
@@ -118,35 +84,6 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Nome:
                             <input {...register("name")} type="text" className="input"/>
-<<<<<<< HEAD
-                            <span className="text-red-500">{errors.name?.message}</span>
-                        </label>
-                        <label>E-mail:
-                            <input {...register("email")} type="email" className="input"/>
-                            <span className="text-red-500">{errors.email?.message}</span>
-                        </label>
-                        <label>Senha:
-                            <div className="flex items-center gap-x-2 
-                            ">
-                                <input {...register("password")} type={visibility1} className="input"/>
-                                {visibility1 == "password" ? 
-                                (<FaEye size={28} onClick={()=>visibility(setVisibility1,"text")} />) : 
-                                (<FaEyeSlash size={28} onClick={()=>visibility(setVisibility1,"password")} />)
-                                }
-                            </div>
-                            <span className="text-red-500">{errors.password?.message}</span>
-                        </label>
-                        <label>Confirmação de senha:
-                            <div className="flex items-center gap-x-2 
-                            ">
-                                <input {...register("confirmPassword")} type={visibility2} className="input"/>
-                                {visibility2 == "password" ? 
-                                (<FaEye size={28} onClick={()=>visibility(setVisibility2,"text")} />) : 
-                                (<FaEyeSlash size={28} onClick={()=>visibility(setVisibility2,"password")} />)
-                                }
-                            </div>
-                            <span className="text-red-500">{errors.confirmPassword?.message}</span>
-=======
                             {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                         </label>
                         <label>E-mail:
@@ -160,7 +97,6 @@ export function RegisterForm(){
                         <label>Confirmação de senha:
                             <input {...register("confirmPassword")} type="password" className="input"/>
                             {errors.confirmPassword && <span className="text-red-500 nowrap">{errors.confirmPassword.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                         </label>
                         {/* <label>Setor:
                             <select className="input" {...register("departmentId")}>
@@ -171,12 +107,7 @@ export function RegisterForm(){
                                     ))
                                 )}
                             </select>
-<<<<<<< HEAD
-                            <span className="text-red-500">{errors.departmentId?.message}</span>
-                        </label>
-=======
                         </label> */}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                     </div>
                     <div className="flex flex-row space-x-5">
                         {/* <label>Tipo do usuário:
@@ -188,21 +119,6 @@ export function RegisterForm(){
                                     ))
                                 )}
                             </select>
-<<<<<<< HEAD
-                            <span className="text-red-500">{errors.userProfileId?.message}</span>
-                        </label>
-                        <label>Telefone:
-                            <input {...register("phoneNumber")} type="text" className="input"/>
-                            <span className="text-red-500">{errors.phoneNumber?.message}</span>
-                        </label>
-                        <label>CPF:
-                            <input {...register("cpf")} type="text" className="input"/>
-                            <span className="text-red-500">{errors.cpf?.message}</span>
-                        </label>
-                        <label>RG:
-                            <input {...register("rg")} type="text" className="input"/>
-                            <span className="text-red-500">{errors.rg?.message}</span>
-=======
                         </label> */}
                         <label>Telefone:
                             <input {...register("phoneNumber")} type="text" className="input"/>
@@ -215,7 +131,6 @@ export function RegisterForm(){
                         <label>RG:
                             <input {...register("rg")} type="text" className="input"/>
                             {errors.rg && <span className="text-red-500 nowrap">{errors.rg.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                         </label>
                     </div>
                 </div>
@@ -224,33 +139,14 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Data de Nascimento:
                             <input {...register("birthDate")} type="date" className="input"/>
-<<<<<<< HEAD
-                            <span className="text-red-500">{errors.birthDate?.message}</span>
-                        </label>
-                        <label>Nacionalidade:
-                            <input {...register("nationality")} type="text" className="input"/>
-                            <span className="text-red-500">{errors.nationality?.message}</span>
-=======
                             {errors.birthDate && <span className="text-red-500 nowrap">{errors.birthDate.message}</span>}
                         </label>
                         <label>Nacionalidade:
                             <input {...register("nationality")} type="text" className="input"/>
                             {errors.nationality && <span className="text-red-500 nowrap">{errors.nationality.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                         </label>
                         <label>Naturalidade:
                             <input {...register("naturalness")} type="text" className="input"/>
-<<<<<<< HEAD
-                            <span className="text-red-500">{errors.naturalness?.message}</span>
-                        </label>
-                        <label>Formação:
-                            <input {...register("formation")} type="text" className="input"/>
-                            <span className="text-red-500">{errors.formation?.message}</span>
-                        </label>
-                        <label>Instituição de Ensino:
-                            <input {...register("institution")} type="text" className="input"/>
-                            <span className="text-red-500">{errors.institution?.message}</span>
-=======
                             {errors.naturalness && <span className="text-red-500 nowrap">{errors.naturalness.message}</span>}
                         </label>
                         <label>Formação:
@@ -260,7 +156,6 @@ export function RegisterForm(){
                         <label>Instituição de Ensino:
                             <input {...register("institution")} type="text" className="input"/>
                             {errors.institution && <span className="text-red-500 nowrap">{errors.institution.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                         </label>
                     </div>
                 </div>
@@ -272,17 +167,6 @@ export function RegisterForm(){
                                 <div className="flex flex-row space-x-5">
                                     <label>CEP:
                                         <input {...register("zipCode")} type="text" className="input"/>
-<<<<<<< HEAD
-                                        <span className="text-red-500">{errors.zipCode?.message}</span>
-                                    </label>
-                                    <label>Endereço:
-                                        <input {...register("address")} type="text" className="input"/>
-                                        <span className="text-red-500">{errors.address?.message}</span>
-                                    </label>
-                                    <label>Cidade:
-                                        <input {...register("city")} type="text" className="input"/>
-                                        <span className="text-red-500">{errors.city?.message}</span>
-=======
                                         {errors.zipCode && <span className="text-red-500 nowrap">{errors.zipCode.message}</span>}
                                     </label>
                                     <label>Endereço:
@@ -292,7 +176,6 @@ export function RegisterForm(){
                                     <label>Cidade:
                                         <input {...register("city")} type="text" className="input"/>
                                         {errors.city && <span className="text-red-500 nowrap">{errors.city.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                                     </label>
                                     <label>Estado:
                                         <select className="input" {...register("state")}>
@@ -325,11 +208,7 @@ export function RegisterForm(){
                                             <option value="SE">Sergipe</option>
                                             <option value="TO">Tocantins</option>
                                         </select>
-<<<<<<< HEAD
-                                        <span className="text-red-500">{errors.state?.message}</span>
-=======
                                         {errors.state && <span className="text-red-500 nowrap">{errors.state.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                                 </label>
                                 </div>
                             </div>

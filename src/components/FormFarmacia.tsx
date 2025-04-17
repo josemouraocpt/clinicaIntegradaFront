@@ -14,19 +14,11 @@ const priceRegex = /^\d+(?:[.,]\d{2})?$/;
 
 const schema = yup.object({
     userId: yup.number(),
-<<<<<<< HEAD
-    name: yup.string().required('O nome é obrigatório'),
-    quantity: yup.number().required('A quantidade é obrigatória'),
-    unitValue: yup.string().required('O valor é obrigatório').matches(priceRegex, 'O preço deve ser um número'),
-    expireDate: yup.string().required('A data de validade é obrigatória'),
-    type: yup.string(),
-=======
     name: requiredString('Nome obrigatório'),
     quantity: requiredNumber('Quantidade obrigatório','Deve conter apenas números'),
     unitValue: requiredString('Valor unitário obrigatório'),
     expireDate: requiredString('Data de valiadade obrigatório'),
     type: requiredString('Tipo obrigatório'),
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -130,32 +122,6 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
         <form onSubmit={handleSubmit(onSubmit)}>
-<<<<<<< HEAD
-            <div>
-                <label>Nome do {type == "MEDICAMENTO" ? "medicamento" : "item"}:
-                    <input disabled={!canEdit} className="input" type="text" {...register("name")} />
-                </label>
-                <span className="text-red-500">{errors.name?.message}</span>
-            </div>
-            <div>
-                <label>Quantidade:
-                    <input disabled={!canEdit} className="input" type="number" {...register("quantity")} />
-                </label>
-                <span className="text-red-500">{errors.quantity?.message}</span>
-            </div>
-            <div>
-                <label>Valor unitário:
-                    <input disabled={!canEdit} className="input" type="text" {...register("unitValue")}/>
-                </label>
-                <span className="text-red-500">{errors.unitValue?.message}</span>
-            </div>
-            <div>
-                <label>Data de validade:
-                    <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
-                </label>
-                <span className="text-red-500">{errors.expireDate?.message}</span>
-            </div>
-=======
             <label className="flex flex-col">Nome do {type == "MEDICAMENTO" ? "medicamento" : "item"}:
                 <input disabled={!canEdit} className="input" type="text" {...register("name")} />
                 {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -172,7 +138,6 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
                 <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
                 {errors.expireDate && <span className="text-red-500">{errors.expireDate.message}</span>}
             </label>
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
             {type == "MEDICAMENTO" && (
                 <label className="flex flex-col">Tipo:
                     <select disabled={!canEdit} className="input" {...register("type")}>

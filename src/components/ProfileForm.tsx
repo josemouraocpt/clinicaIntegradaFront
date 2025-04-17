@@ -16,25 +16,6 @@ const rgRegex = /^\d{1,2}\.?\d{3}\.?\d{3}-?[\dXx]$/;
 const phoneRegex = /^(\+?55\s?)?(\(?\d{2}\)?\s?)?(9\d{4}|\d{4})-?\d{4}$/;
 
 const schema = yup.object({
-<<<<<<< HEAD
-    name: yup.string().required("O nome é obrigatório"),
-	email: yup.string().required('O e-mail é obrigatório').email('Informe um e-mail válido'),
-    nationality: yup.string().required('A nacionaliade é obrigatória'),
-    naturalness: yup.string().required('A naturalidade é obrigatória'),
-    institution: yup.string(),
-    phoneNumber: yup.string().required('O telefone é obrigatório').matches(phoneRegex, 'Deve estar no padrão 31912345678'),
-    cpf: yup.string().required('O CPF é obrigatório').matches(cpfRegex, 'Deve estar no padrão 000.000.000-00'),
-    rg: yup.string().required('O RG é obrigatório').matches(rgRegex, 'Deve estar no padrão 00000000'),
-    birthDate: yup.string().required('A data de nascimento obrigatória'),
-    formation: yup.string(),
-    zipCode: yup.string().required('O CEP é obrigatório').matches(cepRegex, 'Deve estar no padrão 00000-000'),
-    address: yup.string().required('O endereço é obrigatório'),
-    city: yup.string().required('A cidade é obrigatória'),
-    state: yup.string().required('O estado é obrigatório'),
-    departmentId: yup.string().required('O departamento é obrigatório'),
-    userProfileId: yup.string().required('O tipo de perfil é obrigatório'),
-	userStatus: yup.string()
-=======
     name: requiredString('Nome obrigatório'),
 	email: requiredEmail('Email obrigatório'),
     nationality: requiredString('Nacionalidade obrigatório'),
@@ -52,7 +33,6 @@ const schema = yup.object({
     departmentId: requiredString('Setor obrigatório'),
     userProfileId: requiredString('Tipo do usuário obrigatório'),
 	userStatus: requiredString('Status obrigatório'),
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -130,19 +110,11 @@ export function ProfileForm(){
 					<div className="flex flex-row space-x-5">
 						<label>Nome:
 							<input readOnly={!canEdit} {...register("name")} type="text" className="input"/>
-<<<<<<< HEAD
-							<span className="text-red-500">{errors.name?.message}</span>
-						</label>
-						<label>E-mail:
-							<input readOnly={!canEdit} {...register("email")} type="email" className="input"/>
-							<span className="text-red-500">{errors.email?.message}</span>
-=======
 							{errors.name && <span className="text-red-500">{errors.name.message}</span>}
 						</label>
 						<label>E-mail:
 							<input readOnly={!canEdit} {...register("email")} type="email" className="input"/>
 							{errors.email && <span className="text-red-500">{errors.email.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 						</label>
 						{/* <label>Senha:
 							<input readOnly={!canEdit} {...register("password")} type="password" className="input"/>
@@ -160,11 +132,7 @@ export function ProfileForm(){
 									))
 								)}
 							</select>
-<<<<<<< HEAD
-							<span className="text-red-500">{errors.departmentId?.message}</span>
-=======
 							{errors.departmentId && <span className="text-red-500">{errors.departmentId.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 						</label>
 					</div>
 					<div className="flex flex-row space-x-5">
@@ -178,21 +146,6 @@ export function ProfileForm(){
 									))
 								)}
 							</select>
-<<<<<<< HEAD
-							<span className="text-red-500">{errors.userProfileId?.message}</span>
-						</label>
-						<label>Telefone:
-							<input readOnly={!canEdit} {...register("phoneNumber")} type="text" className="input"/>
-							<span className="text-red-500">{errors.phoneNumber?.message}</span>
-						</label>
-						<label>CPF:
-							<input readOnly={!canEdit} {...register("cpf")} type="text" className="input"/>
-							<span className="text-red-500">{errors.cpf?.message}</span>
-						</label>
-						<label>RG:
-							<input readOnly={!canEdit} {...register("rg")} type="text" className="input"/>
-							<span className="text-red-500">{errors.rg?.message}</span>
-=======
 							{errors.userProfileId && <span className="text-red-500">{errors.userProfileId.message}</span>}
 						</label>
 						<label>Telefone:
@@ -206,7 +159,6 @@ export function ProfileForm(){
 						<label>RG:
 							<input readOnly={!canEdit} {...register("rg")} type="text" className="input"/>
 							{errors.rg && <span className="text-red-500">{errors.rg.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 						</label>
 					</div>
 				</div>
@@ -215,25 +167,6 @@ export function ProfileForm(){
 					<div className="flex flex-row space-x-5">
 						<label>Data de Nascimento:
 							<input readOnly={!canEdit} {...register("birthDate")} type="date" className="input"/>
-<<<<<<< HEAD
-							<span className="text-red-500">{errors.birthDate?.message}</span>
-						</label>
-						<label>Nacionalidade:
-							<input readOnly={!canEdit} {...register("nationality")} type="text" className="input"/>
-							<span className="text-red-500">{errors.nationality?.message}</span>
-						</label>
-						<label>Naturalidae:
-							<input readOnly={!canEdit} {...register("naturalness")} type="text" className="input"/>
-							<span className="text-red-500">{errors.naturalness?.message}</span>
-						</label>
-						<label>Formação:
-							<input readOnly={!canEdit} {...register("formation")} type="text" className="input"/>
-							<span className="text-red-500">{errors.formation?.message}</span>
-						</label>
-						<label>Instituição de Ensino:
-							<input readOnly={!canEdit} {...register("institution")} type="text" className="input"/>
-							<span className="text-red-500">{errors.institution?.message}</span>
-=======
 							{errors.birthDate && <span className="text-red-500">{errors.birthDate.message}</span>}
 						</label>
 						<label>Nacionalidade:
@@ -251,7 +184,6 @@ export function ProfileForm(){
 						<label>Instituição de Ensino:
 							<input readOnly={!canEdit} {...register("institution")} type="text" className="input"/>
 							{errors.institution && <span className="text-red-500">{errors.institution.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 						</label>
 					</div>
 				</div>
@@ -263,17 +195,6 @@ export function ProfileForm(){
 								<div className="flex flex-row space-x-5">
 									<label>CEP:
 										<input readOnly={!canEdit} {...register("zipCode")} type="text" className="input"/>
-<<<<<<< HEAD
-										<span className="text-red-500">{errors.zipCode?.message}</span>
-									</label>
-									<label>Endereço:
-										<input readOnly={!canEdit} {...register("address")} type="text" className="input"/>
-										<span className="text-red-500">{errors.address?.message}</span>
-									</label>
-									<label>Cidade:
-										<input readOnly={!canEdit} {...register("city")} type="text" className="input"/>
-										<span className="text-red-500">{errors.city?.message}</span>
-=======
 										{errors.zipCode && <span className="text-red-500">{errors.zipCode.message}</span>}
 									</label>
 									<label>Endereço:
@@ -283,7 +204,6 @@ export function ProfileForm(){
 									<label>Cidade:
 										<input readOnly={!canEdit} {...register("city")} type="text" className="input"/>
 										{errors.city && <span className="text-red-500">{errors.city.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 									</label>
 									<label>Estado:
 										<select disabled={!canEdit} className="input" {...register("state")}>
@@ -316,11 +236,7 @@ export function ProfileForm(){
 											<option value="SE">Sergipe</option>
 											<option value="TO">Tocantins</option>
 										</select>
-<<<<<<< HEAD
-										<span className="text-red-500">{errors.state?.message}</span>
-=======
 										{errors.state && <span className="text-red-500">{errors.state.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 								</label>
 								<label>Status:
 									<select disabled={!canEdit} className="input" {...register("userStatus")}>
@@ -332,11 +248,7 @@ export function ProfileForm(){
 											))
 										)}
 									</select>
-<<<<<<< HEAD
-									<span className="text-red-500">{errors.userStatus?.message}</span>
-=======
 									{errors.userStatus && <span className="text-red-500">{errors.userStatus.message}</span>}
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
 								</label>
 								</div>
 							</div>

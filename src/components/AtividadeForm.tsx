@@ -11,18 +11,6 @@ import { requiredString } from "./ErroPreenchimento";
 import { toast } from "sonner";
 
 const schema = yup.object({
-<<<<<<< HEAD
-    name: yup.string().required('O nome é obrigatório'),
-    department: yup.string().required('O departamento é obrigatório'),
-    responsibleName: yup.string().required('O responsável é obrigatório'),
-    responsibleDocument: yup.string().required('O documento do responsável é obrigatório'),
-    frequency: yup.string().required('A frequência é obrigatória'),
-    status: yup.string().required('O status é obrigatório'),
-    activityDate: yup.string().required('A data da atividade é obrigatória'),
-    startTime: yup.string().required('O horário de início é obrigatório'),
-    endTime: yup.string().required('O horário de término é obrigatório'),
-    observation: yup.string().required('A observação é obrigatória'),
-=======
     name: requiredString('Nome da atividade obrigatório'),
     department: requiredString('Departamento responsável obrigatório'),
     responsibleName: requiredString('Profissional responsável obrigatório'),
@@ -33,7 +21,6 @@ const schema = yup.object({
     startTime: requiredString('Horário de início brigatório'),
     endTime: requiredString('Horário de fim obrigatório'),
     observation: yup.string(),
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
     attachment: yup.mixed(),
 });
 
@@ -112,78 +99,6 @@ export function AtividadeForm({action}: IAtividadeFormProps){
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-2 gap-2">
                     <div>
-<<<<<<< HEAD
-                        <div>
-                            <label>Nome da atividade:
-                                <input disabled={!canEdit} type="text" className="input" {...register("name")} />
-                            </label>
-                            <span className="text-red-500">{errors.name?.message}</span>
-                        </div>
-                        <div>
-                            <label>Departamento responsável:
-                                <input disabled={!canEdit} type="text" className="input" {...register("department")}/>
-                            </label>
-                            <span className="text-red-500">{errors.department?.message}</span>
-                        </div>
-                        <div>
-                            <label>Profissional responsável:
-                                <input disabled={!canEdit} type="text" className="input" {...register("responsibleName")}/>
-                            </label>
-                            <span className="text-red-500">{errors.responsibleName?.message}</span>
-                        </div>
-                        <div>
-                            <label>Documento do responsável:
-                                <input disabled={!canEdit} type="text" className="input" {...register("responsibleDocument")}/>
-                            </label>
-                            <span className="text-red-500">{errors.responsibleDocument?.message}</span>
-                        </div>
-                        <div>
-                            <label>Frequência:
-                                <input disabled={!canEdit} type="text" className="input" {...register("frequency")}/>
-                            </label>
-                            <span className="text-red-500">{errors.frequency?.message}</span>
-                        </div>
-                        <div>
-                            <label>Data da atividade:
-                                <input disabled={!canEdit} type="date" className="input" {...register("activityDate")}/>
-                            </label>
-                            <span className="text-red-500">{errors.activityDate?.message}</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <label>Horário de início:
-                                <input disabled={!canEdit} type="time" className="input" {...register("startTime")}/>
-                            </label>
-                            <span className="text-red-500">{errors.startTime?.message}</span>
-                        </div>
-                        <div>
-                            <label>Horário de fim:
-                                <input disabled={!canEdit} type="time" className="input" {...register("endTime")}/>
-                            </label>
-                            <span className="text-red-500">{errors.endTime?.message}</span>
-                        </div>
-                        <div>
-                            <label>Status:
-                                <select className="input" {...register("status")} disabled={!canEdit}>
-                                    <option hidden={true}></option>
-                                    {statusData && (
-                                        //@ts-ignore
-                                        statusData.map((status) => (
-                                            <option value={status.STATUS_VALUE} key={status.idSTATUS_DOMAIN}>{status.STATUS_DESCRIPTION}</option>
-                                        ))
-                                    )}
-                                </select>
-                            </label>
-                            <span className="text-red-500">{errors.status?.message}</span>
-                        </div>
-                        <div>
-                            <label>Observações:
-                                <textarea disabled={!canEdit} className="input" rows={10} {...register("observation")}></textarea>
-                            </label>
-                            <span className="text-red-500">{errors.observation?.message}</span>
-                        </div>
-=======
                         <label className="flex flex-col">Nome da atividade:
                             <input disabled={!canEdit} type="text" className="input" {...register("name")} />
                             {errors.name && <span className="text-red-500">{errors.name.message}</span>}
@@ -233,7 +148,6 @@ export function AtividadeForm({action}: IAtividadeFormProps){
                         <label>Observações:
                             <textarea disabled={!canEdit} className="input" rows={10} {...register("observation")}></textarea>
                         </label>
->>>>>>> 7499ada62195a360a81930dd9459bbd8e3b996eb
                         <label>Anexo:
                             <input disabled={!canEdit} type="file" className="input" {...register("attachment")} />
                         </label>

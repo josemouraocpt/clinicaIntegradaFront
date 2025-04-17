@@ -31,7 +31,6 @@ export function EstoqueCard({path, data}: IEstoqueCardProps){
     const { user } = useSelector((state) => state.auth);
     
     async function handleDelete(id: number){
-        console.log(path)
         if(path.includes("medicamentos")){
             const res = await deleteMedicamento(id, user.token);
             if(res.type == "SUCCESS"){
@@ -59,8 +58,8 @@ export function EstoqueCard({path, data}: IEstoqueCardProps){
             <div>
                 <ul>
                     <li>Quantidade em estoque: {data.QUANTIDADE}</li>
-                    <li>Valor unitário: R$ {data.VALOR_UNITARIO}</li>
-                    <li>Valor total: R$ {data.VALOR_TOTAL}</li>
+                    <li>Valor unitário: R$ {data.VALOR_UNITARIO.toFixed(2)}</li>
+                    <li>Valor total: R$ {data.VALOR_TOTAL.toFixed(2)}</li>
                     <li>Data da inclusão: {new Date(data.DATA_INCLUSAO.substring(0, 10)).toLocaleDateString("pt-BR")}</li>
                     <li>Alterado por: {data.ALTERADO_POR}</li>
                     {data.DATA_ALTERACAO && (

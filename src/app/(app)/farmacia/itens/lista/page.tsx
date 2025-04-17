@@ -57,7 +57,6 @@ export default function ListaItem(){
                 {/* <SearchBar data={data} setAuxData={setAuxData} path="/farmacia/itens/cadastrar" keys={["idESTOQUE","NOME"]} /> */}
                 <select className="input" onChange={e => {handleChange(e.target.value)}}>
                     <option hidden={true}></option>
-                    <option value=""></option>
                     {dataSet && dataSet.length > 0 ? dataSet.map((medicamento) => (
                         <option value={medicamento.idESTOQUE} key={medicamento.idESTOQUE}>{medicamento.NOME}</option>
                     )) : <option disabled>Nenhum item encontrado</option>}
