@@ -224,6 +224,27 @@ async function deleteDominio(dominioID: number, token: string) {
     }
 }
 
+async function generateUploadURL(fileKey:string, fileType:string): Promise<string> {
+    try {
+        const urlResponse = await fetch(`http://localhost:3001/sistema/generate-upload-url?filename=${fileKey}&contentType=${fileType}`);
+        const url = await urlResponse.json();
+        return url
+    } catch (error) {
+        return 'Error ao gerar URL'
+    }
+}
+
+async function generateDownloadURL(fileKey:string): Promise<string> {
+    try {
+        const urlResponse = await fetch(`http://localhost:3001/sistema/generate-download-url?key=${fileKey}`);
+        const url = await urlResponse.json();
+        return url
+    } catch (error) {
+        return 'Error ao gerar URL'
+    }
+}
+
+
 const sistemaService = {
     getFornecedor,
     getDominio,
@@ -234,7 +255,9 @@ const sistemaService = {
     editFornecedor,
     editDominio,
     deleteFornecedor,
-    deleteDominio
+    deleteDominio,
+    generateUploadURL,
+    generateDownloadURL
 }
 
 export default sistemaService;

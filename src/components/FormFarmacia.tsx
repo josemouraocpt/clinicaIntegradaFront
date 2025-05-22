@@ -4,11 +4,11 @@ import { MyButton } from "./MyButton";
 import * as yup from "yup";
 import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import farmaciaService from "@/services/farmaciaService";
 import { requiredString, requiredNumber } from "./ErroPreenchimento";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 const priceRegex = /^\d+(?:[.,]\d{2})?$/;
 
@@ -118,26 +118,27 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
         setValue("unitValue", data.VALOR_UNITARIO);
     }
 
-
-
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    } 
+    
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit, onError)}>
+            <Toaster richColors/>
             <label className="flex flex-col">Nome do {type == "MEDICAMENTO" ? "medicamento" : "item"}:
                 <input disabled={!canEdit} className="input" type="text" {...register("name")} />
-                {errors.name && <span className="text-red-500">{errors.name.message}</span>}
             </label>
             <label className="flex flex-col">Quantidade:
                 <input disabled={!canEdit} className="input" type="number" {...register("quantity")} />
-                {errors.quantity && <span className="text-red-500">{errors.quantity.message}</span>}
             </label>
             <label className="flex flex-col">Valor unitário:
                 <input disabled={!canEdit} className="input" type="text" {...register("unitValue")}/>
-                {errors.unitValue && <span className="text-red-500">{errors.unitValue.message}</span>}
             </label>
             <label className="flex flex-col">Data de validade:
                 <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
-                {errors.expireDate && <span className="text-red-500">{errors.expireDate.message}</span>}
             </label>
             {type == "MEDICAMENTO" && (
                 <label className="flex flex-col">Tipo:
@@ -146,7 +147,6 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
                         <option value="MEDICAMENTO">Medicamento</option>
                         <option value="VACINA">Vacina</option>
                     </select>
-                    {errors.type && <span className="text-red-500">{errors.type.message}</span>}
                 </label>
             )}
             {dataBD && (

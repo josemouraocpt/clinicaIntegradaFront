@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,7 +9,7 @@ import cozinhaService from "@/services/cozinhaService";
 import { useEffect, useState } from "react";
 import { MyButton } from "./MyButton";
 import { requiredString } from "./ErroPreenchimento";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 const schema = yup.object({
     date: requiredString('Data do cardápio obrigatório'),
@@ -95,24 +95,27 @@ export function CardapioForm({action}: ICardapioProps){
 		return data.substring(0,10)
 	}
 
+        async function onError(formErrors: FieldErrors<FormData>) {
+            for (const value of Object.entries(formErrors)) {
+                toast.error(value[1].message)
+            }
+        }
+
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
+                <Toaster richColors/>
                 <label className="flex flex-col">Título do cardápio:
                     <input className="input" readOnly={!canEdit} type="text" {...register("name")} />
-                    {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                 </label>
                 <label className="flex flex-col">Data do cardápio:
                     <input className="input" readOnly={!canEdit} type="date" {...register("date")} />
-                    {errors.date && <span className="text-red-500">{errors.date.message}</span>}
                 </label>
                 <label className="flex flex-col">Horário do cardárpio:
                     <input className="input" readOnly={!canEdit} type="text" {...register("time")} />
-                    {errors.time && <span className="text-red-500">{errors.time.message}</span>}
                 </label>
                 <label className="flex flex-col">Descrição do cardápio:
                     <textarea className="input" readOnly={!canEdit} rows={10} {...register("description")}/>
-                    {errors.description && <span className="text-red-500">{errors.description.message}</span>}
                 </label>
                 <label className="flex flex-col">Tipo do cardárpio:
                     <select className="input" {...register("type")} disabled={!canEdit}>
@@ -120,7 +123,6 @@ export function CardapioForm({action}: ICardapioProps){
                         <option value="PADRAO">Cardápio Padrão</option>
                         <option value="ESPECIAL">Cardápio Especial</option>
                     </select>
-                    {errors.type && <span className="text-red-500">{errors.type.message}</span>}
                 </label>
                 <label className="flex flex-col">Status do cardárpio:
                     <select className="input" {...register("status")} disabled={!canEdit}>
@@ -132,7 +134,6 @@ export function CardapioForm({action}: ICardapioProps){
                             ))
                         )}
                     </select>
-                    {errors.status && <span className="text-red-500">{errors.status.message}</span>}
                 </label>
                 <div className='flex space-x-2 items-center justify-end m-4'>
                     {action == "EDITAR" ? (

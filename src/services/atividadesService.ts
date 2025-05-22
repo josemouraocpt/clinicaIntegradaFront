@@ -1,4 +1,5 @@
 'use client'
+import sistemaService from './sistemaService'
 
 async function getAtividades(token: string) {
     try {
@@ -24,6 +25,25 @@ async function getAtividades(token: string) {
 
 async function createAtividade(data: any, token: string){
     try {
+        let fileKey = ""
+        if(data.attachment.length > 0){
+            //gerar url de envio ao s3 AWS
+            const file: File = data.attachment[0]
+            fileKey = `uploads/${Date.now()}-${file.name}`;
+            
+            const url = await sistemaService.generateUploadURL(fileKey, file.type);
+            //enviar dados para bucket
+            await fetch(url, {
+                method: 'PUT',
+                body: file,
+                headers: {
+                    'Content-Type': file.type
+                }
+            });
+        }
+
+        data.attachment = fileKey;
+
         const res = await fetch('http://localhost:3001/atividades/criar', {
             method: "POST",
 			headers: {
@@ -178,6 +198,27 @@ async function getLista(atividadeId:number, token: string) {
     }
 }
 
+async function deleteHospedeEmAtividade(atividadeId:number, token: string, hospedeId:number) {
+    try {
+        const res = await fetch(`http://localhost:3001/atividades/remover/hospede/${atividadeId}?hospede=${hospedeId}`, {
+            method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			}
+        });
+        const response = await res.json();
+        if(response.type == "ERROR"){
+            return { error: response.message }
+        }else{
+            return response 
+        }
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
 const atividadesService = {
     getAtividades,
     createAtividade,
@@ -186,7 +227,8 @@ const atividadesService = {
     deleteAtividade,
     lancarPresencaByAtividadeId,
     getAtividadeStatus,
-    getLista
+    getLista,
+    deleteHospedeEmAtividade
 }
 
 export default atividadesService;

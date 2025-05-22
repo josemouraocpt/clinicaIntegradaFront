@@ -3,14 +3,14 @@
 import { reset, singUp } from "@/slices/authSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import userService from "@/services/userService";
 import {requiredConfirmPassword, requiredPassword, requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
-import { toast } from "sonner";
- 
+import { toast, Toaster } from "sonner";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const schema = yup.object({
     name: requiredString('Nome obrigatório'),
@@ -46,8 +46,8 @@ export function RegisterForm(){
 	const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
-    const [visibility1, setVisibility1] = useState("password")
-    const [visibility2, setVisibility2] = useState("password")
+    const [visibility1, setVisibility1] = useState(false)
+    const [visibility2, setVisibility2] = useState(false)
 
 	async function onSubmit(data: FormData){
         const res  = await dispatch(singUp(data));
@@ -71,12 +71,15 @@ export function RegisterForm(){
         fetch()
 	}, [dispatch]);
 
-    function visibility(callback: any, text: string){
-        callback(text)
-    }
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    } 
 
     return(
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit, onError)}>
+            <Toaster richColors/>
             <div className="flex flex-col space-y-3">
                 {/* dados de cadastro */}
                 <div className="flex flex-col space-y-2">
@@ -84,19 +87,29 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Nome:
                             <input {...register("name")} type="text" className="input"/>
-                            {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                         </label>
                         <label>E-mail:
                             <input {...register("email")} type="email" className="input"/>
-                            {errors.email && <span className="text-red-500">{errors.email.message}</span>}
                         </label>
                         <label>Senha:
-                            <input {...register("password")} type="password" className="input"/>
-                            {errors.password && <span className="text-red-500">{errors.password.message}</span>}
+                            <div className="flex space-x-2">
+                                <input {...register("password")} type={visibility1 ? "text" : "password"} className="input"/>
+                                {!visibility1 ? (
+                                    <button type="button" onClick={() => { setVisibility1(!visibility1) }}><FaEye size={24} /></button>
+                                ) : (
+                                    <button type="button" onClick={() => { setVisibility1(!visibility1) }}><FaEyeSlash size={24} /></button>
+                                )}
+                            </div>
                         </label>
                         <label>Confirmação de senha:
-                            <input {...register("confirmPassword")} type="password" className="input"/>
-                            {errors.confirmPassword && <span className="text-red-500 nowrap">{errors.confirmPassword.message}</span>}
+                            <div className="flex space-x-2">
+                                <input {...register("confirmPassword")} type={visibility2 ? "text" : "password"} className="input"/>
+                                {!visibility2 ? (
+                                    <button type="button" onClick={() => { setVisibility2(!visibility2) }}><FaEye size={24} /></button>
+                                ) : (
+                                    <button type="button" onClick={() => { setVisibility2(!visibility2) }}><FaEyeSlash size={24} /></button>
+                                )}
+                            </div>
                         </label>
                         <label>Setor:
                             <select className="input" {...register("departmentId")}>
@@ -122,15 +135,12 @@ export function RegisterForm(){
                         </label>
                         <label>Telefone:
                             <input {...register("phoneNumber")} type="text" className="input"/>
-                            {errors.phoneNumber && <span className="text-red-500 nowrap">{errors.phoneNumber.message}</span>}
                         </label>
                         <label>CPF:
                             <input {...register("cpf")} type="text" className="input"/>
-                            {errors.cpf && <span className="text-red-500 nowrap">{errors.cpf.message}</span>}
                         </label>
                         <label>RG:
                             <input {...register("rg")} type="text" className="input"/>
-                            {errors.rg && <span className="text-red-500 nowrap">{errors.rg.message}</span>}
                         </label>
                     </div>
                 </div>
@@ -139,23 +149,18 @@ export function RegisterForm(){
                     <div className="flex flex-row space-x-5">
                         <label>Data de Nascimento:
                             <input {...register("birthDate")} type="date" className="input"/>
-                            {errors.birthDate && <span className="text-red-500 nowrap">{errors.birthDate.message}</span>}
                         </label>
                         <label>Nacionalidade:
                             <input {...register("nationality")} type="text" className="input"/>
-                            {errors.nationality && <span className="text-red-500 nowrap">{errors.nationality.message}</span>}
                         </label>
                         <label>Naturalidade:
                             <input {...register("naturalness")} type="text" className="input"/>
-                            {errors.naturalness && <span className="text-red-500 nowrap">{errors.naturalness.message}</span>}
                         </label>
                         <label>Formação:
                             <input {...register("formation")} type="text" className="input"/>
-                            {errors.formation && <span className="text-red-500 nowrap">{errors.formation.message}</span>}
                         </label>
                         <label>Instituição de Ensino:
                             <input {...register("institution")} type="text" className="input"/>
-                            {errors.institution && <span className="text-red-500 nowrap">{errors.institution.message}</span>}
                         </label>
                     </div>
                 </div>
@@ -167,15 +172,12 @@ export function RegisterForm(){
                                 <div className="flex flex-row space-x-5">
                                     <label>CEP:
                                         <input {...register("zipCode")} type="text" className="input"/>
-                                        {errors.zipCode && <span className="text-red-500 nowrap">{errors.zipCode.message}</span>}
                                     </label>
                                     <label>Endereço:
                                         <input {...register("address")} type="text" className="input"/>
-                                        {errors.address && <span className="text-red-500 nowrap">{errors.address.message}</span>}
                                     </label>
                                     <label>Cidade:
                                         <input {...register("city")} type="text" className="input"/>
-                                        {errors.city && <span className="text-red-500 nowrap">{errors.city.message}</span>}
                                     </label>
                                     <label>Estado:
                                         <select className="input" {...register("state")}>
@@ -208,7 +210,6 @@ export function RegisterForm(){
                                             <option value="SE">Sergipe</option>
                                             <option value="TO">Tocantins</option>
                                         </select>
-                                        {errors.state && <span className="text-red-500 nowrap">{errors.state.message}</span>}
                                 </label>
                                 </div>
                             </div>

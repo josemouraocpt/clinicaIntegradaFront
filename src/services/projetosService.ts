@@ -197,7 +197,28 @@ async function getListaParticipantes(projectId:number, token: string) {
     }
 }
 
+async function deleteHospedeEmProjeto(projectId:number, token: string, hospedeId:number) {
+    try {
+        const res = await fetch(`http://localhost:3001/projetos/remover/hospede/${projectId}?hospede=${hospedeId}`, {
+            method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			}
+        });
+        const response = await res.json();
+        if(response.type == "ERROR"){
+            return { error: response.message }
+        }else{
+            return response 
+        }
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
 
+ 
 const projetoService = {
     getProjetos,
     createProjeto,
@@ -206,7 +227,8 @@ const projetoService = {
     deleteProjeto,
     getProjetoStatus,
     addParticipante,
-    getListaParticipantes
+    getListaParticipantes,
+    deleteHospedeEmProjeto
 }
 
 export default projetoService;

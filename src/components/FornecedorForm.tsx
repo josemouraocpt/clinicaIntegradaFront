@@ -5,10 +5,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
 import { requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 interface IFornecedorFormProps{
     action: string
@@ -82,29 +82,31 @@ export function FornecedorForm({action}: IFornecedorFormProps){
         setValue("NOME_CONTATO", data.NOME_CONTATO);
     }
 
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    } 
+
 
     return(
         <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
+                <Toaster richColors/>
                 <label className="flex flex-col">Nome: 
                     <input disabled={!canEdit} type="text" className="input" {...register("NOME")} />
-                    {errors.NOME && <span className="text-red-500">{errors.NOME.message}</span>}
                 </label>
                 <label className="flex flex-col">Email: 
                     <input disabled={!canEdit} type="text" className="input" {...register("EMAIL")} />
-                    {errors.EMAIL && <span className="text-red-500">{errors.EMAIL.message}</span>}
                 </label>
                 <label className="flex flex-col">Telefone: 
                     <input disabled={!canEdit} type="text" className="input" {...register("TELEFONE")} />
-                    {errors.TELEFONE && <span className="text-red-500">{errors.TELEFONE.message}</span>}
                 </label>
                 <label className="flex flex-col">CNPJ: 
                     <input disabled={!canEdit} type="text" className="input" {...register("CNPJ")} />
-                    {errors.CNPJ && <span className="text-red-500">{errors.CNPJ.message}</span>}
                 </label>
                 <label className="flex flex-col">Nome do contato: 
                     <input disabled={!canEdit} type="text" className="input" {...register("NOME_CONTATO")} />
-                    {errors.NOME_CONTATO && <span className="text-red-500">{errors.NOME_CONTATO.message}</span>}
                 </label>
                 <div className="my-2 flex justify-end space-x-2">
                     {action == "EDITAR" && (

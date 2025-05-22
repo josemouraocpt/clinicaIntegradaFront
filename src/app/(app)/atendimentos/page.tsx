@@ -24,16 +24,16 @@ export default function Atendimentos(){
 	const { user } = useSelector((state) => state.auth);
 	const [data, setData] = useState<Array<IHospedeData>>([]);
 	const [auxData, setAuxData] = useState<Array<IHospedeData>>([]);
-	const { getHospedes } = hospedeService;
+	const { getHospedesComAtendimento } = hospedeService;
 
 	useEffect(() => {
 		async function fetchAll(){
-			const res = await getHospedes(user.token); 
+			const res = await getHospedesComAtendimento(user.token); 
 			setData(res.data);
 			setAuxData(res.data);
 		}
 		fetchAll()
-	}, [user, getHospedes]);
+	}, [user, getHospedesComAtendimento]);
 
 	return(
 		<div className="min-h-screen">

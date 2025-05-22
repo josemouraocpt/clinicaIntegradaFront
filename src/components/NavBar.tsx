@@ -21,7 +21,7 @@ export function NavBar(){
 					<Link href="/dashboard">Home</Link>
 				)}
 				<Link href="/about">Contatos</Link>
-				<Link href="\trabalhe_conosco">Trabalhe Conosco</Link>
+				{/* <Link href="\trabalhe_conosco">Trabalhe Conosco</Link> */}
 				{user ? (
 					// <LogOut/>
 					<Menu/>

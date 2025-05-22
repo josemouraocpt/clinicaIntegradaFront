@@ -1,9 +1,12 @@
 "use client"
 
+import { useState } from "react";
+import { MyButton } from "./MyButton";
+
 interface ILancarPresencaListProps{
     data: Array<IHospedeData>
-    handleChange1: any
-    handleChange2: any
+    idAtividade: string
+    setData: any
 }
 interface IHospedeData {
     idHOSPEDE: number;
@@ -30,10 +33,23 @@ interface IHospedeData {
     RESPONSAVEL: string;
     STATUS_HOSPEDE: string;
 }
-export function LancarPresencaList({data, handleChange1, handleChange2}: ILancarPresencaListProps){
+export function LancarPresencaList({data, idAtividade, setData}: ILancarPresencaListProps){
+    const [ATIVIDADES_idATIVIDADES, setATIVIDADES_idATIVIDADES] = useState<string>(idAtividade);
+    const [HOSPEDE_idHOSPEDE, setHOSPEDE_idHOSPEDE] = useState<string>();
+    const [OBSERVACOES_HOSPEDE_ATIVIDADE, setOBSERVACOES_HOSPEDE_ATIVIDADE] = useState<string>();
+
+    function createObj(){
+        const obj = {
+            ATIVIDADES_idATIVIDADES,
+            HOSPEDE_idHOSPEDE,
+            OBSERVACOES_HOSPEDE_ATIVIDADE
+        }
+        setData(state => [...state, obj]);
+    }
+
     return(
         <div className="flex space-x-2 mb-1 w-full">
-            <select className="border border-button shadow-sm w-4/12 outline-none p-1" onChange={e => { handleChange1(e.currentTarget.value) }}>
+            <select className="border border-button shadow-sm w-4/12 outline-none p-1" onChange={e => { setHOSPEDE_idHOSPEDE(e.currentTarget.value) }}>
                 <option hidden={true}></option>
                 {data && (
                     data.map((hospede) => (
@@ -41,7 +57,8 @@ export function LancarPresencaList({data, handleChange1, handleChange2}: ILancar
                     ))
                 )}
             </select>
-            <input onChange={e => { handleChange2(e.currentTarget.value) }}  type="text" className="border border-button shadow-sm w-4/12 outline-none p-1" placeholder="Observações"/>
+            <input onChange={e => { setOBSERVACOES_HOSPEDE_ATIVIDADE(e.currentTarget.value) }}  type="text" className="border border-button shadow-sm w-4/12 outline-none p-1" placeholder="Observações"/>
+            <MyButton buttonText="Confirmar" buttonType="button" handleClick={createObj}/>
         </div>
     )
 }

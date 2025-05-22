@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,9 +12,9 @@ import { DadosMedicos } from "./HospedeFormComponets/DadosMedicos";
 import { DadosHospedagem } from "./HospedeFormComponets/DadosHospedagem";
 import hospedeService from "@/services/hospedeService";
 import { MyButton } from "./MyButton";
-import { MdDelete } from "react-icons/md";
 import { requiredString, requiredNumberString, requiredNumber } from "./ErroPreenchimento";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
+import sistemaService from "@/services/sistemaService";
 
 interface IHospedeFormProps{
 	action: string
@@ -68,8 +68,6 @@ const schema = yup.object({
 	tipoComplicacao: yup.string(),
 	descComplicacao: yup.string(),
 	anexo: yup.mixed(),
-	descAnexo: yup.string(),
-	idANEXO: yup.number(),
 	HOSPEDE_idHOSPEDE: yup.number(),
 	idDADOS_BANCARIOS: yup.number(),
 	REMEDIOS_idREMEDIOS: yup.number(),
@@ -92,7 +90,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 	const [hospedagemStatusList, setHospedagemStatusList] = useState([]);
 	const [canEdit, setCanEdit] = useState(false);
 	const [hospedeData, setHospedeData] = useState();
-	const [hasError, setHasError] = useState(false);
+	const { generateDownloadURL } = sistemaService;
 
 	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -105,6 +103,23 @@ export function HospedeForm({action}: IHospedeFormProps){
 	function handlePrevius(){
 		setCurrentStep(state => state - 1)
 	};
+
+	async function getDownloadUrl(key:string){
+		try {
+			const url = await generateDownloadURL(key);
+			const res = await fetch(url);
+			const blob = await res.blob();
+			const blobUrl = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = blobUrl;
+			a.download = key;
+			a.click();
+			a.remove();
+			window.URL.revokeObjectURL(blobUrl); // Clean up the URL object
+		} catch (error) {
+			console.error('Error downloading file:', error);
+		}
+	}
 
 
 
@@ -120,10 +135,6 @@ export function HospedeForm({action}: IHospedeFormProps){
 				return;
 			}
 		}else{
-			if(!data.anexo) {
-				setValue("anexo", hospedeData.anexosData.BUCKET_URL);
-				setValue("descAnexo", hospedeData.anexosData.DESCRIPTION);
-			}
 			const res = await editHospedeById(Number(pathname.substring(10)),data, user.token);
 			if(res.type == "SUCCESS"){
 				toast.success("Ação realizada com sucesso!");{}
@@ -155,7 +166,6 @@ export function HospedeForm({action}: IHospedeFormProps){
 
 	function setValues(data: any){
 		if (!data) return;
-
 		if (data.hospedeData) {
 			setValue("nome", data.hospedeData.NOME_COMPLETO)
 			setValue("nomeSocial", data.hospedeData.NOME_SOCIAL)
@@ -199,12 +209,12 @@ export function HospedeForm({action}: IHospedeFormProps){
 			setValue("numConta", data.dadosBancariosData.NUMERO_CONTA)
 			setValue("HOSPEDE_idHOSPEDE", data.dadosBancariosData.HOSPEDE_idHOSPEDE)
 			setValue("idDADOS_BANCARIOS", data.dadosBancariosData.idDADOS_BANCARIOS)
-			setValue("REMEDIOS_idREMEDIOS", data.dadosBancariosData.REMEDIOS_idREMEDIOS)
 		}
 
 		if (data.dadosMedicos) {
 			setValue("grauDependencia", data.dadosMedicos.GRAU_DEPENDENCIA)
 			setValue("observacoeMedicamento", data.dadosMedicos.OBSERVACOES)
+			setValue("idDADOS_MEDICOS", data.dadosMedicos.idDADOS_MEDICOS)
 		}
 
 		if (data.remediosData) {
@@ -212,31 +222,27 @@ export function HospedeForm({action}: IHospedeFormProps){
 			setValue("freqMedicamento", data.remediosData.FREQUENCIA_USO)
 			setValue("tempoMedicamento", data.remediosData.TEMPO_USO)
 			setValue("dosagemMedicamento", data.remediosData.DOSAGEM)
+			setValue("idREMEDIOS", data.remediosData.idREMEDIOS)
 		}
 
 		if (data.dadosMedicosDoencasAlergiasDietasData) {
 			setValue("tipoComplicacao", data.dadosMedicosDoencasAlergiasDietasData.TIPO)
 			setValue("descComplicacao", data.dadosMedicosDoencasAlergiasDietasData.DESCRICAO)
-			setValue("idDADOS_MEDICOS", data.dadosMedicosDoencasAlergiasDietasData.idDADOS_MEDICOS)
 			setValue("idDOENCAS_ALERGIAS_DIETAS", data.dadosMedicosDoencasAlergiasDietasData.idDOENCAS_ALERGIAS_DIETAS)
-			setValue("idREMEDIOS", data.dadosMedicosDoencasAlergiasDietasData.idREMEDIOS)
-		}
-
-		if (data.anexosData) {
-			setValue("idANEXO", data.anexosData.idANEXOS)
+			setValue("REMEDIOS_idREMEDIOS", data.dadosMedicosDoencasAlergiasDietasData.idREMEDIOS)
 		}
 	}
 
-	if(Object.keys(errors).length >= 1){
-		if(hasError == false){
-			setHasError(!hasError)
-			alert("Existem erros nos campos, gentileza realizar a correção.")
+	async function onError(formErrors: FieldErrors<FormData>) {
+		for (const value of Object.entries(formErrors)) {
+			toast.error(value[1].message)
 		}
-	}
+	} 
 
 	return(
 		<div className="bg-white p-5 rounded-md mx-10 mb-20 shadow-lg">
-			<form className="flex flex-col space-y-3" onSubmit={handleSubmit(onSubmit)}>
+			<form className="flex flex-col space-y-3" onSubmit={handleSubmit(onSubmit, onError)} method="PSOT" encType="multipart/form-data">
+				<Toaster richColors/>
 				{/* Inicio da primeira parte do formulário */}
 				{currentStep == 0 && (
 					<>
@@ -313,28 +319,23 @@ export function HospedeForm({action}: IHospedeFormProps){
 				{currentStep == 5 && (
 					<div>
 						<div className="flex flex-col space-y-3">
-							<div className="p-3">
-								{!hospedeData && (
-									<label>Documento e descrição(opcional)
-										<input disabled={!canEdit} type="file" className="input mb-2" {...register("anexo")} />
-										<input disabled={!canEdit} type="text" className="input" {...register("descAnexo")}/>
-									</label>
-								)}
+							<div>
+								<h3 className="text-center font-bold text-lg">Anexos</h3>
+								<label>Documento(opcional)
+									<input type="file" className="input mb-2" {...register("anexo")} multiple/>
+								</label>
 							</div>
 							{hospedeData && (
 								<div>
-									<ul>
-										<li>Link do anexo: 
-											<a href={"https://google.com"} target="blank" className="text-blue-600 underline">
-												 {hospedeData.anexosData.DESCRIPTION}
-											</a>
-											<button type="button" onClick={() => { console.log("removendo") }} className="block">
-												<MdDelete size={24} className="text-red-600"/>
-											</button>
-											
-										</li>
-										
-									</ul>
+									<div className="grid grid-cols-3 gap-2">
+										{/* @ts-ignore */}
+										{hospedeData.anexosData.map((obj) => (
+											<div className="border-2 rounded shadow-md p-2 m-4" key={obj.idANEXOS}>
+												<h4 className="text-lg">Nome: {obj.DESCRIPTION}</h4>
+												<button type="button" className="w-full mt-4 bg-button text-white py-2 px-4 rounded-lg hover:bg-button-hover transition" onClick={() => {getDownloadUrl(obj.BUCKET_URL)}}>Baixar</button>
+											</div>
+										))}
+									</div>
 								</div>
 							)}
 						</div>

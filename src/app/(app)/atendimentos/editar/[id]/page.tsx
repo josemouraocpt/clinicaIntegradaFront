@@ -5,21 +5,47 @@ import { MyButton } from "@/components/MyButton";
 import { SetorInfo } from "@/components/SetorInfo";
 import atendimentoService from "@/services/atendimentoService";
 import hospedeService from "@/services/hospedeService";
+import sistemaService from "@/services/sistemaService";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdCheckCircleOutline } from "react-icons/md";
 import { useSelector } from "react-redux";
-
+import { toast, Toaster } from "sonner";
+  
 export default function EditarAtendimento(){
     const { user } = useSelector((state) => state.auth);
     const [data, setData] = useState();
-    const [atendimentosData, setAtendimentosData] = useState();
+    const [atendimentosData, setAtendimentosData] = useState([]);
     const [dataTosend, setDataToSend] = useState([]);
+    const [isConfirmedArr, setIsConfirmedArr] = useState([]);
     const { getHospedeById } = hospedeService;
     const { getAtendimentoByHospedeId, editAtendimentoById } = atendimentoService;
     const pathname = usePathname();
     const router = useRouter();
-    const [canEdit, setCanEdit] = useState(false)
+    const [canEdit, setCanEdit] = useState(false);
+    const { generateDownloadURL } = sistemaService;
+
+    function getAttachmentName(attachmentKey: string){
+		const start = attachmentKey.search("-");
+		return(attachmentKey.slice(start+1));
+	}
+
+	async function getDownloadUrl(key:string){
+		try {
+			const url = await generateDownloadURL(key);
+			const res = await fetch(url);
+			const blob = await res.blob();
+			const blobUrl = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = blobUrl;
+			a.download = getAttachmentName(key);
+			a.click();
+			a.remove();
+			window.URL.revokeObjectURL(blobUrl); // Clean up the URL object
+		} catch (error) {
+			console.error('Error downloading file:', error);
+		}
+	}
 
 	function getAge(dateString: string) {
 		var today = new Date();
@@ -31,7 +57,7 @@ export default function EditarAtendimento(){
 		}
 		return age;
 	}
-
+ 
     useEffect(() => {
         async function fecth(){
             const res1 = await getHospedeById(Number(pathname.substring(21)), user.token);
@@ -44,16 +70,27 @@ export default function EditarAtendimento(){
 
     async function handleSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
+        if(dataTosend.length == 0){
+            atendimentosData.map((item) => {
+                setDataToSend(state => [...state, item])
+            })
+        }
+        if(isConfirmedArr.length < atendimentosData.length){
+            return toast.error('Confirme a alteração antes de enviar')
+        }
         const res = await editAtendimentoById(Number(pathname.substring(21)), dataTosend, user.token);
         if(res.type == "SUCCESS"){
+            toast.success("Ação realizada com sucesso!");{}
             router.push("/atendimentos");
+        }else{
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
         }
     }
 
-    //incluir anexos
-
     return(
         <div className="min-h-screen">
+            <Toaster richColors/>
             <ContainerAtendimento/>
             <SetorInfo setor="Atendimentos"/>
             <div className="m-10 bg-white p-8 rounded-lg shadow-xl space-y-4">
@@ -70,8 +107,24 @@ export default function EditarAtendimento(){
                         </ul>
                     </div>
                 </div>
+                <div>
+                    <h3 className="text-center font-bold text-lg">Anexos</h3>
+                    <div className="grid grid-cols-3 gap-2">
+                        {atendimentosData && (
+                            //@ts-ignore
+                            atendimentosData.map((atendimento) => (
+                                <div className="border-2 rounded shadow-md p-2" key={atendimento.idATENDIMENTO}>
+                                    <h4 className="text-lg">Nome: {getAttachmentName(atendimento.ANEXO)}</h4>
+                                    <button type="button" className="w-full mt-4 bg-button text-white py-2 px-4 rounded-lg hover:bg-button-hover transition" onClick={() => {getDownloadUrl(atendimento.ANEXO)}}>Baixar</button>
+                                </div>
+                            )) 
+                        )}
+                    </div>
+                </div>
                 <div className="flex space-x-4">
-                    <MyButton buttonText="Editar" handleClick={() => { setCanEdit(!canEdit) }}/>
+                    {!canEdit && (
+                        <MyButton buttonText="Editar" handleClick={() => { setCanEdit(!canEdit) }}/>
+                    )}
                 </div>
                 <div>
                     <div className="flex space-x-2 mt-4 mb-1 w-full mr-24">
@@ -102,7 +155,7 @@ export default function EditarAtendimento(){
                             //@ts-ignore
                             atendimentosData.map((atendimento) => (
                                 <div  className="flex space-x-2 mb-1 w-full" key={atendimento.idATENDIMENTO}>
-                                    <AtendimentosList canEdit={canEdit}  data={atendimento} setDataToSend={setDataToSend}/>
+                                    <AtendimentosList canEdit={canEdit}  data={atendimento} setDataToSend={setDataToSend} confirmArr={setIsConfirmedArr}/>
                                 </div>
                             )) 
                         )}

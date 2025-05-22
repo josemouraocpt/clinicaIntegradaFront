@@ -4,12 +4,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import * as yup from "yup";
 import { MyButton } from "./MyButton";
 import { requiredString, requiredNumber } from "./ErroPreenchimento";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 interface IEstoqueFormProps{
     action: string
 }
@@ -97,25 +97,29 @@ export function EstoqueForm({action}: IEstoqueFormProps){
         setValue("type", data.TIPO);
         setValue("unitValue", data.VALOR_UNITARIO);
     }
+
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    } 
+    
     
     return(
         <div className='bg-white p-5 rounded-md mb-20 shadow-lg m-10'>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
+                <Toaster richColors/>
                 <label className="flex flex-col">Nome da mercadoria:
                     <input disabled={!canEdit} className="input" type="text" {...register("name")} />
-                    {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                 </label>
                 <label className="flex flex-col">Quantidade:
                     <input disabled={!canEdit} className="input" type="number" {...register("quantity")} />
-                    {errors.quantity && <span className="text-red-500">{errors.quantity.message}</span>}
                 </label>
                 <label className="flex flex-col">Valor unitário:
                     <input disabled={!canEdit} className="input" type="text" {...register("unitValue")}/>
-                    {errors.unitValue && <span className="text-red-500">{errors.unitValue.message}</span>}
                 </label>
                 <label className="flex flex-col">Data de validade:
                     <input disabled={!canEdit} className="input" type="date" {...register("expireDate")}/>
-                    {errors.expireDate && <span className="text-red-500">{errors.expireDate.message}</span>}
                 </label>
                 {mercadoriaData && (
                     <div className="my-5">

@@ -7,21 +7,21 @@ import hospedeService from "@/services/hospedeService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import * as yup from "yup";
+import { toast, Toaster } from "sonner";
+import * as yup from "yup"; 
 
 const schema = yup.object({
     hospedeId: yup.number(),
     usuarioId: yup.number(),
-    tipo: yup.string().required(),
-    dataAtendimento: yup.string().required(),
-    motivo: yup.string().required(),
-    procedimento: yup.string().required(),
+    tipo: yup.string().required("O tipo do atendimento é obrigatório"),
+    dataAtendimento: yup.string().required("A data do atendimento é obrigatório"),
+    motivo: yup.string().required("O motivo do atendimento é obrigatório"),
+    procedimento: yup.string().required("O procedimento do atendimento é obrigatório"),
     recomendacoes: yup.string(),
-    nomeMedico: yup.string().required(),
-    docMedico: yup.string().required(),
+    nomeMedico: yup.string().required("O médico do atendimento é obrigatório"),
+    docMedico: yup.string().required("O documento do médico do atendimento é obrigatório"),
     anexo: yup.mixed(),
 });
 
@@ -57,12 +57,19 @@ export default function CadastrarAtendimento(){
         setValue("usuarioId", user.user.userId);
     }, [getHospedesAtivos, user]);
 
-    return(
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    }
+
+    return( 
         <div className="min-h-screen">
             <ContainerAtendimento/>
             <SetorInfo setor="Atendimentos"/>
             <div className="m-10 bg-white p-8 rounded-lg shadow-xl">
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit, onError)}>
+                    <Toaster richColors/>
                     <div className="grid grid-cols-2 gap-2 gap-x-6">
                         <div>
                             <label>Tipo do atendimento:

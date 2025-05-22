@@ -3,14 +3,15 @@ import { useEffect, useState } from "react";
 import { MyButton } from "./MyButton";
 import { ProjetoHospedeInput } from "./ProjetoHospedeInput";
 import { useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useRouter } from "next/navigation";
 import * as yup from "yup";
 import projetoService from "@/services/projetosService";
 import hospedeService from "@/services/hospedeService";
 import { requiredString } from "./ErroPreenchimento";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
+import { MdDeleteForever } from "react-icons/md";
 
 const priceRegexBR = /^(R\$ ?)?\d{1,3}(\.\d{3})*,\d{2}$/;
 
@@ -87,7 +88,7 @@ export function ProjetoForm({action}: IProjetoFormProps){
     const [lista, setLista] = useState<Array<IParticipantesListData>>([]);
     const router = useRouter();
     const pathname = usePathname();
-    const { createProjeto, getProjetoStatus, editProjeto, getProjetoById, addParticipante, getListaParticipantes } = projetoService;
+    const { createProjeto, getProjetoStatus, editProjeto, getProjetoById, addParticipante, getListaParticipantes, deleteHospedeEmProjeto } = projetoService;
     const { getHospedesAtivos } = hospedeService;
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -173,73 +174,77 @@ export function ProjetoForm({action}: IProjetoFormProps){
         setDummy(state => [...state, 1]);
     }
 
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    }
+
+    async function handleDelete(hospedeId: number) {
+        const res = await deleteHospedeEmProjeto(Number(pathname.substring(17)), user.token, hospedeId);
+        if(res.type == "SUCCESS"){
+            toast.success("Ação realizada com sucesso!");{}
+            router.push("/projetos")
+        } else {
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
+        }
+    }
+
+
 
     return(
         <div className="bg-white p-5 rounded-md mb-20 shadow-lg m-10">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
+                <Toaster richColors/>
                 <div className="grid grid-cols-3 gap-4">
                     <div>
                         <label className="flex flex-col">Nome do projeto:
                             <input disabled={!canEdit} type="text" className="input" {...register("name")}/>
-                            {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                         </label>
                         <label className="flex flex-col">Data do projeto:
                             <input disabled={!canEdit} type="date" className="input" {...register("projectDate")}/>
-                            {errors.projectDate && <span className="text-red-500">{errors.projectDate.message}</span>}
                         </label>
                         <label className="flex flex-col">Escopo do projeto:
                             <textarea disabled={!canEdit} className="input"  {...register("scope")} rows={10}></textarea>
-                            {errors.scope && <span className="text-red-500">{errors.scope.message}</span>}
                         </label>
                         <label className="flex flex-col">Atividade:
                             <textarea disabled={!canEdit} className="input" {...register("activity")} rows={10}></textarea>
-                            {errors.activity && <span className="text-red-500">{errors.activity.message}</span>}
                         </label>
                         <label className="flex flex-col">Resultados esperados:
                             <textarea disabled={!canEdit} className="input" {...register("expectedResults")} rows={10}></textarea>
-                            {errors.expectedResults && <span className="text-red-500">{errors.expectedResults.message}</span>}
                         </label>
                         <label className="flex flex-col">Objetivos:
                             <textarea disabled={!canEdit} className="input" {...register("objectives")} rows={10}></textarea>
-                            {errors.objectives && <span className="text-red-500">{errors.objectives.message}</span>}
                         </label>
                         <label className="flex flex-col">Metodologia:
                             <textarea disabled={!canEdit} className="input" {...register("methodology")} rows={10}></textarea>
-                            {errors.methodology && <span className="text-red-500">{errors.methodology.message}</span>}
                         </label>
                     </div>
                     <div>
                         <label className="flex flex-col">Custo do projeto:
                             <input disabled={!canEdit} type="text" className="input" {...register("cost")}/>
-                            {errors.cost && <span className="text-red-500">{errors.cost.message}</span>}
                         </label>
                         <label className="flex flex-col">Tipo do projeto:
                             <input disabled={!canEdit} type="text" className="input" {...register("type")}/>
-                            {errors.type && <span className="text-red-500">{errors.type.message}</span>}
                         </label>
                         <label className="flex flex-col">Centro de custo:
                             <input disabled={!canEdit} type="text" className="input" {...register("cc")}/>
-                            {errors.cc && <span className="text-red-500">{errors.cc.message}</span>}
                         </label>
                         <label className="flex flex-col">Público beneficiário:
                             <input disabled={!canEdit} type="text" className="input" {...register("public")}/>
-                            {errors.public && <span className="text-red-500">{errors.public.message}</span>}
                         </label>
                         <label className="flex flex-col">Identificação:
                             <input disabled={!canEdit} type="text" className="input" {...register("identification")}/>
-                            {errors.identification && <span className="text-red-500">{errors.identification.message}</span>}
                         </label>
                         <label className="flex flex-col">Justificativa:
                             <textarea disabled={!canEdit} className="input" {...register("justification")} rows={10}></textarea>
-                            {errors.justification && <span className="text-red-500">{errors.justification.message}</span>}
                         </label>
                         <label className="flex flex-col">Restrições:
                             <textarea disabled={!canEdit} className="input" {...register("restriction")} rows={10}></textarea>
-                            {errors.restriction && <span className="text-red-500">{errors.restriction.message}</span>}
                         </label>
                         <label className="flex flex-col">Apresentação:
                             <textarea disabled={!canEdit} className="input" {...register("presentation")} rows={10}></textarea>
-                            {errors.presentation && <span className="text-red-500">{errors.presentation.message}</span>}
                         </label>
                     </div>
                     <div>
@@ -253,7 +258,6 @@ export function ProjetoForm({action}: IProjetoFormProps){
                                     ))
                                 )}
                             </select>
-                            {errors.status && <span className="text-red-500">{errors.status.message}</span>}
                         </label>
                         {action == "EDITAR" && (
                             <div>
@@ -271,13 +275,14 @@ export function ProjetoForm({action}: IProjetoFormProps){
                                         <div className="border border-black rounded-md p-3">
                                             <h1 className="text-center text-xl my-5">Participantes cadastrados</h1>
                                             {lista.map((value) => (
-                                                <div key={value.HOSPEDE_idHOSPEDE} className="my-2">
+                                                <div key={value.HOSPEDE_idHOSPEDE} className="my-2 flex flex-col justify-items-center space-y-2 border-2 shadow-md p-2 rounded-md">
                                                     <label>Nome do hóspede:
                                                         <p className="input">{value.NOME_COMPLETO}</p>
                                                     </label>
                                                     <label>ID do hóspede:
                                                         <p className="input">{value.HOSPEDE_idHOSPEDE}</p>
                                                     </label>
+                                                    <button type="button" className="m-auto" onClick={() => {handleDelete(value.HOSPEDE_idHOSPEDE)}}><MdDeleteForever size={28} className="text-button"/></button>
                                                 </div>
                                             ))}
                                         </div>

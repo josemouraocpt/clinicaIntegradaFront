@@ -1,7 +1,7 @@
+'use client'
 import authService from "@/services/authService";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-//@ts-expect-error
 const user = JSON.parse(window.sessionStorage.getItem("user"))
 
 const initialState = {

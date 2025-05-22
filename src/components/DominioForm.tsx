@@ -5,10 +5,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
 import { requiredString } from "./ErroPreenchimento";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 interface IDominioFormProps{
     action: string
@@ -76,20 +76,24 @@ export function DominioForm({action}: IDominioFormProps){
         setValue("STATUS_DESCRIPTION", data.STATUS_DESCRIPTION);
     }
 
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    } 
+
     return(
         <div className="bg-white p-5 rounded-md mb-20 shadow-lg mx-10">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
+                <Toaster richColors/>
                 <label className="flex flex-col">Tipo do dominio: 
                     <input disabled={!canEdit} type="text" className="input" {...register("STATUS_TYPE")} />
-                    {errors.STATUS_TYPE && <span className="text-red-500">{errors.STATUS_TYPE.message}</span>}
                 </label>
                 <label className="flex flex-col">Valor do dominio: 
                     <input disabled={!canEdit} type="text" className="input" {...register("STATUS_VALUE")} />
-                    {errors.STATUS_VALUE && <span className="text-red-500">{errors.STATUS_VALUE.message}</span>}
                 </label>
                 <label className="flex flex-col">Descrição do dominio: 
                     <input disabled={!canEdit} type="text" className="input" {...register("STATUS_DESCRIPTION")} />
-                    {errors.STATUS_DESCRIPTION && <span className="text-red-500">{errors.STATUS_DESCRIPTION.message}</span>}
                 </label>
                 <div className="my-2 flex justify-end space-x-2">
                     {action == "EDITAR" && (

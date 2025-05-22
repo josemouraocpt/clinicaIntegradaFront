@@ -6,11 +6,11 @@ import hospedeService from "@/services/hospedeService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import * as yup from "yup";
-
+ 
 interface IRemedio {
     idREMEDIOS?: number;
     NOME: string;
@@ -35,19 +35,19 @@ interface IDoencasAlergiasDietas {
 
 const schema = yup.object({
     idREMEDIOS: yup.number(),
-    NOME: yup.string(),
-    FREQUENCIA_USO: yup.string(),
-    TEMPO_USO: yup.string(),
-	DOSAGEM: yup.string(),
+    NOME: yup.string().required("Nome do medicamento é obrigatório"),
+    FREQUENCIA_USO: yup.string().required("Frequência de uso é obrigatório"),
+    TEMPO_USO: yup.string().required("Tempo de uso é obrigatório"),
+	DOSAGEM: yup.string().required("Dosagem é obrigatória"),
     idDADOS_MEDICOS: yup.number(),
     REMEDIOS_idREMEDIOS: yup.number(),
     DOENCAS_ALERGIAS_DIETAS_idDOENCAS_ALERGIAS_DIETAS: yup.number(),
-	GRAU_DEPENDENCIA: yup.string(),
-	OBSERVACOES: yup.string(),
+	GRAU_DEPENDENCIA: yup.string().required("Grau de dependência é obrigatório"),
+	OBSERVACOES: yup.string().required("Observações é obrigatório"),
     HOSPEDE_idHOSPEDE: yup.number(),
     idDOENCAS_ALERGIAS_DIETAS: yup.number(),
-	TIPO: yup.string(),
-	DESCRICAO: yup.string(),
+	TIPO: yup.string().required("Tipo é obrigatório"),
+	DESCRICAO: yup.string().required("Descrição é obrigatória"),
 
     idREMEDIOS2: yup.number(),
     NOME2: yup.string(),
@@ -173,6 +173,26 @@ export default function Ficha(){
     }
 
     async function onSubmit(data: FormData) {
+        if(count >= 1){
+            if(data.NOME2 === "") return toast.error("Nome do medicamento é obrigatório");
+            if(data.FREQUENCIA_USO2 === "") return toast.error("Frequência de uso é obrigatório");
+            if(data.TEMPO_USO2 === "") return toast.error("Tempo de uso é obrigatório");
+            if(data.DOSAGEM2 === "") return toast.error("Dosagem é obrigatória");
+            if(data.GRAU_DEPENDENCIA2 === "") return toast.error("Grau de dependência é obrigatório");
+            if(data.OBSERVACOES2 === "") return toast.error("Observações é obrigatório");
+            if(data.TIPO2 === "") return toast.error("Tipo é obrigatório");
+            if(data.DESCRICAO2 === "") return toast.error("Descrição é obrigatória");
+
+            if(data.NOME3 === "") return toast.error("Nome do medicamento é obrigatório");
+            if(data.FREQUENCIA_USO3 === "") return toast.error("Frequência de uso é obrigatório");
+            if(data.TEMPO_USO3 === "") return toast.error("Tempo de uso é obrigatório");
+            if(data.DOSAGEM3 === "") return toast.error("Dosagem é obrigatória");
+            if(data.GRAU_DEPENDENCIA3 === "") return toast.error("Grau de dependência é obrigatório");
+            if(data.OBSERVACOES3 === "") return toast.error("Observações é obrigatório");
+            if(data.TIPO3 === "") return toast.error("Tipo é obrigatório");
+            if(data.DESCRICAO3 === "") return toast.error("Descrição é obrigatória");
+        }
+        
         const remediosToSend =  [];
         const dadosMedicosToSend = [];
         const complicacoesToSend = [];
@@ -331,6 +351,12 @@ export default function Ficha(){
         }
         fecth();
     }, [user, getHospedeComplicacoes, getHospedeFicha, getHospedeRemedios]);
+
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    } 
     
     return(
         <div className="min-h-screen">
@@ -339,7 +365,8 @@ export default function Ficha(){
                 <h1 className="text-center text-xl font-bold">Dados de saúde do Hospede.</h1>
             </div>
             <div className="bg-white m-10 p-4 rounded-md shadow-md">
-                <form className="flex flex-col space-y-3" onSubmit={handleSubmit(onSubmit)}>
+                <form className="flex flex-col space-y-3" onSubmit={handleSubmit(onSubmit, onError)}>
+                    <Toaster richColors/>
                     <div>
                         <div className="mt-4">
                             <h2 className="font-bold">Grau de dependência</h2>

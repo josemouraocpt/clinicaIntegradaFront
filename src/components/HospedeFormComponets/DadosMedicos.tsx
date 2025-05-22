@@ -24,7 +24,6 @@ export function DadosMedicos({register, canEdit,errors}: IDadosMedicosProp){
                             </select>
                         </div>
                         <small className="text-sm opacity-50">** 1 (Pouco dependente), 2 (Dependente), 3 (Muito dependente)</small>
-                        {errors.grauDependencia && <span className="text-red-500">{errors.grauDependencia.message}</span>}
                     </div>
                     <div>
                         <h2 className="font-bold">Histórico de Medicamentos</h2>

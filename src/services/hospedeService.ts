@@ -1,5 +1,6 @@
 'use client'
-
+import sistemaService from './sistemaService'
+ 
 async function getHospedes(token: string) {
     try {
         const res = await fetch('http://localhost:3001/hospedes', {
@@ -21,8 +22,51 @@ async function getHospedes(token: string) {
     }
 }
 
+async function getHospedesComAtendimento(token: string) {
+    try {
+        const res = await fetch('http://localhost:3001/hospedes/hospedes-atendimentos', {
+            method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			}
+        });
+        const response = await res.json();
+        if(response.type == "ERROR"){
+            return { error: response.message }
+        }else{
+            return response 
+        }
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
 async function createHospedeFull(data: any,  token: string){
     try {
+        const fileKeys = []
+        if(data.anexo.length > 0){
+            for (var i = 0; i < data.anexo.length; i++) {
+                const fileObj = data.anexo.item(i);
+                const fileKey = `uploads/${Date.now()}-${fileObj.name}`;
+                const obj = {
+                    descricao: fileObj.name,
+                    file: fileKey
+                }
+                fileKeys.push(obj)
+                const url = await sistemaService.generateUploadURL(fileKey, fileObj.type);
+                //enviar dados para bucket
+                await fetch(url, {
+                    method: 'PUT',
+                    body: fileObj,
+                    headers: {
+                        'Content-Type': fileObj.type
+                    }
+                });   
+            }
+            
+        }
         const dataToSend = {
             remediosData: {
                 nome: data.nomeMedicamento,
@@ -77,8 +121,7 @@ async function createHospedeFull(data: any,  token: string){
                 status: data.hospedagemStatus
             },
             anexosData: {
-                descricao: data.descAnexo,
-                file: data.anexo
+                fileKeys
             }
         }
         
@@ -127,6 +170,31 @@ async function getHospedeById(hospedeId:number, token: string) {
 
 async function editHospedeById(hospedeId:number, data:any, token: string) {
     try {
+        //caso existam novos anexos, enviar para a aws
+        const fileKeys = []
+        if(data.anexo.length > 0){
+            if(data.anexo.length > 0){
+                for (var i = 0; i < data.anexo.length; i++) {
+                    const fileObj = data.anexo.item(i);
+                    const fileKey = `uploads/${Date.now()}-${fileObj.name}`;
+                    const obj = {
+                        descricao: fileObj.name,
+                        file: fileKey
+                    }
+                    fileKeys.push(obj)
+                    const url = await sistemaService.generateUploadURL(fileKey, fileObj.type);
+                    //enviar dados para bucket
+                    await fetch(url, {
+                        method: 'PUT',
+                        body: fileObj,
+                        headers: {
+                            'Content-Type': fileObj.type
+                        }
+                    });   
+                }
+                
+            }
+        }
         const dataToSend = {
             remediosData: {
                 id: data.idREMEDIOS,
@@ -188,9 +256,7 @@ async function editHospedeById(hospedeId:number, data:any, token: string) {
                 status: data.hospedagemStatus
             },
             anexosData: {
-                descricao: data.descAnexo,
-                file: data.anexo,
-                id: data.idANEXO
+                fileKeys
             }
         }
         const res = await fetch(`http://localhost:3001/hospedes/editar/${hospedeId}`, {
@@ -647,7 +713,8 @@ const hospedeService = {
     putHospedeComplicacoes,
     deleteHospedeBanco,
     deleteHospedeSituacao,
-    deleteHospedeDadosMedicos
+    deleteHospedeDadosMedicos,
+    getHospedesComAtendimento
 }
 
 export default hospedeService;

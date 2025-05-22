@@ -4,11 +4,11 @@ import { MyButton } from "./MyButton";
 import { usePathname, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import farmaciaService from "@/services/farmaciaService";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { requiredString } from "./ErroPreenchimento";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 const schema = yup.object({
     idStock: requiredString('Medicamento no estoque obrigatório'), 
@@ -110,6 +110,12 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
         setValue("storageCondition", data.CONDICAO_ARMAZENAMENTO);
     }
 
+        async function onError(formErrors: FieldErrors<FormData>) {
+            for (const value of Object.entries(formErrors)) {
+                toast.error(value[1].message)
+            }
+        } 
+
     return (
         <div className='p-10'>
             <div className='m-4'>
@@ -119,39 +125,32 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
                 )}
             </div>
             <div className='bg-white p-5 rounded-md mb-20 shadow-lg'>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit, onError)}>
+                    <Toaster richColors/>
                     <div className="grid grid-cols-2 gap-4">
                         <label>Nome da vacina:
                             <input disabled={!canEdit} type="text" className='input' {...register("name")}/>
-                            {errors.name && <span className="text-red-500">{errors.name.message}</span>}
                         </label>
                         <label>Fabricante:
                             <input disabled={!canEdit} type="text" className='input' {...register("crafter")}/>
-                            {errors.crafter && <span className="text-red-500">{errors.crafter.message}</span>}
                         </label>
                         <label>Dosagem:
                             <input disabled={!canEdit} type="text" className='input' {...register("dosage")}/>
-                            {errors.dosage && <span className="text-red-500">{errors.dosage.message}</span>}
                         </label>
                         <label>Data de Validade:
                             <input disabled={!canEdit} type="date" className='input' {...register("expireDate")}/>
-                            {errors.expireDate && <span className="text-red-500">{errors.expireDate.message}</span>}
                         </label>
                         <label>Tipo de armazenamento:
                             <input disabled={!canEdit} type="text" className='input' {...register("storageType")}/>
-                            {errors.storageType && <span className="text-red-500">{errors.storageType.message}</span>}
                         </label>
                         <label>Número do lote:
                             <input disabled={!canEdit} type="text" className='input' {...register("batch")}/>
-                            {errors.batch && <span className="text-red-500">{errors.batch.message}</span>}
                         </label>
                         <label>Condição de armazenamento:
                             <input disabled={!canEdit} type="text" className='input' {...register("storageCondition")}/>
-                            {errors.storageCondition && <span className="text-red-500">{errors.storageCondition.message}</span>}
                         </label>
                         <label>Data da fabricação:
                             <input disabled={!canEdit} type="date" className='input' {...register("fabricationDate")}/>
-                            {errors.fabricationDate && <span className="text-red-500">{errors.fabricationDate.message}</span>}
                         </label>
                         <label>Medicamento no estoque:
                             <select className="input" {...register("idStock")} disabled={!canEdit}>
@@ -163,7 +162,6 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
                                     ))
                                 )}
                             </select>
-                            {errors.idStock && <span className="text-red-500">{errors.idStock.message}</span>}
                         </label>
                         <label>Fornecedores:
                             <select className="input" {...register("idSupplier")} disabled={!canEdit}>
@@ -175,7 +173,6 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
                                     ))
                                 )}
                             </select>
-                            {errors.idSupplier && <span className="text-red-500">{errors.idSupplier.message}</span>}
                         </label>
                     </div>
                     <div className='flex space-x-2 items-center justify-end my-2'>   

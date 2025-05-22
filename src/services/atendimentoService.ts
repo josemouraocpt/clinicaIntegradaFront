@@ -1,7 +1,25 @@
 'use client'
+import sistemaService from './sistemaService'
 
 async function createAtendimento(data: any, token: string){
     try {
+        let fileKey = ""
+        if(data.anexo.length > 0){
+            //gerar url de envio ao s3 AWS
+            const file: File = data.anexo[0]
+            fileKey = `uploads/${Date.now()}-${file.name}`;
+            
+            const url = await sistemaService.generateUploadURL(fileKey, file.type);
+            //enviar dados para bucket
+            await fetch(url, {
+                method: 'PUT',
+                body: file,
+                headers: {
+                    'Content-Type': file.type
+                }
+            });
+        }
+
         const reqBody = {
             hospedeId: data.hospedeId,
             userId: data.usuarioId,
@@ -12,7 +30,7 @@ async function createAtendimento(data: any, token: string){
             recomendations: data.recomendacoes,
             medicName: data.nomeMedico,
             medicDoc: data.docMedico,
-            attach: data.anexo[0].name,
+            attach: fileKey,
         }
         const res = await fetch('http://localhost:3001/atendimentos/criar', {
             method: "POST",

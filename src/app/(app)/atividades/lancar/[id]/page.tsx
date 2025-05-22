@@ -9,7 +9,8 @@ import hospedeService from "@/services/hospedeService";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import { toast, Toaster } from "sonner";
+ 
 interface IAtividadeData{
 	idATIVIDADES: number
 	NOME: string
@@ -59,9 +60,7 @@ interface IReqBodyStruct{
 }
 
 export default function LancarPresencaId(){
-    const [hospedeId, setHospedeId] = useState<string>();
     const [lista, setLista] = useState<Array<IReqBodyStruct>>([]);
-    const [observation, setObservation] = useState<string>();
     const [dummy, setDummy] = useState<Array<number>>([]);
     const [hospedesList, setHospedesList] = useState([]);
     const { user } = useSelector((state) => state.auth);
@@ -86,49 +85,29 @@ export default function LancarPresencaId(){
 
     async function handleSubmit(event: React.SyntheticEvent){
         event.preventDefault();
-
-        const dataToSend = [];
-
-        const data = {
-            ATIVIDADES_idATIVIDADES: Number(pathname.substring(19)),
-            HOSPEDE_idHOSPEDE:  Number(hospedeId),
-            OBSERVACOES_HOSPEDE_ATIVIDADE: observation
+        if(hospedesList.length == 0){
+            return
         }
-        dataToSend.push(data);
 
-        hospedesList.map((obj) => {
-            //@ts-ignore
-            if(obj.OBSERVACOES_HOSPEDE_ATIVIDADE !== undefined){
-                dataToSend.push(obj)
-            }
-        });
-        
-        const res = await lancarPresencaByAtividadeId(Number(pathname.substring(19)), dataToSend, user.token);
+        toast("Não esqueça de confirmar!")
+
+        const res = await lancarPresencaByAtividadeId(Number(pathname.substring(19)), hospedesList, user.token);
         if(res.type == "SUCCESS"){
+            toast.success("Ação realizada com sucesso!");{}
             router.push("/atividades")
+        }else{
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
         }
-    }
-
-    function handleChangeField1(value: string){
-        setHospedeId(value);
-    }
-
-    function handleChangeField2(value: string){
-        setObservation(value);
     }
 
     function handleCounter(){
         setDummy(state => [...state, 1]);
-        const data = {
-            ATIVIDADES_idATIVIDADES: Number(pathname.substring(19)),
-            HOSPEDE_idHOSPEDE:  Number(hospedeId),
-            OBSERVACOES_HOSPEDE_ATIVIDADE: observation
-        }
-        setHospedesList(state => [...state, data]);
     }
 
     return(
         <div className="min-h-screen">
+            <Toaster richColors/>
             <ContainerAtividades/>
             <SetorInfo setor="Atividades"/>
             <div className="bg-white p-8 rounded-lg shadow-xl m-10">
@@ -166,7 +145,7 @@ export default function LancarPresencaId(){
                         <form onSubmit={(e: React.SyntheticEvent) => {return handleSubmit(e)}}>
                             {dummy.length > 0 && (
                                 dummy.map((item, index) => (
-                                    <LancarPresencaList key={index} data={hospedeData} handleChange1={handleChangeField1} handleChange2={handleChangeField2}/>
+                                    <LancarPresencaList key={index} data={hospedeData} idAtividade={pathname.substring(19)} setData={setHospedesList}/>
                                 ))
                             )}
                             <div className="mt-5 flex justify-end space-x-2">

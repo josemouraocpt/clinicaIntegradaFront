@@ -3,9 +3,11 @@ import { AtividadesListMin } from "@/components/AtividadesListMin"
 import { ContainerAtividades } from "@/components/ContainerAtividades"
 import { SetorInfo } from "@/components/SetorInfo"
 import atividadesService from "@/services/atividadesService";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { MdDeleteForever } from "react-icons/md";
+import { toast, Toaster } from "sonner";
 
 interface IAtividadeData{
 	idATIVIDADES: number
@@ -31,10 +33,11 @@ interface IHospedeEmAtividadeData{
 
 export default function ConsultarPresencaId(){
     const { user } = useSelector((state) => state.auth);
+    const router = useRouter();
     const [data, setData] = useState<IAtividadeData>();
     const [hospedeData, setHospedeData] = useState<Array<IHospedeEmAtividadeData>>([]);
     const pathname = usePathname();
-    const { getAtividadeById, getLista } = atividadesService;
+    const { getAtividadeById, getLista, deleteHospedeEmAtividade } = atividadesService;
 
     useEffect(() => {
         async function fetch(){
@@ -44,10 +47,22 @@ export default function ConsultarPresencaId(){
             setHospedeData(res2.data);
         }
         fetch();
-    }, [getAtividadeById, user, getLista])
+    }, [getAtividadeById, user, getLista]);
+
+    async function handleDelete(hospedeId: number) {
+        const res = await deleteHospedeEmAtividade(Number(pathname.substring(22)), user.token, hospedeId);
+        if(res.type == "SUCCESS"){
+            toast.success("Ação realizada com sucesso!");{}
+            router.push("/atividades")
+        } else {
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
+        }
+    }
 
     return(
         <div className="min-h-screen">
+            <Toaster richColors/>
             <ContainerAtividades/>
             <SetorInfo setor="Atividades"/>
             <div className="bg-white p-8 rounded-lg shadow-xl m-10">
@@ -82,7 +97,10 @@ export default function ConsultarPresencaId(){
                         </div>
                         {hospedeData.length > 0 && (
                             hospedeData.map((obj) => (
-                                <AtividadesListMin key={obj.HOSPEDE_idHOSPEDE} data={obj}/>
+                                <div key={obj.HOSPEDE_idHOSPEDE} className="flex">
+                                    <AtividadesListMin data={obj}/>
+                                    <button type="button" onClick={() => {handleDelete(obj.HOSPEDE_idHOSPEDE)}}><MdDeleteForever size={28} className="text-button"/></button>
+                                </div>
                             ))
                         )}
                     </div>

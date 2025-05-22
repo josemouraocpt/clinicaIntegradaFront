@@ -1,10 +1,5 @@
-import { Actions } from "@/components/Actions";
-import { Medicines } from "@/components/Medicines";
 import { MyButton } from "@/components/MyButton";
-import { PageInfoText } from "@/components/PageInfoText";
-import { TbPill } from "react-icons/tb";
 import Link from "next/link";
-import BackButton from "@/components/BackButton";
 import { ContainerFarmacia } from "@/components/ContainerFarmacia";
 
 export default function Farmacia(){

@@ -5,10 +5,11 @@ import hospedeService from "@/services/hospedeService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { toast, Toaster } from "sonner";
 import * as yup from "yup";
-
+ 
 interface IDadosBancarios {
     idDADOS_BANCARIOS?: number;
     HOSPEDE_idHOSPEDE: number;
@@ -19,12 +20,12 @@ interface IDadosBancarios {
 }
 
 const schema = yup.object({
-	DESCRICAO: yup.string(),
+	DESCRICAO: yup.string().required("Descrição obrigatória"),
     idSITUACAO_FINANCEIRA: yup.number(),
-	AGENCIA: yup.string(),
-	CONTA: yup.string(),
-	NOME_BANCO: yup.string(),
-	NUMERO_CONTA: yup.string(),
+	AGENCIA: yup.string().required("Agência obrigatória"),
+	CONTA: yup.string().required("Conta obrigatória"),
+	NOME_BANCO: yup.string().required("Banco obrigatório"),
+	NUMERO_CONTA: yup.string().required("Número da conta obrigatório"),
 	HOSPEDE_idHOSPEDE: yup.number(),
 	idDADOS_BANCARIOS: yup.number(),
     AGENCIA2: yup.string(),
@@ -42,7 +43,6 @@ const schema = yup.object({
 });
 
 type FormData = yup.InferType<typeof schema>;
-
 
 export default function Banco(){
     const [canEdit, setCanEdit] = useState(false);
@@ -77,10 +77,17 @@ export default function Banco(){
         //separar os objetos
         const dataToSend = [];
 
-        if(count >= 1 && data.AGENCIA2 == ''){
-            return alert("Dados vazios")
+        if(count >= 1){
+            if(data.NOME_BANCO2 === "") return toast.error("Banco obrigatório");
+            if(data.AGENCIA2 === "") return toast.error("Agência obrigatória");
+            if(data.CONTA2 === "") return toast.error("Conta obrigatória");
+            if(data.NUMERO_CONTA2 === "") return toast.error("Número da conta obrigatório");
+
+            if(data.NOME_BANCO3 === "") return toast.error("Banco obrigatório");
+            if(data.AGENCIA3 === "") return toast.error("Agência obrigatória");
+            if(data.CONTA3 === "") return toast.error("Conta obrigatória");
+            if(data.NUMERO_CONTA3 === "") return toast.error("Número da conta obrigatório");
         }
-        
         const sitFinData = {
             DESCRICAO: data.DESCRICAO,
             idSITUACAO_FINANCEIRA: data.idSITUACAO_FINANCEIRA,
@@ -98,7 +105,7 @@ export default function Banco(){
 
         dataToSend.push(data1);
 
-        if(count >= 1 || hospedeData.length > 1){
+        if(count >= 1 || hospedeData.length >= 1){
             const data2 = {
                 AGENCIA: data.AGENCIA2,
                 CONTA: data.CONTA2,
@@ -109,7 +116,7 @@ export default function Banco(){
             };
             dataToSend.push(data2);
         }
-        if(count >= 2 || hospedeData.length > 1){
+        if(count >= 2 || hospedeData.length >= 2){
             const data3 = {
                 AGENCIA: data.AGENCIA3,
                 CONTA: data.CONTA3,
@@ -122,7 +129,6 @@ export default function Banco(){
         }
 
         const dataToUpdate = dataToSend.filter((obj) => { return obj.idDADOS_BANCARIOS !== undefined });
-
         //enviar atualizações
 
         const res1 = await putHospedeFinanceiro(Number(pathname.substring(16)), dataToUpdate, user.token);
@@ -139,7 +145,11 @@ export default function Banco(){
         }
 
         if(res1.type === "SUCCESS" && res2.type === "SUCCESS"){
+            toast.success("Ação realizada com sucesso!");{}
             router.push("/hospedes")
+        }else{
+            toast.error("Algo não está certo.Tente novamente!");
+            return;
         }
 
     }
@@ -200,6 +210,12 @@ export default function Banco(){
         }
     }
 
+    async function onError(formErrors: FieldErrors<FormData>) {
+        for (const value of Object.entries(formErrors)) {
+            toast.error(value[1].message)
+        }
+    } 
+
 
     return(
         <div className="min-h-screen">
@@ -208,7 +224,8 @@ export default function Banco(){
                 <h1 className="text-center text-xl font-bold">Dados bancários do Hospede.</h1>
             </div>
             <div className="bg-white m-10 p-4 rounded-md shadow-md">
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit, onError)}>
+                    <Toaster richColors/>
                     <div className="flex space-x-5" >
                         <label className="w-2/6">Nome do banco:
                             <input disabled={!canEdit} type="text" className="input" {...register("NOME_BANCO")}/>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
@@ -8,12 +8,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import userService from "@/services/userService";
 import { requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
-import { toast } from "sonner";
-
-const cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
-const cepRegex = /^\d{5}-\d{3}$/;
-const rgRegex = /^\d{1,2}\.?\d{3}\.?\d{3}-?[\dXx]$/;
-const phoneRegex = /^(\+?55\s?)?(\(?\d{2}\)?\s?)?(9\d{4}|\d{4})-?\d{4}$/;
+import { toast, Toaster } from "sonner";
 
 const schema = yup.object({
     name: requiredString('Nome obrigatório'),
@@ -101,8 +96,15 @@ export function ProfileForm(){
 		setValue("userStatus", data.STATUS_USUARIO)
 	}
 
+	async function onError(formErrors: FieldErrors<FormData>) {
+		for (const value of Object.entries(formErrors)) {
+			toast.error(value[1].message)
+		}
+	} 
+
 	return(
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<form onSubmit={handleSubmit(onSubmit, onError)}>
+			<Toaster richColors/>
 			<div className="flex flex-col space-y-3">
 				{/* dados de cadastro */}
 				<div className="flex flex-col space-y-2">
@@ -110,11 +112,9 @@ export function ProfileForm(){
 					<div className="flex flex-row space-x-5">
 						<label>Nome:
 							<input readOnly={!canEdit} {...register("name")} type="text" className="input"/>
-							{errors.name && <span className="text-red-500">{errors.name.message}</span>}
 						</label>
 						<label>E-mail:
 							<input readOnly={!canEdit} {...register("email")} type="email" className="input"/>
-							{errors.email && <span className="text-red-500">{errors.email.message}</span>}
 						</label>
 						{/* <label>Senha:
 							<input readOnly={!canEdit} {...register("password")} type="password" className="input"/>
@@ -132,7 +132,6 @@ export function ProfileForm(){
 									))
 								)}
 							</select>
-							{errors.departmentId && <span className="text-red-500">{errors.departmentId.message}</span>}
 						</label>
 					</div>
 					<div className="flex flex-row space-x-5">
@@ -146,19 +145,15 @@ export function ProfileForm(){
 									))
 								)}
 							</select>
-							{errors.userProfileId && <span className="text-red-500">{errors.userProfileId.message}</span>}
 						</label>
 						<label>Telefone:
 							<input readOnly={!canEdit} {...register("phoneNumber")} type="text" className="input"/>
-							{errors.phoneNumber && <span className="text-red-500">{errors.phoneNumber.message}</span>}
 						</label>
 						<label>CPF:
 							<input readOnly={!canEdit} {...register("cpf")} type="text" className="input"/>
-							{errors.cpf && <span className="text-red-500">{errors.cpf.message}</span>}
 						</label>
 						<label>RG:
 							<input readOnly={!canEdit} {...register("rg")} type="text" className="input"/>
-							{errors.rg && <span className="text-red-500">{errors.rg.message}</span>}
 						</label>
 					</div>
 				</div>
@@ -167,23 +162,18 @@ export function ProfileForm(){
 					<div className="flex flex-row space-x-5">
 						<label>Data de Nascimento:
 							<input readOnly={!canEdit} {...register("birthDate")} type="date" className="input"/>
-							{errors.birthDate && <span className="text-red-500">{errors.birthDate.message}</span>}
 						</label>
 						<label>Nacionalidade:
 							<input readOnly={!canEdit} {...register("nationality")} type="text" className="input"/>
-							{errors.nationality && <span className="text-red-500">{errors.nationality.message}</span>}
 						</label>
 						<label>Naturalidae:
 							<input readOnly={!canEdit} {...register("naturalness")} type="text" className="input"/>
-							{errors.naturalness && <span className="text-red-500">{errors.naturalness.message}</span>}
 						</label>
 						<label>Formação:
 							<input readOnly={!canEdit} {...register("formation")} type="text" className="input"/>
-							{errors.formation && <span className="text-red-500">{errors.formation.message}</span>}
 						</label>
 						<label>Instituição de Ensino:
 							<input readOnly={!canEdit} {...register("institution")} type="text" className="input"/>
-							{errors.institution && <span className="text-red-500">{errors.institution.message}</span>}
 						</label>
 					</div>
 				</div>
@@ -195,15 +185,12 @@ export function ProfileForm(){
 								<div className="flex flex-row space-x-5">
 									<label>CEP:
 										<input readOnly={!canEdit} {...register("zipCode")} type="text" className="input"/>
-										{errors.zipCode && <span className="text-red-500">{errors.zipCode.message}</span>}
 									</label>
 									<label>Endereço:
 										<input readOnly={!canEdit} {...register("address")} type="text" className="input"/>
-										{errors.address && <span className="text-red-500">{errors.address.message}</span>}
 									</label>
 									<label>Cidade:
 										<input readOnly={!canEdit} {...register("city")} type="text" className="input"/>
-										{errors.city && <span className="text-red-500">{errors.city.message}</span>}
 									</label>
 									<label>Estado:
 										<select disabled={!canEdit} className="input" {...register("state")}>
@@ -236,7 +223,6 @@ export function ProfileForm(){
 											<option value="SE">Sergipe</option>
 											<option value="TO">Tocantins</option>
 										</select>
-										{errors.state && <span className="text-red-500">{errors.state.message}</span>}
 								</label>
 								<label>Status:
 									<select disabled={!canEdit} className="input" {...register("userStatus")}>
@@ -248,7 +234,6 @@ export function ProfileForm(){
 											))
 										)}
 									</select>
-									{errors.userStatus && <span className="text-red-500">{errors.userStatus.message}</span>}
 								</label>
 								</div>
 							</div>
