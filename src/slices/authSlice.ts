@@ -2,7 +2,7 @@
 import authService from "@/services/authService";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const user = JSON.parse(window.sessionStorage.getItem("user"))
+const user = JSON.parse(window.sessionStorage.getItem("user"));
 
 const initialState = {
     user: user,
