@@ -9,11 +9,10 @@ import sistemaService from "@/services/sistemaService";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdCheckCircleOutline } from "react-icons/md";
-import { useSelector } from "react-redux";
 import { toast, Toaster } from "sonner";
   
 export default function EditarAtendimento(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const [data, setData] = useState();
     const [atendimentosData, setAtendimentosData] = useState([]);
     const [dataTosend, setDataToSend] = useState([]);
@@ -66,7 +65,7 @@ export default function EditarAtendimento(){
             setData(res1.data);
         }
         fecth();
-    }, [getHospedeById, user, getAtendimentoByHospedeId]);
+    }, []);
 
     async function handleSubmit(event: React.SyntheticEvent) {
         event.preventDefault();
@@ -123,7 +122,7 @@ export default function EditarAtendimento(){
                 </div>
                 <div className="flex space-x-4">
                     {!canEdit && (
-                        <MyButton buttonText="Editar" handleClick={() => { setCanEdit(!canEdit) }}/>
+                        <MyButton buttonText="Editar" handleClick={() => { setCanEdit(!canEdit) }} hidden={["SOCIAL", "ADMIN", "SAUDE-Atendimentos"].includes(user.user.access) ? false : true}/>
                     )}
                 </div>
                 <div>

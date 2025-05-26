@@ -1,13 +1,10 @@
 'use client'
-
 import { ContainerFornecedores } from "@/components/ContainerFornecedores"
 import { MyButton } from "@/components/MyButton";
 import sistemaService from "@/services/sistemaService";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdDeleteForever, MdRemoveRedEye } from "react-icons/md";
-import { useSelector } from "react-redux";
-
 interface IFornecedorData {
     idFORNECEDOR: number;
     NOME: string;
@@ -18,7 +15,7 @@ interface IFornecedorData {
 }
 
 export default function Fornecedores(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<IFornecedorData[]>([]);
 	const { getAllFornecedor, deleteFornecedor } = sistemaService;
     const router = useRouter();
@@ -29,7 +26,7 @@ export default function Fornecedores(){
 			setData(res.data);
 		}
 		fetchAll()
-	}, [user, getAllFornecedor]);
+	}, []);
 
     async function handleDelete(id: number){
         const res = await deleteFornecedor(id, user.token);

@@ -14,6 +14,7 @@ interface ISearchBarProps{
  
 export function SearchBar({data, setAuxData, path, keys}: ISearchBarProps){
 	const [search, setSearch] = useState("");
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 
     function handleChange(e: React.FormEvent<HTMLInputElement>){
 		setSearch(e.currentTarget.value)
@@ -42,7 +43,7 @@ export function SearchBar({data, setAuxData, path, keys}: ISearchBarProps){
         <div>
 			<div className="flex justify-end my-4">
 				{path  && (
-					<Link href={path}>
+					<Link href={path} hidden={user.user.access !=  "PADRAO" ? false : true}>
 						<MyButton buttonText="Realizar novo cadastro"/>
 					</Link>
 				)}

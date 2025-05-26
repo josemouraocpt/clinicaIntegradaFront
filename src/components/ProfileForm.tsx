@@ -1,10 +1,8 @@
-'use client'
-
+"use client"
 import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import userService from "@/services/userService";
 import { requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
@@ -34,7 +32,7 @@ type FormData = yup.InferType<typeof schema>;
 
 
 export function ProfileForm(){
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [userSetores, setUserSetores] = useState();
 	const [userProfiles, setUserProfiles] = useState();
 	const [useStatus, setUserStatus] = useState();
@@ -69,7 +67,7 @@ export function ProfileForm(){
 			setUserStatus(res4.data);
 		}
 		fetch();
-	}, [getUserData, user, getUserProfiles, getUserProfiles, getUserStatus]);
+	}, []);
 
 	function formatDate(data: string){
 		return data.substring(0,10)
@@ -116,12 +114,6 @@ export function ProfileForm(){
 						<label>E-mail:
 							<input readOnly={!canEdit} {...register("email")} type="email" className="input"/>
 						</label>
-						{/* <label>Senha:
-							<input readOnly={!canEdit} {...register("password")} type="password" className="input"/>
-						</label> */}
-						{/* <label>Confirmação de senha:
-							<input readOnly={!canEdit} {...register("confirmPassword")} type="password" className="input"/>
-						</label> */}
 						<label>Setor:
 							<select disabled={!canEdit} className="input" {...register("departmentId")}>
 								<option hidden={true}></option>
@@ -136,7 +128,7 @@ export function ProfileForm(){
 					</div>
 					<div className="flex flex-row space-x-5">
 						<label>Tipo do usuário:
-							<select disabled={!canEdit} className="input" {...register("userProfileId")}>
+							<select disabled={user.user.access  == "ADMIN" ? false : true} className="input" {...register("userProfileId")}>
 								<option hidden={true}></option>
 								{userProfiles && (
 									//@ts-ignore
@@ -225,7 +217,7 @@ export function ProfileForm(){
 										</select>
 								</label>
 								<label>Status:
-									<select disabled={!canEdit} className="input" {...register("userStatus")}>
+									<select disabled={user.user.access  == "ADMIN" ? false : true} className="input" {...register("userStatus")}>
 										<option hidden={true}></option>
 										{useStatus && (
 											//@ts-ignore

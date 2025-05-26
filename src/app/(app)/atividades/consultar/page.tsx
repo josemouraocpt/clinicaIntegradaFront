@@ -5,7 +5,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import atividadesService from "@/services/atividadesService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface IAtividadeData{
 	idATIVIDADES: number
@@ -23,7 +22,7 @@ interface IAtividadeData{
 }
 
 export default function ConsultarPresenca(){
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<Array<IAtividadeData>>([]);
 	const [auxData, setAuxData] = useState<Array<IAtividadeData>>([]);
 	const { getAtividades } = atividadesService;
@@ -35,14 +34,14 @@ export default function ConsultarPresenca(){
 			setAuxData(res.data);
 		}
 		fetchAll()
-	}, [user, getAtividades]);
+	}, []);
 	
 	return(
 		<div className="min-h-screen">
 			<ContainerAtividades/>
 			<SetorInfo setor="Atividades"/>
 			<div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
-                <SearchBar data={data} setAuxData={setAuxData} path="/atividades/cadastrar" keys={["idATIVIDADES","NOME"]}/>
+                <SearchBar data={data} setAuxData={setAuxData} path={["SOCIAL", "ADMIN", "SAUDE-Atividades"].includes(user.user.access) ? "/atividades/cadastrar" : null} keys={["idATIVIDADES","NOME"]}/>
                 <div>
                     {auxData && (
                         <div className="grid grid-cols-2">

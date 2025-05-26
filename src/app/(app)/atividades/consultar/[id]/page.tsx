@@ -5,7 +5,6 @@ import { SetorInfo } from "@/components/SetorInfo"
 import atividadesService from "@/services/atividadesService";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { MdDeleteForever } from "react-icons/md";
 import { toast, Toaster } from "sonner";
 
@@ -32,7 +31,7 @@ interface IHospedeEmAtividadeData{
 
 
 export default function ConsultarPresencaId(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const router = useRouter();
     const [data, setData] = useState<IAtividadeData>();
     const [hospedeData, setHospedeData] = useState<Array<IHospedeEmAtividadeData>>([]);
@@ -47,7 +46,7 @@ export default function ConsultarPresencaId(){
             setHospedeData(res2.data);
         }
         fetch();
-    }, [getAtividadeById, user, getLista]);
+    }, []);
 
     async function handleDelete(hospedeId: number) {
         const res = await deleteHospedeEmAtividade(Number(pathname.substring(22)), user.token, hospedeId);

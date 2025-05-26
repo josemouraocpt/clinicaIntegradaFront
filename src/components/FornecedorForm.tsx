@@ -3,7 +3,6 @@ import * as yup from "yup";
 import { MyButton } from "./MyButton";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FieldErrors, useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
@@ -32,7 +31,7 @@ export function FornecedorForm({action}: IFornecedorFormProps){
     const router = useRouter();
     const pathname = usePathname();
     const [canEdit, setCanEdit] = useState(false);
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
@@ -70,7 +69,7 @@ export function FornecedorForm({action}: IFornecedorFormProps){
         }else{
             fetch()
         }
-    }, [user, getFornecedor]);
+    }, []);
 
     function setValues(data: any){
         if(!data) return;

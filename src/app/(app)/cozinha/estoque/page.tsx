@@ -5,7 +5,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import cozinhaService from "@/services/cozinhaService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface IEstoqueData{
     idESTOQUE: number
@@ -22,7 +21,7 @@ interface IEstoqueData{
 }
 
 export default function Estoque(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<Array<IEstoqueData>>([]);
 	const [auxData, setAuxData] = useState<Array<IEstoqueData>>([]);
     const { getMercadorias } = cozinhaService;
@@ -38,14 +37,14 @@ export default function Estoque(){
 		if(user.token !== undefined){
 			fetchAll()
 		}
-	}, [user, getMercadorias]);
+	}, []);
     
     return(
         <div className="min-h-screen">
             <ContainerCozinha/>
             <SetorInfo setor="Estoque"/>
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
-                <SearchBar data={data} setAuxData={setAuxData} path='/cozinha/estoque/cadastrar' keys={["idESTOQUE", "NOME"]} />
+                <SearchBar data={data} setAuxData={setAuxData} path={["SOCIAL", "ADMIN", "SAUDE-Cozinha"].includes(user.user.access) ? '/cozinha/estoque/cadastrar' : null} keys={["idESTOQUE", "NOME"]} />
                 <div>
                     {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2">

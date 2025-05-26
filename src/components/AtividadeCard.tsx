@@ -1,5 +1,4 @@
 'use client'
-import { useSelector } from "react-redux";
 import { ActionsBox } from "./ActionsBox";
 import { useRouter } from "next/navigation";
 import atividadesService from "@/services/atividadesService";
@@ -25,7 +24,7 @@ interface IAtividadeData{
 }
 
 export function AtividadeCard({path, data}: IAtividadeCardProps){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const router = useRouter();
     const { deleteAtividade } = atividadesService;
 

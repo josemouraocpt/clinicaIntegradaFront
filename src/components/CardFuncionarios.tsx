@@ -1,12 +1,11 @@
 "use client"
 import { useRouter } from "next/navigation";
 import { ActionsBox } from "./ActionsBox";
-import { useSelector } from "react-redux";
 import userService from "@/services/userService";
 
 export function CardFuncionarios({data}: any){
 	const router = useRouter();
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const { deleteUser } = userService;
 
 	async function handleDelete(id: number){

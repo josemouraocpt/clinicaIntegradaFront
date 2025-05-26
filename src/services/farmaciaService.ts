@@ -1,8 +1,9 @@
 'use client'
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 async function getMedicamentos(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/farmacia/medicamentos', {
+        const res = await fetch(apiHost+'farmacia/medicamentos', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -23,7 +24,7 @@ async function getMedicamentos(token: string) {
 
 async function getItens(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/farmacia/itens/todos', {
+        const res = await fetch(apiHost+'farmacia/itens/todos', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -44,7 +45,7 @@ async function getItens(token: string) {
 
 async function getVacinas(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/farmacia/vacinas', {
+        const res = await fetch(apiHost+'farmacia/vacinas', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -65,7 +66,7 @@ async function getVacinas(token: string) {
 
 async function getVacinasEstoque(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/farmacia/vacinas/estoque', {
+        const res = await fetch(apiHost+'farmacia/vacinas/estoque', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -86,7 +87,7 @@ async function getVacinasEstoque(token: string) {
 
 async function getFornecedores(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/farmacia/vacinas/fornecedores', {
+        const res = await fetch(apiHost+'farmacia/vacinas/fornecedores', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -107,7 +108,7 @@ async function getFornecedores(token: string) {
 
 async function getMedicamentoById(medicamentoId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/medicamentos/${medicamentoId}`, {
+        const res = await fetch(apiHost+`farmacia/medicamentos/${medicamentoId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -129,7 +130,7 @@ async function getMedicamentoById(medicamentoId:number, token: string) {
 
 async function getItemById(itemId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/itens/${itemId}`, {
+        const res = await fetch(apiHost+`farmacia/itens/${itemId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -151,7 +152,7 @@ async function getItemById(itemId:number, token: string) {
 
 async function getVacinaById(vacinaId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/vacinas/${vacinaId}`, {
+        const res = await fetch(apiHost+`farmacia/vacinas/${vacinaId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -187,7 +188,7 @@ async function createMedicamento(data: any, token: string){
             type: data.type,
         }
         
-        const res = await fetch('http://localhost:3001/farmacia/medicamentos/criar', {
+        const res = await fetch(apiHost+'farmacia/medicamentos/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -225,7 +226,7 @@ async function createItem(data: any, token: string){
             changeBy: data.userId,
             type: "ITEM",
         }
-        const res = await fetch('http://localhost:3001/farmacia/itens/criar', {
+        const res = await fetch(apiHost+'farmacia/itens/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -264,7 +265,7 @@ async function createVacina(data: any, token: string){
             changeDate: createDate, 
             changeBy: data.changeBy
         }
-        const res = await fetch('http://localhost:3001/farmacia/vacinas/criar', {
+        const res = await fetch(apiHost+'farmacia/vacinas/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -288,7 +289,7 @@ async function createVacina(data: any, token: string){
 
 async function editMedicamento(medicamentoId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/medicamentos/editar/${medicamentoId}`, {
+        const res = await fetch(apiHost+`farmacia/medicamentos/editar/${medicamentoId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -311,7 +312,7 @@ async function editMedicamento(medicamentoId:number, data:any, token: string) {
 
 async function editItem(itemId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/itens/editar/${itemId}`, {
+        const res = await fetch(apiHost+`farmacia/itens/editar/${itemId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -334,7 +335,7 @@ async function editItem(itemId:number, data:any, token: string) {
 
 async function editVacina(vacinaId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/vacinas/editar/${vacinaId}`, {
+        const res = await fetch(apiHost+`farmacia/vacinas/editar/${vacinaId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -357,7 +358,7 @@ async function editVacina(vacinaId:number, data:any, token: string) {
 
 async function deleteMedicamento(medicamentoId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/medicamentos/remover/${medicamentoId}`, {
+        const res = await fetch(apiHost+`farmacia/medicamentos/remover/${medicamentoId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -378,7 +379,7 @@ async function deleteMedicamento(medicamentoId:number, token: string) {
 
 async function deleteItem(itemId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/itens/remover/${itemId}`, {
+        const res = await fetch(apiHost+`farmacia/itens/remover/${itemId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -399,7 +400,7 @@ async function deleteItem(itemId:number, token: string) {
 
 async function deleteVacina(vacinaId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/farmacia/vacinas/remover/${vacinaId}`, {
+        const res = await fetch(apiHost+`farmacia/vacinas/remover/${vacinaId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",

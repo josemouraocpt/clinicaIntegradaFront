@@ -1,9 +1,10 @@
 'use client'
 import sistemaService from './sistemaService'
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 async function getAtividades(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/atividades/todos', {
+        const res = await fetch(apiHost+'atividades/todos', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -26,7 +27,7 @@ async function getAtividades(token: string) {
 async function createAtividade(data: any, token: string){
     try {
         let fileKey = ""
-        if(data.attachment.length > 0){
+        if(data.attachment){
             //gerar url de envio ao s3 AWS
             const file: File = data.attachment[0]
             fileKey = `uploads/${Date.now()}-${file.name}`;
@@ -44,7 +45,7 @@ async function createAtividade(data: any, token: string){
 
         data.attachment = fileKey;
 
-        const res = await fetch('http://localhost:3001/atividades/criar', {
+        const res = await fetch(apiHost+'atividades/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -68,7 +69,7 @@ async function createAtividade(data: any, token: string){
 
 async function getAtividadeById(atividadeId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/atividades/${atividadeId}`, {
+        const res = await fetch(apiHost+`atividades/${atividadeId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -89,7 +90,7 @@ async function getAtividadeById(atividadeId:number, token: string) {
 
 async function editAtiviadade(atividadeId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/atividades/editar/${atividadeId}`, {
+        const res = await fetch(apiHost+`atividades/editar/${atividadeId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -112,7 +113,7 @@ async function editAtiviadade(atividadeId:number, data:any, token: string) {
 
 async function lancarPresencaByAtividadeId(atividadeId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/atividades/presenca/${atividadeId}`, {
+        const res = await fetch(apiHost+`atividades/presenca/${atividadeId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -135,7 +136,7 @@ async function lancarPresencaByAtividadeId(atividadeId:number, data:any, token: 
 
 async function deleteAtividade(atividadeId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/atividades/remover/${atividadeId}`, {
+        const res = await fetch(apiHost+`atividades/remover/${atividadeId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -156,7 +157,7 @@ async function deleteAtividade(atividadeId:number, token: string) {
 
 async function getAtividadeStatus(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/atividades/status', {
+        const res = await fetch(apiHost+'atividades/status', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -178,7 +179,7 @@ async function getAtividadeStatus(token: string) {
 
 async function getLista(atividadeId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/atividades/lista/${atividadeId}`, {
+        const res = await fetch(apiHost+`atividades/lista/${atividadeId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -200,12 +201,34 @@ async function getLista(atividadeId:number, token: string) {
 
 async function deleteHospedeEmAtividade(atividadeId:number, token: string, hospedeId:number) {
     try {
-        const res = await fetch(`http://localhost:3001/atividades/remover/hospede/${atividadeId}?hospede=${hospedeId}`, {
+        const res = await fetch(apiHost+`atividades/remover/hospede/${atividadeId}?hospede=${hospedeId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
                 "Authorization": token
 			}
+        });
+        const response = await res.json();
+        if(response.type == "ERROR"){
+            return { error: response.message }
+        }else{
+            return response 
+        }
+    } catch (error) {
+        console.log(error)
+        return {error: error}
+    }
+}
+
+async function getElegiveis(horaInicio:string, dataDia: string, token: string) {
+    try {
+        const res = await fetch(apiHost+`atividades/elegiveis/`, {
+            method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+                "Authorization": token
+			},
+            body: JSON.stringify({horario: horaInicio, dataDia})
         });
         const response = await res.json();
         if(response.type == "ERROR"){
@@ -228,7 +251,8 @@ const atividadesService = {
     lancarPresencaByAtividadeId,
     getAtividadeStatus,
     getLista,
-    deleteHospedeEmAtividade
+    deleteHospedeEmAtividade,
+    getElegiveis
 }
 
 export default atividadesService;

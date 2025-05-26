@@ -1,12 +1,9 @@
 "use client"
 import { ContainerFarmacia } from "@/components/ContainerFarmacia";
 import { EstoqueCard } from "@/components/EstoqueCard";
-import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import farmaciaService from "@/services/farmaciaService";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface IEstoqueData{
     idESTOQUE: number
@@ -23,7 +20,7 @@ interface IEstoqueData{
 } 
 
 export default function ListaMedicamentos(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const [dataSet, setDataSet] = useState<Array<IEstoqueData>>([]);
     const [data, setData] = useState<IEstoqueData>();
     const [selected, setSelected] = useState(false);
@@ -35,7 +32,7 @@ export default function ListaMedicamentos(){
             setDataSet(res.data);
         }
         fetch()
-    }, [user, getMedicamentos]);
+    }, []);
 
     function handleChange(value: string){
         if(value == ""){
@@ -53,7 +50,6 @@ export default function ListaMedicamentos(){
             <ContainerFarmacia/>
             <SetorInfo setor="Medicamentos"/>
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
-                {/* <SearchBar data={data} setAuxData={setAuxData} path="/farmacia/medicamentos/cadastrar" keys={["idESTOQUE","NOME"]} /> */}
                 <select className="input" onChange={e => {handleChange(e.target.value)}}>
                     <option hidden={true}></option>
                     {dataSet && dataSet.length > 0 ? dataSet.map((medicamento) => (

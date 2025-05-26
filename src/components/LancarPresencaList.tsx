@@ -10,29 +10,9 @@ interface ILancarPresencaListProps{
 }
 interface IHospedeData {
     idHOSPEDE: number;
-    DADOS_MEDICOS_idDADOS_MEDICOS: number;
     NOME_COMPLETO: string;
-    NOME_SOCIAL?: string;
-    APELIDO?: string;
-    RG: string;
-    CPF: string;
-    NACIONALIDADE: string;
-    NATURALIDADE: string;
-    ESTADO_CIVIL: string;
-    DATA_NASCIMENTO: Date;
-    NOME_MAE: string;
-    NOME_PAI?: string;
-    TELEFONE: string;
-    PROFISSAO?: string;
-    TITULO_ELEITOR?: string;
-    ENDERECO: string;
-    CIDADE: string;
-    UF: string;
-    CEP: string;
-    DATA_ENTRADA: Date;
-    RESPONSAVEL: string;
-    STATUS_HOSPEDE: string;
 }
+
 export function LancarPresencaList({data, idAtividade, setData}: ILancarPresencaListProps){
     const [ATIVIDADES_idATIVIDADES, setATIVIDADES_idATIVIDADES] = useState<string>(idAtividade);
     const [HOSPEDE_idHOSPEDE, setHOSPEDE_idHOSPEDE] = useState<string>();

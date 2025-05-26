@@ -1,8 +1,10 @@
 'use client';
 
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
+
 async function register(data: any) {
     try {
-        const res = await fetch("http://localhost:3001/usuarios/registro", {
+        const res = await fetch(apiHost+"usuarios/registro", {
             method: "POST",
 			body: JSON.stringify(data),
 			headers: {
@@ -12,10 +14,10 @@ async function register(data: any) {
         const response = await res.json();
         
         if(response.type == "ERROR"){
-            return { error: response.message }
+            return response
         }else{
             if(!window.sessionStorage.getItem("user")){
-				sessionStorage.setItem("user", JSON.stringify(response))
+				sessionStorage.setItem("user", JSON.stringify(response.data))
 			}
         }
         return response
@@ -27,7 +29,7 @@ async function register(data: any) {
 
 async function login(data: any) {
     try {
-        const res = await fetch("http://localhost:3001/usuarios/login", {
+        const res = await fetch(apiHost+"usuarios/login", {
             method: "POST",
 			body: JSON.stringify(data),
 			headers: {
@@ -36,9 +38,9 @@ async function login(data: any) {
         });
         const response = await res.json();
         if(response.type == "ERROR"){
-            return { error: response.message }
+            return response 
         }else{
-            sessionStorage.setItem("user", JSON.stringify(response))
+            sessionStorage.setItem("user", JSON.stringify(response.data))
         }
         return response
     } catch (error) {
@@ -48,7 +50,7 @@ async function login(data: any) {
 
 async function recuperarSenha(data: any) {
     try {
-        const res = await fetch("http://localhost:3001/usuarios/recuperar", {
+        const res = await fetch(apiHost+"usuarios/recuperar", {
             method: "POST",
 			body: JSON.stringify(data),
 			headers: {
@@ -58,8 +60,6 @@ async function recuperarSenha(data: any) {
         const response = await res.json();
         if(response.type == "ERROR"){
             return response
-        }else{
-            sessionStorage.setItem("user", JSON.stringify(response))
         }
         return response
     } catch (error) {
@@ -70,7 +70,6 @@ async function recuperarSenha(data: any) {
 function logout() {
     sessionStorage.removeItem("user")
 }
-
 
 const authService = {
     register,

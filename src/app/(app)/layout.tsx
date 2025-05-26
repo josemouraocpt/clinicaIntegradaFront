@@ -1,3 +1,5 @@
+import { NavBarAuth } from "@/components/NavBarAuth"
+
 export const metadata = {
     title: 'Clínica Integrada Unibh - HelthLab 4.0',
     description: 'Clínica Integrada Unibh - HelthLab 4.0',
@@ -15,6 +17,7 @@ export default function AppLayout({
   }) {
     return (
       <>
+        <NavBarAuth/>
         {children}
       </>
     )

@@ -6,7 +6,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import hospedeService from "@/services/hospedeService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface HospedeCardData{
     idHOSPEDE: number
@@ -22,7 +21,7 @@ interface HospedeCardData{
 }
 
 export default function Registros(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const [data, setData] = useState<Array<HospedeCardData>>([]);
     const [auxData, setAuxData] = useState<Array<HospedeCardData>>([]);
     const { getHospedes } = hospedeService;
@@ -33,7 +32,7 @@ export default function Registros(){
             setAuxData(res.data);
         }
         fetch() 
-    }, [user, getHospedes])
+    }, [])
     return(
         <div className="min-h-screen">
             <ContainerFarmacia/>

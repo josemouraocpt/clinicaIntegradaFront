@@ -1,8 +1,9 @@
 'use client'
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 async function getProjetos(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/projetos/todos', {
+        const res = await fetch(apiHost+'projetos/todos', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -43,7 +44,7 @@ async function createProjeto(data: any, token: string){
             public: data.public,
             expectedResults: data.expectedResults
         }
-        const res = await fetch('http://localhost:3001/projetos/criar', {
+        const res = await fetch(apiHost+'projetos/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -67,7 +68,7 @@ async function createProjeto(data: any, token: string){
 
 async function getProjetoById(projectId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/projetos/${projectId}`, {
+        const res = await fetch(apiHost+`projetos/${projectId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -88,7 +89,7 @@ async function getProjetoById(projectId:number, token: string) {
 
 async function editProjeto(projectId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/projetos/editar/${projectId}`, {
+        const res = await fetch(apiHost+`projetos/editar/${projectId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -111,7 +112,7 @@ async function editProjeto(projectId:number, data:any, token: string) {
 
 async function deleteProjeto(projectId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/projetos/remover/${projectId}`, {
+        const res = await fetch(apiHost+`projetos/remover/${projectId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -132,7 +133,7 @@ async function deleteProjeto(projectId:number, token: string) {
 
 async function getProjetoStatus(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/projetos/status', {
+        const res = await fetch(apiHost+'projetos/status', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -154,7 +155,7 @@ async function getProjetoStatus(token: string) {
 
 async function addParticipante(data: any, token: string){
     try {
-        const res = await fetch('http://localhost:3001/projetos/participantes', {
+        const res = await fetch(apiHost+'projetos/participantes', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -178,7 +179,7 @@ async function addParticipante(data: any, token: string){
 
 async function getListaParticipantes(projectId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/projetos/lista/${projectId}`, {
+        const res = await fetch(apiHost+`projetos/lista/${projectId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -199,7 +200,7 @@ async function getListaParticipantes(projectId:number, token: string) {
 
 async function deleteHospedeEmProjeto(projectId:number, token: string, hospedeId:number) {
     try {
-        const res = await fetch(`http://localhost:3001/projetos/remover/hospede/${projectId}?hospede=${hospedeId}`, {
+        const res = await fetch(apiHost+`projetos/remover/hospede/${projectId}?hospede=${hospedeId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",

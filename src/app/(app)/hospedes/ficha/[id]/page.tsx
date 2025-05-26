@@ -1,13 +1,11 @@
 'use client'
-
 import { ContainerHospedes } from "@/components/ContainerHospedes";
 import { MyButton } from "@/components/MyButton";
 import hospedeService from "@/services/hospedeService";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { toast, Toaster } from "sonner";
 import * as yup from "yup";
  
@@ -87,7 +85,7 @@ export default function Ficha(){
     const [canEdit, setCanEdit] = useState(false);
     const [canEdit2, setCanEdit2] = useState(false);
     const [count, setCount] = useState(0);
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const pathname = usePathname();
     const router = useRouter();
     const { getHospedeRemedios, getHospedeFicha, getHospedeComplicacoes, postHospedeFicha, putHospedeFicha, postHospedeRemedio, putHospedeRemedio, postHospedeComplicacoes, putHospedeComplicacoes, deleteHospedeDadosMedicos } = hospedeService;
@@ -350,7 +348,7 @@ export default function Ficha(){
             })            
         }
         fecth();
-    }, [user, getHospedeComplicacoes, getHospedeFicha, getHospedeRemedios]);
+    }, []);
 
     async function onError(formErrors: FieldErrors<FormData>) {
         for (const value of Object.entries(formErrors)) {
@@ -550,7 +548,7 @@ export default function Ficha(){
                     {count == 3 && (
                         <h1>Não é possivel incluir mais que 3.</h1>
                     )}
-                    <div className="flex justify-end space-x-2 m-3">
+                    <div className="flex justify-end space-x-2 m-3" hidden={["SOCIAL", "ADMIN"].includes(user.user.access) ? true : false}>
                         <MyButton buttonText="Editar" buttonType="button" handleClick={() => setCanEdit(!canEdit)} />
                         <MyButton buttonText="Incluir" buttonType="button" handleClick={handleClick1} disable={count == 3}/>
                         <MyButton buttonText="Enviar" buttonType="submit"/>

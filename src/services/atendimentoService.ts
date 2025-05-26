@@ -1,5 +1,6 @@
 'use client'
 import sistemaService from './sistemaService'
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 async function createAtendimento(data: any, token: string){
     try {
@@ -32,7 +33,7 @@ async function createAtendimento(data: any, token: string){
             medicDoc: data.docMedico,
             attach: fileKey,
         }
-        const res = await fetch('http://localhost:3001/atendimentos/criar', {
+        const res = await fetch(apiHost+'atendimentos/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -56,7 +57,7 @@ async function createAtendimento(data: any, token: string){
 
 async function getAtendimentoByHospedeId(hospedeId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/atendimentos/${hospedeId}`, {
+        const res = await fetch(apiHost+`atendimentos/${hospedeId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -77,7 +78,7 @@ async function getAtendimentoByHospedeId(hospedeId:number, token: string) {
 
 async function editAtendimentoById(atendimentoId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/atendimentos/editar/${atendimentoId}`, {
+        const res = await fetch(apiHost+`atendimentos/editar/${atendimentoId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -100,7 +101,7 @@ async function editAtendimentoById(atendimentoId:number, data:any, token: string
 
 async function deleteAtendimento(atendimentoId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/remover/${atendimentoId}`, {
+        const res = await fetch(apiHost+`hospedes/remover/${atendimentoId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",

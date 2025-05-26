@@ -2,7 +2,6 @@
 import { usePathname, useRouter } from "next/navigation";
 import { MyButton } from "./MyButton";
 import * as yup from "yup";
-import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
@@ -37,7 +36,7 @@ export function AtividadeForm({action}: IAtividadeFormProps){
     const [statusData, setStatusData] = useState();
     const [canEdit, setCanEdit] = useState(false);
     const [attachmentName, setSttachmentName] = useState("");
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const { getAtividadeStatus, createAtividade, getAtividadeById, editAtiviadade } = atividadesService;
  	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -81,7 +80,7 @@ export function AtividadeForm({action}: IAtividadeFormProps){
         if(action == "CRIAR"){
             setCanEdit(!canEdit);
         }
-    }, [user, getAtividadeById, getAtividadeStatus]);
+    }, []);
 
     function setValues(data: any){
         setSttachmentName(data.ANEXO);

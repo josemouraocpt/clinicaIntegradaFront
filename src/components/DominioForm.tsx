@@ -3,7 +3,6 @@ import * as yup from "yup";
 import { MyButton } from "./MyButton";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FieldErrors, useForm } from "react-hook-form";
 import sistemaService from "@/services/sistemaService";
@@ -27,7 +26,7 @@ export function DominioForm({action}: IDominioFormProps){
     const router = useRouter();
     const pathname = usePathname();
     const [canEdit, setCanEdit] = useState(false);
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
@@ -59,14 +58,13 @@ export function DominioForm({action}: IDominioFormProps){
         async function fetch(){
             const res = await getDominio(Number(pathname.substring(25)), user.token);
             setValues(res.data[0]);
-            console.log(res.data)
         }
         if(action == "CRIAR"){
             setCanEdit(!canEdit);
         }else{
             fetch();
         }
-    }, [user, getDominio]);
+    }, []);
 
     function setValues(data: any) {
         if (!data) return;

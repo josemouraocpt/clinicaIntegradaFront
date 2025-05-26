@@ -5,7 +5,6 @@ import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import { DadosBasicos } from "./HospedeFormComponets/DadosBasicos";
 import { DadosBancarios } from "./HospedeFormComponets/DadosBancarios";
 import { DadosMedicos } from "./HospedeFormComponets/DadosMedicos";
@@ -84,7 +83,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 	const [currentStep, setCurrentStep] = useState(0);
 	const router = useRouter();
 	const pathname = usePathname();
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const { createHospedeFull, getHospedeStatus, editHospedeById, getHospedeById } = hospedeService;
 	const [hospedeStatusList, setHospedeStatusList] = useState([]);
 	const [hospedagemStatusList, setHospedagemStatusList] = useState([]);
@@ -161,7 +160,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 		if(action == "CRIAR"){
 			setCanEdit(!canEdit);
 		}
-	}, [getHospedeStatus, user, getHospedeById]);
+	}, []);
 
 
 	function setValues(data: any){
@@ -241,7 +240,7 @@ export function HospedeForm({action}: IHospedeFormProps){
 
 	return(
 		<div className="bg-white p-5 rounded-md mx-10 mb-20 shadow-lg">
-			<form className="flex flex-col space-y-3" onSubmit={handleSubmit(onSubmit, onError)} method="PSOT" encType="multipart/form-data">
+			<form className="flex flex-col space-y-3" onSubmit={handleSubmit(onSubmit, onError)} method="POST" encType="multipart/form-data">
 				<Toaster richColors/>
 				{/* Inicio da primeira parte do formulário */}
 				{currentStep == 0 && (
@@ -249,7 +248,8 @@ export function HospedeForm({action}: IHospedeFormProps){
 					<DadosBasicos errors= {errors} register={register} statusList={hospedeStatusList} canEdit={canEdit} />
 					<div className="flex justify-end space-x-3">
 						{hospedeData && (
-							<MyButton buttonText="Editar" buttonType="button" handleClick={() => {setCanEdit(!canEdit)}}/>
+							<MyButton buttonText="Editar" hidden={["SOCIAL", "ADMIN"].includes(user.user.access) ? false : true}
+ buttonType="button" handleClick={() => {setCanEdit(!canEdit)}}/>
 						)}
 						<MyButton buttonText="Próximo" buttonType="button" handleClick={handleNext}/>
 					</div>

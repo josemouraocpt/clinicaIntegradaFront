@@ -1,20 +1,13 @@
 "use client";
-import { logout, reset } from "@/slices/authSlice";
-import { useEffect } from "react";
 import { MdLogout } from "react-icons/md";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import authService from "@/services/authService";
 
 export function LogOut(){
-    const dispatch = useDispatch();
     const router = useRouter();
-    useEffect(() => {
-		dispatch(reset());
-	}, [dispatch]);
-
     async function sair() {
         router.push("/")
-        await dispatch(logout())
+        await authService.logout()
     }
     return(
         <div className="border-t border-black w-4/5 mx-auto">

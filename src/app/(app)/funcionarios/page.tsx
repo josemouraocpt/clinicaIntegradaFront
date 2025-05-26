@@ -6,7 +6,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import userService from "@/services/userService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface IFuncionarioData {
     idUSUARIO: number;
@@ -15,7 +14,7 @@ interface IFuncionarioData {
 }
 
 export default function Funcionarios(){
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<IFuncionarioData[]>([]);
 	const [auxData, setAuxData] = useState<IFuncionarioData[]>([]);
 	const { getFuncionarios } = userService;
@@ -31,7 +30,7 @@ export default function Funcionarios(){
 		if(user.token !== undefined){
 			fetchAll()
 		}
-	}, [user, getFuncionarios]); 
+	}, []); 
 
 	return(
 		<div className="p-4 min-h-screen">

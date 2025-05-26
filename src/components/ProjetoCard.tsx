@@ -1,5 +1,4 @@
 'use client'
-import { useSelector } from "react-redux";
 import { ActionsBox } from "./ActionsBox";
 import { useRouter } from "next/navigation";
 import projetoService from "@/services/projetosService";
@@ -30,7 +29,7 @@ interface IProjetoData{
 }
 
 export function ProjetoCard({data}: IProjetoCardPros){
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const router = useRouter();
     const { deleteProjeto } = projetoService;
 

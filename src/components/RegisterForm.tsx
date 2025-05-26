@@ -1,8 +1,5 @@
 "use client"
-
-import { reset, singUp } from "@/slices/authSlice";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -11,6 +8,7 @@ import userService from "@/services/userService";
 import {requiredConfirmPassword, requiredPassword, requiredString, requiredEmail, requiredNumber, requiredNumberString } from "./ErroPreenchimento";
 import { toast, Toaster } from "sonner";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import authService from "@/services/authService";
 
 const schema = yup.object({
     name: requiredString('Nome obrigatório'),
@@ -37,9 +35,8 @@ const schema = yup.object({
 type FormData = yup.InferType<typeof schema>;
 
 export function RegisterForm(){
-    const dispatch = useDispatch();
-	const { loading, error } = useSelector((state) => state.auth);
     const router = useRouter();
+    const { register: registrar } = authService;
     const { getUserSetores, getUserProfiles } = userService;
     const [setores, setSetores] = useState([]);
     const [profiles, setProfiles] = useState([]);
@@ -50,9 +47,9 @@ export function RegisterForm(){
     const [visibility2, setVisibility2] = useState(false)
 
 	async function onSubmit(data: FormData){
-        const res  = await dispatch(singUp(data));
-        if(res.type == "/register/rejected"){
-            toast.error(res.payload);
+        const res  = await registrar(data);
+        if(res.type == "ERROR"){
+            toast.error(res.message);
             return
         }else{
             toast.success("Registro realizado com sucesso!");
@@ -61,7 +58,6 @@ export function RegisterForm(){
 	};
 
 	useEffect(() => {
-		dispatch(reset());
         async function fetch() {
             const res1 = await getUserSetores();
             const res2 = await getUserProfiles();
@@ -69,7 +65,7 @@ export function RegisterForm(){
             setProfiles(res2.data);
         }
         fetch()
-	}, [dispatch]);
+	}, []);
 
     async function onError(formErrors: FieldErrors<FormData>) {
         for (const value of Object.entries(formErrors)) {

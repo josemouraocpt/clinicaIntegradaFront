@@ -1,5 +1,4 @@
 'use client'
-import { useSelector } from "react-redux";
 import { ActionsBox } from "./ActionsBox";
 import { useRouter } from "next/navigation";
 import cozinhaService from "@/services/cozinhaService";
@@ -21,7 +20,7 @@ interface ICardapioData{
 }
 
 export function CardapioCard({path, data}: ICardapioCardProps){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const router = useRouter();
     const { deleteCardapio } = cozinhaService;
 

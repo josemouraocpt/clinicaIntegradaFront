@@ -1,8 +1,6 @@
 "use client"
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import cozinhaService from "@/services/cozinhaService";
@@ -32,7 +30,7 @@ export function CardapioForm({action}: ICardapioProps){
     const pathname = usePathname();
     const [status, setStatus] = useState();
     const [canEdit, setCanEdit] = useState(false);
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const { createCardapio, getCardapioStatus, editCardapio, getCardapioById } = cozinhaService;
  	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -80,7 +78,7 @@ export function CardapioForm({action}: ICardapioProps){
             setCanEdit(!canEdit);
         }
         fetch()
-    }, [user, getCardapioStatus, getCardapioById]);
+    }, []);
 
     function setCadapioData(data: any){
         setValue("date", formatDate(data.DATA_CARDAPIO))

@@ -5,7 +5,6 @@ import { SetorInfo } from "@/components/SetorInfo";
 import { VacinaCard } from "@/components/VacinaCard"
 import farmaciaService from "@/services/farmaciaService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface IVacinaData{
     idFARMACOS: number
@@ -25,7 +24,7 @@ interface IVacinaData{
 }
 
 export default function ListaVacinas(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const [data, setData] = useState<Array<IVacinaData>>([]);
     const [auxData, setAuxData] = useState<Array<IVacinaData>>([]);
     const { getVacinas } = farmaciaService;
@@ -37,14 +36,14 @@ export default function ListaVacinas(){
             setAuxData(res.data);
         }
         fetch()
-    }, [user, getVacinas])
+    }, [])
     
     return(
         <div className="min-h-screen">
             <ContainerFarmacia/>
             <SetorInfo setor="Vacinas"/>
             <div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
-                <SearchBar data={data} setAuxData={setAuxData} path="/farmacia/vacinas/cadastrar" keys={["idFARMACOS","NOME"]} />
+                <SearchBar data={data} setAuxData={setAuxData} keys={["idFARMACOS","NOME"]} />
                 <div>
                     {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2 gap-6"> 

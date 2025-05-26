@@ -1,9 +1,10 @@
 'use client'
 import sistemaService from './sistemaService'
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
  
 async function getHospedes(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/hospedes', {
+        const res = await fetch(apiHost+'hospedes', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -24,7 +25,7 @@ async function getHospedes(token: string) {
 
 async function getHospedesComAtendimento(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/hospedes/hospedes-atendimentos', {
+        const res = await fetch(apiHost+'hospedes/hospedes-atendimentos', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -125,7 +126,7 @@ async function createHospedeFull(data: any,  token: string){
             }
         }
         
-        const res = await fetch('http://localhost:3001/hospedes/criar', {
+        const res = await fetch(apiHost+'hospedes/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -149,7 +150,7 @@ async function createHospedeFull(data: any,  token: string){
 
 async function getHospedeById(hospedeId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/${hospedeId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -259,7 +260,7 @@ async function editHospedeById(hospedeId:number, data:any, token: string) {
                 fileKeys
             }
         }
-        const res = await fetch(`http://localhost:3001/hospedes/editar/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/editar/${hospedeId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -282,7 +283,7 @@ async function editHospedeById(hospedeId:number, data:any, token: string) {
 
 async function deleteHospede(hospedeId:number, token: string, userId: number) {
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/remover/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/remover/${hospedeId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -304,7 +305,7 @@ async function deleteHospede(hospedeId:number, token: string, userId: number) {
 
 async function getHospedesAtivos(token: string){
     try {
-        const res = await fetch('http://localhost:3001/hospedes/ativos', {
+        const res = await fetch(apiHost+'hospedes/ativos', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -325,7 +326,7 @@ async function getHospedesAtivos(token: string){
 
 async function getHospedeStatus(token: string){
     try {
-        const res = await fetch('http://localhost:3001/hospedes/status', {
+        const res = await fetch(apiHost+'hospedes/status', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -346,7 +347,7 @@ async function getHospedeStatus(token: string){
 
 async function getHospedeFinanceiro(hospedeId:number, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/banco/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/banco/${hospedeId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -367,7 +368,7 @@ async function getHospedeFinanceiro(hospedeId:number, token: string){
 
 async function postHospedeFinanceiro(data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/banco`, {
+        const res = await fetch(apiHost+`hospedes/banco`, {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -389,7 +390,7 @@ async function postHospedeFinanceiro(data: any, token: string){
 
 async function putHospedeFinanceiro(hospedeId:number, data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/banco/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/banco/${hospedeId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -411,7 +412,7 @@ async function putHospedeFinanceiro(hospedeId:number, data: any, token: string){
 
 async function putHospedeSituacaoFinanceira(hospedeId:number, data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/financeiro/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/financeiro/${hospedeId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -433,7 +434,7 @@ async function putHospedeSituacaoFinanceira(hospedeId:number, data: any, token: 
 
 async function getHospedeRemedios(hospedeId:number, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/remedios/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/remedios/${hospedeId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -454,7 +455,7 @@ async function getHospedeRemedios(hospedeId:number, token: string){
 
 async function getHospedeFicha(hospedeId:number, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/ficha/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/ficha/${hospedeId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -475,7 +476,7 @@ async function getHospedeFicha(hospedeId:number, token: string){
 
 async function getHospedeComplicacoes(hospedeId:number, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/complicacoes/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/complicacoes/${hospedeId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -496,7 +497,7 @@ async function getHospedeComplicacoes(hospedeId:number, token: string){
 
 async function postHospedeFicha(data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/ficha`, {
+        const res = await fetch(apiHost+`hospedes/ficha`, {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -518,7 +519,7 @@ async function postHospedeFicha(data: any, token: string){
 
 async function putHospedeFicha(hospedeId:number, data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/ficha/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/ficha/${hospedeId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -540,7 +541,7 @@ async function putHospedeFicha(hospedeId:number, data: any, token: string){
 
 async function postHospedeRemedio(data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/remedios`, {
+        const res = await fetch(apiHost+`hospedes/remedios`, {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -562,7 +563,7 @@ async function postHospedeRemedio(data: any, token: string){
 
 async function putHospedeRemedio(hospedeId:number, data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/remedios/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/remedios/${hospedeId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -584,7 +585,7 @@ async function putHospedeRemedio(hospedeId:number, data: any, token: string){
 
 async function postHospedeComplicacoes(data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/complicacoes`, {
+        const res = await fetch(apiHost+`hospedes/complicacoes`, {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -606,7 +607,7 @@ async function postHospedeComplicacoes(data: any, token: string){
 
 async function putHospedeComplicacoes(hospedeId:number, data: any, token: string){
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/complicacoes/${hospedeId}`, {
+        const res = await fetch(apiHost+`hospedes/complicacoes/${hospedeId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -628,7 +629,7 @@ async function putHospedeComplicacoes(hospedeId:number, data: any, token: string
 
 async function deleteHospedeBanco(bancoId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/remover/banco/${bancoId}`, {
+        const res = await fetch(apiHost+`hospedes/remover/banco/${bancoId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -649,7 +650,7 @@ async function deleteHospedeBanco(bancoId:number, token: string) {
 
 async function deleteHospedeSituacao(situacaoId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/remover/situacao/${situacaoId}`, {
+        const res = await fetch(apiHost+`hospedes/remover/situacao/${situacaoId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -670,7 +671,7 @@ async function deleteHospedeSituacao(situacaoId:number, token: string) {
 
 async function deleteHospedeDadosMedicos(fichaId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/hospedes/remover/ficha/${fichaId}`, {
+        const res = await fetch(apiHost+`hospedes/remover/ficha/${fichaId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",

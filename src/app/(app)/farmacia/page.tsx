@@ -1,7 +1,7 @@
 import { MyButton } from "@/components/MyButton";
 import Link from "next/link";
 import { ContainerFarmacia } from "@/components/ContainerFarmacia";
-
+ 
 export default function Farmacia(){
 	return(
 		<div className="p-4 min-h-screen">

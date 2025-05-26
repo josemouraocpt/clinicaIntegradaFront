@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { MyButton } from "./MyButton";
 import { ProjetoHospedeInput } from "./ProjetoHospedeInput";
-import { useSelector } from "react-redux";
 import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useRouter } from "next/navigation";
@@ -13,7 +12,7 @@ import { requiredString } from "./ErroPreenchimento";
 import { toast, Toaster } from "sonner";
 import { MdDeleteForever } from "react-icons/md";
 
-const priceRegexBR = /^(R\$ ?)?\d{1,3}(\.\d{3})*,\d{2}$/;
+const priceRegexBR = /\d+\.\d+/;
 
 const schema = yup.object({
     name: requiredString('Nome obrigatório'),
@@ -21,7 +20,7 @@ const schema = yup.object({
     scope: requiredString('Escopo do projeto obrigatório'),
     activity: requiredString('Atividade obrigatório'),
     restriction: requiredString('Restrições obrigatório'),
-    cost: requiredString('Custo do projeto obrigatório'),
+    cost: requiredString('Custo do projeto obrigatório').matches(priceRegexBR, { message: "Deve ser um número decimal com ponto." }),
     type: requiredString('Tipo do projeto obrigatório'),
     userId: yup.number(),
     cc: requiredString('Centro de custo obrigatório'),
@@ -79,7 +78,7 @@ interface IParticipantesListData{
 }
 
 export function ProjetoForm({action}: IProjetoFormProps){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const [hospedesList, setHospedesList] = useState<Array<IHospedeEmProjeto>>([]);
     const [dummy, setDummy] = useState<Array<number>>([]);
     const [hospedeAtivos, setHospedesAtivos] = useState<Array<IHospedeData>>([]);
@@ -140,7 +139,7 @@ export function ProjetoForm({action}: IProjetoFormProps){
         if(action == "CRIAR"){
             setCanEdit(!canEdit);
         }
-    }, [user, getProjetoStatus, getProjetoById, getHospedesAtivos]);
+    }, []);
 
     function setValues(data: any) {
         if (!data) return;
@@ -263,7 +262,7 @@ export function ProjetoForm({action}: IProjetoFormProps){
                             <div>
                                 <div className="flex justify-around my-5">
                                     <h2 className="mt-2">Lista de participantes</h2>
-                                    <MyButton buttonText="Inserir" buttonType="button" handleClick={handleCounter} disable={!canEdit}/>
+                                    <MyButton buttonText="Inserir" buttonType="button" handleClick={handleCounter} disable={!canEdit} hidden={["SOCIAL", "ADMIN", "SAUDE-Projetos"].includes(user.user.access) ? false : true}/>
                                 </div>
                                 {dummy.length  > 0 && (
                                     dummy.map((value, index) => (
@@ -298,7 +297,7 @@ export function ProjetoForm({action}: IProjetoFormProps){
                         <MyButton buttonText="Salvar" buttonType="submit"/>
                     ) : (
                         <>
-                            <MyButton buttonText="Editar" buttonType="button" handleClick={() => setCanEdit(!canEdit)}/>
+                            <MyButton buttonText="Editar" buttonType="button" handleClick={() => setCanEdit(!canEdit)} hidden={["SOCIAL", "ADMIN", "SAUDE-Projetos"].includes(user.user.access) ? false : true}/>
                             <MyButton buttonText="Salvar" buttonType="submit"/>
                         </>
                     )}

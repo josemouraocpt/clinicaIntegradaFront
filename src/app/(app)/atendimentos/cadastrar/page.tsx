@@ -8,7 +8,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { toast, Toaster } from "sonner";
 import * as yup from "yup"; 
 
@@ -32,7 +31,7 @@ export default function CadastrarAtendimento(){
     const { getHospedesAtivos } = hospedeService;
     const { createAtendimento } = atendimentoService;
     const router = useRouter();
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
  	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
 	});
@@ -55,7 +54,7 @@ export default function CadastrarAtendimento(){
         }
         fetch()
         setValue("usuarioId", user.user.userId);
-    }, [getHospedesAtivos, user]);
+    }, []);
 
     async function onError(formErrors: FieldErrors<FormData>) {
         for (const value of Object.entries(formErrors)) {
@@ -84,7 +83,7 @@ export default function CadastrarAtendimento(){
                             <label>Procedimento realizado:
                                 <textarea className="input" rows={10} {...register("procedimento")}></textarea>
                             </label>
-                            <label>ID hóspede:
+                            <label>Hóspede:
                                 <select className="input" {...register("hospedeId")}>
                                     <option hidden={true}></option>
                                     {hospedes && (

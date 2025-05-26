@@ -1,8 +1,9 @@
 'use client';
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 async function getUserData(userID: number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/usuarios/${userID}`, {
+        const res = await fetch(apiHost+`usuarios/${userID}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -24,7 +25,7 @@ async function getUserData(userID: number, token: string) {
 
 async function updateUser(userID: number, data: any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/usuarios/editar/${userID}`, {
+        const res = await fetch(apiHost+`usuarios/editar/${userID}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -47,7 +48,7 @@ async function updateUser(userID: number, data: any, token: string) {
 
 async function getUsersAndDepartments(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/usuarios/setores', {
+        const res = await fetch(apiHost+'usuarios/setores', {
             method: "GET", 
 			headers: {
 				"Content-Type": "application/json",
@@ -69,7 +70,7 @@ async function getUsersAndDepartments(token: string) {
 
 async function getFuncionarios(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/usuarios/todos', {
+        const res = await fetch(apiHost+'usuarios/todos', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -91,7 +92,7 @@ async function getFuncionarios(token: string) {
 
 async function getUserSetores(){
     try {
-        const res = await fetch('http://localhost:3001/usuarios/setores', {
+        const res = await fetch(apiHost+'usuarios/setores', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -111,7 +112,7 @@ async function getUserSetores(){
 
 async function getUserProfiles(){
     try {
-        const res = await fetch('http://localhost:3001/usuarios/perfis', {
+        const res = await fetch(apiHost+'usuarios/perfis', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -131,7 +132,7 @@ async function getUserProfiles(){
 
 async function getUserStatus(token: string){
     try {
-        const res = await fetch('http://localhost:3001/usuarios/status', {
+        const res = await fetch(apiHost+'usuarios/status', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -152,7 +153,7 @@ async function getUserStatus(token: string){
 
 async function deleteUser(userID: number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/usuarios/remover/${userID}`, {
+        const res = await fetch(apiHost+`usuarios/remover/${userID}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -174,7 +175,7 @@ async function deleteUser(userID: number, token: string) {
 
 async function updateUserStatus(data: any, token: string) {
     try {
-        const res = await fetch('http://localhost:3001/usuarios/editar/status', {
+        const res = await fetch(apiHost+'usuarios/editar/status', {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

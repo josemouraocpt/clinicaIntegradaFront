@@ -6,7 +6,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { toast, Toaster } from "sonner";
 import * as yup from "yup";
  
@@ -50,7 +49,7 @@ export default function Banco(){
     const [count, setCount] = useState(0);
 
     const { getHospedeFinanceiro, postHospedeFinanceiro, putHospedeFinanceiro, putHospedeSituacaoFinanceira, deleteHospedeBanco, deleteHospedeSituacao } = hospedeService;
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const pathname = usePathname();
     const router = useRouter();
     const [hospedeData, setHospedeData] = useState<Array<IDadosBancarios>>([]);
@@ -71,7 +70,7 @@ export default function Banco(){
             setValue("DESCRICAO", res.data.financeiro.DESCRICAO);
         }
         fetch()
-    }, [user, getHospedeFinanceiro]);
+    }, []);
 
     async function onSubmit(data: FormData){
         //separar os objetos

@@ -2,7 +2,6 @@
 import { MdAssignment, MdAttachMoney } from "react-icons/md";
 import { ActionsBox } from "./ActionsBox";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import hospedeService from "@/services/hospedeService";
 
 interface IHospedeCardProps{
@@ -22,7 +21,7 @@ interface IHospedeData{
 
 export function HospedeCard({data}: IHospedeCardProps){
 	const router = useRouter();
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const { deleteHospede } = hospedeService;
 
 	function formatDate(data: string){
@@ -64,10 +63,10 @@ export function HospedeCard({data}: IHospedeCardProps){
 			</div>
 			<div className="flex justify-end">
 				<ActionsBox path={`/hospedes/${data.idHOSPEDE}`} deleteFunc={() => { handleDelete(data.idHOSPEDE) }}/> 
-				<button className="hover:opacity-75" onClick={() => router.push(`/hospedes/banco/${data.idHOSPEDE}`)}>
+				<button className="hover:opacity-75" onClick={() => router.push(`/hospedes/banco/${data.idHOSPEDE}`)} hidden={["SOCIAL", "ADMIN"].includes(user.user.access) ? false : true}>
                 	<MdAttachMoney size={32} className="text-button"/>
             	</button>
-				<button className="hover:opacity-75" onClick={() => router.push(`/hospedes/ficha/${data.idHOSPEDE}`)}>
+				<button className="hover:opacity-75" onClick={() => router.push(`/hospedes/ficha/${data.idHOSPEDE}`)} hidden={["SOCIAL", "ADMIN"].includes(user.user.access)? false : true}>
                 	<MdAssignment size={32} className="text-button"/>
             	</button> 
 			</div>

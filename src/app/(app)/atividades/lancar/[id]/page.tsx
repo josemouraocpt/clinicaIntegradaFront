@@ -5,10 +5,8 @@ import { LancarPresencaList } from "@/components/LancarPresencaList";
 import { MyButton } from "@/components/MyButton";
 import { SetorInfo } from "@/components/SetorInfo";
 import atividadesService from "@/services/atividadesService";
-import hospedeService from "@/services/hospedeService";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { toast, Toaster } from "sonner";
  
 interface IAtividadeData{
@@ -29,28 +27,7 @@ interface IAtividadeData{
 
 interface IHospedeData {
     idHOSPEDE: number;
-    DADOS_MEDICOS_idDADOS_MEDICOS: number;
     NOME_COMPLETO: string;
-    NOME_SOCIAL?: string;
-    APELIDO?: string;
-    RG: string;
-    CPF: string;
-    NACIONALIDADE: string;
-    NATURALIDADE: string;
-    ESTADO_CIVIL: string;
-    DATA_NASCIMENTO: Date;
-    NOME_MAE: string;
-    NOME_PAI?: string;
-    TELEFONE: string;
-    PROFISSAO?: string;
-    TITULO_ELEITOR?: string;
-    ENDERECO: string;
-    CIDADE: string;
-    UF: string;
-    CEP: string;
-    DATA_ENTRADA: Date;
-    RESPONSAVEL: string;
-    STATUS_HOSPEDE: string;
 }
 
 interface IReqBodyStruct{
@@ -63,25 +40,24 @@ export default function LancarPresencaId(){
     const [lista, setLista] = useState<Array<IReqBodyStruct>>([]);
     const [dummy, setDummy] = useState<Array<number>>([]);
     const [hospedesList, setHospedesList] = useState([]);
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<IAtividadeData>();
     const [hospedeData, setHospedeData] = useState<Array<IHospedeData>>([]);
     const pathname = usePathname();
     const router = useRouter();
-    const { getAtividadeById, lancarPresencaByAtividadeId, getLista } = atividadesService;
-    const { getHospedesAtivos } = hospedeService;
+    const { getAtividadeById, lancarPresencaByAtividadeId, getLista, getElegiveis } = atividadesService;
 
     useEffect(() => {
         async function fecth(){
-            const res1 = await getAtividadeById(Number(pathname.substring(19)),user.token); 
-            const res2 = await getHospedesAtivos(user.token);
+            const res1 = await getAtividadeById(Number(pathname.substring(19)),user.token);
+            const res2 = await getElegiveis(res1.data[0].HORARIO_INICIO, res1.data[0].DATA_ATIVIDADE, user.token);
             const res3 = await getLista(Number(pathname.substring(19)),user.token);
             setData(res1.data[0]);
             setHospedeData(res2.data);
             setLista(res3.data);
         }
         fecth();
-    }, [user, getAtividadeById, getHospedesAtivos])
+    }, [])
 
     async function handleSubmit(event: React.SyntheticEvent){
         event.preventDefault();

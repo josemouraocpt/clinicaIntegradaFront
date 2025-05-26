@@ -1,11 +1,9 @@
 'use client'
 import { ContainerFarmacia } from "@/components/ContainerFarmacia"
 import { EstoqueCard } from "@/components/EstoqueCard";
-import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import farmaciaService from "@/services/farmaciaService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface IEstoqueData{
     idESTOQUE: number
@@ -22,7 +20,7 @@ interface IEstoqueData{
 } 
 
 export default function ListaItem(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const [dataSet, setDataSet] = useState<Array<IEstoqueData>>([]);
     const [data, setData] = useState<IEstoqueData>();
     const [selected, setSelected] = useState(false);
@@ -36,7 +34,7 @@ export default function ListaItem(){
             
         }
         fetch() 
-    }, [user, getItens]);
+    }, []);
 
     function handleChange(value: string){
         if(value == ""){

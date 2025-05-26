@@ -2,7 +2,6 @@
 import farmaciaService from "@/services/farmaciaService";
 import { ActionsBox } from "./ActionsBox";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import cozinhaService from "@/services/cozinhaService";
 
 interface IEstoqueCardProps{
@@ -28,7 +27,7 @@ export function EstoqueCard({path, data}: IEstoqueCardProps){
     const router = useRouter();
     const { deleteMedicamento, deleteItem } = farmaciaService;
     const { deleteMercadoria } = cozinhaService;
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     
     async function handleDelete(id: number){
         if(path.includes("medicamentos")){

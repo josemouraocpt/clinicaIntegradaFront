@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import * as yup from "yup";
 import { MyButton } from "./MyButton";
 import { requiredString, requiredNumber } from "./ErroPreenchimento";
@@ -31,7 +30,7 @@ export function EstoqueForm({action}: IEstoqueFormProps){
     const pathname = usePathname();
     const [canEdit, setCanEdit] = useState(false);
     const [mercadoriaData, setMercadoriaData] = useState();
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const { createMercadoria, getMercadoriaById, editMercadoria } = cozinhaService;
  	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -87,7 +86,7 @@ export function EstoqueForm({action}: IEstoqueFormProps){
         }else{
             setCanEdit(!canEdit);
         }
-    }, [user, getMercadoriaById]);
+    }, []);
 
     function setValues(data: any){
         if(!data) return;

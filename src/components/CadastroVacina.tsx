@@ -2,7 +2,6 @@
 import * as yup from "yup";
 import { MyButton } from "./MyButton";
 import { usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import farmaciaService from "@/services/farmaciaService";
 import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -32,7 +31,7 @@ interface ICadastroVacinaProps{
 export default function CadastroVacina({action}: ICadastroVacinaProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const { createVacina, getFornecedores, getVacinasEstoque, getVacinaById, editVacina } = farmaciaService;
     const [medicamentos, setMedicamentos] = useState();
     const [fornecedores, setFornecedores] = useState();
@@ -95,7 +94,7 @@ export default function CadastroVacina({action}: ICadastroVacinaProps) {
             setCanEdit(!canEdit);
         }
         setValue("changeBy", user.user.userId)
-    }, [user, getFornecedores, getVacinasEstoque, getVacinaById]);
+    }, []);
 
     function setValues(data: any){
         setValue("idStock", data.ESTOQUE_idESTOQUE);

@@ -6,19 +6,20 @@ import { TbCurrencyReal, TbPhysotherapist, TbPill } from "react-icons/tb";
 import { LogOut } from "./LogOut";
 
 export function Menu(){
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const [toggle, setToggle] = useState(false);
     function handleClick(){
         setToggle(!toggle)
     }
-    function teste(){
+    function hide(){
         return toggle == true ? setToggle(!toggle) : undefined
-    }
+    } 
     return(
         <div className="absolute right-2 top-0">
             <button onClick={() => setToggle(!toggle)}>
                 <MdMenu size={32}  className="mt-5"/>
             </button>
-            <div className={toggle == false ? "hidden" : "absolute -right-2 w-56 top-[67px] space-y-2 text-black bg-white rounded-b-lg pb-2 z-10"} onMouseLeave={teste}>
+            <div className={toggle == false ? "hidden" : "absolute -right-2 w-56 top-[67px] space-y-2 text-black bg-white rounded-b-lg pb-2 z-10"} onMouseLeave={hide}>
                 <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50">
                     <Link href="/atendimentos" onClick={handleClick}>
                          <TbPhysotherapist className="inline" size={32}/> Atendimentos
@@ -34,7 +35,7 @@ export function Menu(){
                         <MdRestaurant className="inline" size={32}/> Cozinha
                     </Link>
                 </div>
-                <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50">
+                <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50" hidden={user.user.access == "ADMIN" ? false : true}>
                     <Link href="/sistema/dominios" onClick={handleClick}>
                         <MdOutlineAppRegistration className="inline" size={32}/> Dominios
                     </Link>
@@ -44,17 +45,17 @@ export function Menu(){
                         <TbPill size={32} className="inline"/> Fármacia
                     </Link>
                 </div>
-                <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50">
+                <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50" hidden={["SOCIAL", "ADMIN", "SAUDE-Financeiro"].includes(user.user.access) ? false : true}>
                     <Link href="/financeiro" onClick={handleClick}>
                         <TbCurrencyReal className="inline" size={32}/> Financeiro
                     </Link>
                 </div>
-                <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50">
+                <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50" hidden={["SOCIAL", "ADMIN", "SAUDE-Farmácia"].includes(user.user.access) ? false : true}>
                     <Link href="/sistema/fornecedores" onClick={handleClick}>
                         <MdContentPaste className="inline" size={32}/> Fornecedores
                     </Link>
                 </div>
-                <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50">
+                <div className="border-t border-black w-4/5 mx-auto hover:bg-gray-50" hidden={["SOCIAL", "ADMIN"].includes(user.user.access) ? false : true}>
                     <Link href="/funcionarios" onClick={handleClick}>
                         <MdBusinessCenter size={32} className="inline"/> Funcionários
                     </Link>

@@ -1,6 +1,5 @@
 import { ContainerHospedes } from "@/components/ContainerHospedes";
 import { HospedeForm } from "@/components/HospedeForm";
-import { HospedeFormEdit } from "@/components/HospedeFormEdit";
 
 export default function Cadastro(){
 	return(

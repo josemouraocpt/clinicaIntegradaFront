@@ -5,7 +5,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import projetoService from "@/services/projetosService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 interface IProjetoData{
 	idPROJETO: number
 	USUARIO_idUSUARIO: number 
@@ -29,7 +28,7 @@ interface IProjetoData{
 }
 
 export default function Projetos(){
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<Array<IProjetoData>>([]);
 	const [auxData, setAuxData] = useState<Array<IProjetoData>>([]);
 	const { getProjetos } = projetoService;
@@ -43,14 +42,14 @@ export default function Projetos(){
 		if(user.token !== undefined){
 			fetchAll()
 		}
-	}, [user, getProjetos]); 
+	}, []); 
 
 	return(
 		<div className="min-h-screen">
 			<ContainerProjeto/>
 			<SetorInfo setor="Projetos"/>
 			<div className="bg-white p-8 rounded-lg shadow-xl space-y-5 m-10">
-                <SearchBar data={data} setAuxData={setAuxData} path="/projetos/cadastrar" keys={["idPROJETO","NOME"]} />
+                <SearchBar data={data} setAuxData={setAuxData} path={["SOCIAL", "ADMIN", "SAUDE-Projetos"].includes(user.user.access) ? "/projetos/cadastrar" : null} keys={["idPROJETO","NOME"]} />
                 <div>
                     {auxData && auxData.length > 0 ? (
                         <div className="grid grid-cols-2">

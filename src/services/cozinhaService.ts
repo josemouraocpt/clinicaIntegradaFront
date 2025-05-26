@@ -1,8 +1,9 @@
 'use client'
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 async function getCardapiosPadrao(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/cozinha/cardapios/padrao', {
+        const res = await fetch(apiHost+'cozinha/cardapios/padrao', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -24,7 +25,7 @@ async function getCardapiosPadrao(token: string) {
 
 async function getCardapiosEspecial(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/cozinha/cardapios/especial', {
+        const res = await fetch(apiHost+'cozinha/cardapios/especial', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -46,7 +47,7 @@ async function getCardapiosEspecial(token: string) {
 
 async function getCardapioById(cardapioId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/cozinha/cardapios/${cardapioId}`, {
+        const res = await fetch(apiHost+`cozinha/cardapios/${cardapioId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -67,7 +68,7 @@ async function getCardapioById(cardapioId:number, token: string) {
 
 async function getMercadorias(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/cozinha/estoque', {
+        const res = await fetch(apiHost+'cozinha/estoque', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -88,7 +89,7 @@ async function getMercadorias(token: string) {
 
 async function getMercadoriaById(mercadoriaId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/cozinha/estoque/${mercadoriaId}`, {
+        const res = await fetch(apiHost+`cozinha/estoque/${mercadoriaId}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -109,7 +110,7 @@ async function getMercadoriaById(mercadoriaId:number, token: string) {
 
 async function createCardapio(data: any, token: string){
     try {
-        const res = await fetch('http://localhost:3001/cozinha/cardapios/criar', {
+        const res = await fetch(apiHost+'cozinha/cardapios/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -147,7 +148,7 @@ async function createMercadoria(data: any, token: string){
             changeBy: data.userId,
             type: "MERCADORIA",
         }
-        const res = await fetch('http://localhost:3001/cozinha/estoque/criar', {
+        const res = await fetch(apiHost+'cozinha/estoque/criar', {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -171,7 +172,7 @@ async function createMercadoria(data: any, token: string){
 
 async function editCardapio(cardapioId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/cozinha/cardapios/editar/${cardapioId}`, {
+        const res = await fetch(apiHost+`cozinha/cardapios/editar/${cardapioId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -194,7 +195,7 @@ async function editCardapio(cardapioId:number, data:any, token: string) {
 
 async function editMercadoria(mercadoriaId:number, data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/cozinha/estoque/editar/${mercadoriaId}`, {
+        const res = await fetch(apiHost+`cozinha/estoque/editar/${mercadoriaId}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -217,7 +218,7 @@ async function editMercadoria(mercadoriaId:number, data:any, token: string) {
 
 async function deleteCardapio(cardapioId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/cozinha/cardapios/remover/${cardapioId}`, {
+        const res = await fetch(apiHost+`cozinha/cardapios/remover/${cardapioId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -238,7 +239,7 @@ async function deleteCardapio(cardapioId:number, token: string) {
 
 async function deleteMercadoria(mercadoriaId:number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/cozinha/estoque/remover/${mercadoriaId}`, {
+        const res = await fetch(apiHost+`cozinha/estoque/remover/${mercadoriaId}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -259,7 +260,7 @@ async function deleteMercadoria(mercadoriaId:number, token: string) {
 
 async function getCardapioStatus(token: string) {
     try {
-        const res = await fetch('http://localhost:3001/cozinha/cardapios/status', {
+        const res = await fetch(apiHost+'cozinha/cardapios/status', {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",

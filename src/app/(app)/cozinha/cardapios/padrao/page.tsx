@@ -5,7 +5,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import cozinhaService from "@/services/cozinhaService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface ICardapioData{
     idCARDAPIO:  number
@@ -19,7 +18,7 @@ interface ICardapioData{
 }
 
 export default function Padrao(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<Array<ICardapioData>>([]);
 	const [auxData, setAuxData] = useState<Array<ICardapioData>>([]);
     const { getCardapiosPadrao } = cozinhaService;
@@ -35,7 +34,7 @@ export default function Padrao(){
 		if(user.token !== undefined){
 			fetchAll()
 		}
-	}, [user, getCardapiosPadrao]); 
+	}, []); 
 
     return(
         <div className="min-h-screen">

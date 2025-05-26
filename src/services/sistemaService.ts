@@ -1,8 +1,9 @@
 'use client'
+const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 async function getFornecedor(fornecedorID: number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/fornecedores/${fornecedorID}`, {
+        const res = await fetch(apiHost+`sistema/fornecedores/${fornecedorID}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -24,7 +25,7 @@ async function getFornecedor(fornecedorID: number, token: string) {
 
 async function getDominio(dominioID: number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/dominios/${dominioID}`, {
+        const res = await fetch(apiHost+`sistema/dominios/${dominioID}`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -46,7 +47,7 @@ async function getDominio(dominioID: number, token: string) {
 
 async function getAllFornecedor(token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/fornecedores/todos`, {
+        const res = await fetch(apiHost+`sistema/fornecedores/todos`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -68,7 +69,7 @@ async function getAllFornecedor(token: string) {
 
 async function getAllDominio(token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/dominios/todos`, {
+        const res = await fetch(apiHost+`sistema/dominios/todos`, {
             method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -90,7 +91,7 @@ async function getAllDominio(token: string) {
 
 async function createFornecedor(data: any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/fornecedores/criar`, {
+        const res = await fetch(apiHost+`sistema/fornecedores/criar`, {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -113,7 +114,7 @@ async function createFornecedor(data: any, token: string) {
 
 async function createDominio(data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/dominios/criar`, {
+        const res = await fetch(apiHost+`sistema/dominios/criar`, {
             method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -136,7 +137,7 @@ async function createDominio(data:any, token: string) {
 
 async function editFornecedor(fornecedorID: number, data: any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/fornecedores/editar/${fornecedorID}`, {
+        const res = await fetch(apiHost+`sistema/fornecedores/editar/${fornecedorID}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -159,7 +160,7 @@ async function editFornecedor(fornecedorID: number, data: any, token: string) {
 
 async function editDominio(dominioID: number  ,data:any, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/dominios/editar/${dominioID}`, {
+        const res = await fetch(apiHost+`sistema/dominios/editar/${dominioID}`, {
             method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -182,7 +183,7 @@ async function editDominio(dominioID: number  ,data:any, token: string) {
 
 async function deleteFornecedor(fornecedorID: number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/fornecedores/remover/${fornecedorID}`, {
+        const res = await fetch(apiHost+`sistema/fornecedores/remover/${fornecedorID}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -204,7 +205,7 @@ async function deleteFornecedor(fornecedorID: number, token: string) {
 
 async function deleteDominio(dominioID: number, token: string) {
     try {
-        const res = await fetch(`http://localhost:3001/sistema/dominios/remover/${dominioID}`, {
+        const res = await fetch(apiHost+`sistema/dominios/remover/${dominioID}`, {
             method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -226,7 +227,7 @@ async function deleteDominio(dominioID: number, token: string) {
 
 async function generateUploadURL(fileKey:string, fileType:string): Promise<string> {
     try {
-        const urlResponse = await fetch(`http://localhost:3001/sistema/generate-upload-url?filename=${fileKey}&contentType=${fileType}`);
+        const urlResponse = await fetch(apiHost+`sistema/generate-upload-url?filename=${fileKey}&contentType=${fileType}`);
         const url = await urlResponse.json();
         return url
     } catch (error) {
@@ -236,13 +237,14 @@ async function generateUploadURL(fileKey:string, fileType:string): Promise<strin
 
 async function generateDownloadURL(fileKey:string): Promise<string> {
     try {
-        const urlResponse = await fetch(`http://localhost:3001/sistema/generate-download-url?key=${fileKey}`);
+        const urlResponse = await fetch(apiHost+`sistema/generate-download-url?key=${fileKey}`);
         const url = await urlResponse.json();
         return url
     } catch (error) {
         return 'Error ao gerar URL'
     }
 }
+
 
 
 const sistemaService = {

@@ -1,13 +1,10 @@
 'use client'
-
 import { ContainerDominios } from "@/components/ContainerDominios"
 import { MyButton } from "@/components/MyButton";
 import sistemaService from "@/services/sistemaService";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdDeleteForever, MdRemoveRedEye } from "react-icons/md";
-import { useSelector } from "react-redux";
-
 interface IDominioData {
     idSTATUS_DOMAIN: number;
     STATUS_TYPE: string;
@@ -16,7 +13,7 @@ interface IDominioData {
 }
 
 export default function Dominios(){
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<IDominioData[]>([]);
 	const { getAllDominio, deleteDominio } = sistemaService;
     const router = useRouter();
@@ -27,7 +24,7 @@ export default function Dominios(){
 			setData(res.data);
 		}
 		fetchAll();
-	}, [user, getAllDominio]);
+	}, []);
 
     async function handleDelete(id: number){
         const res = await deleteDominio(id, user.token);

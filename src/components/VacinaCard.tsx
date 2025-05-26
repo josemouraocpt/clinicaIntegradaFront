@@ -2,8 +2,6 @@
 import { useRouter } from "next/navigation";
 import { ActionsBox } from "./ActionsBox";
 import farmaciaService from "@/services/farmaciaService";
-import { useSelector } from "react-redux";
-
 interface IVacinaProps{
     data: IVacinaData
 }
@@ -27,7 +25,7 @@ interface IVacinaData{
 export function VacinaCard({data}: IVacinaProps){
     const router = useRouter();
     const { deleteVacina } = farmaciaService;
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 
     async function handleDelete(id: number){
         const res = await deleteVacina(id, user.token);

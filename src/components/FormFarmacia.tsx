@@ -2,7 +2,6 @@
 import { usePathname, useRouter } from "next/navigation";
 import { MyButton } from "./MyButton";
 import * as yup from "yup";
-import { useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
@@ -33,7 +32,7 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
     const pathname = usePathname();
     const [canEdit, setCanEdit] = useState(false);
     const [dataBD, setDataBD] = useState();
-    const { user } = useSelector((state) => state.auth);
+    const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
     const { createMedicamento, createItem, getItemById, getMedicamentoById, editMedicamento, editItem } = farmaciaService;
  	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -107,7 +106,7 @@ export function FormFarmacia({type, action}: IFormFarmaciaProps){
         }
         
         setValue("userId", user.user.userId);
-    }, [user, getItemById, getMedicamentoById]);
+    }, []);
 
     function setValues(data: any){
         if(!data) return;

@@ -5,7 +5,6 @@ import { SearchBar } from "@/components/SearchBar";
 import { SetorInfo } from "@/components/SetorInfo";
 import atividadesService from "@/services/atividadesService";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 interface IAtividadeData{
 	idATIVIDADES: number
@@ -23,7 +22,7 @@ interface IAtividadeData{
 }
 
 export default function LancarPresenca(){
-	const { user } = useSelector((state) => state.auth);
+	const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const [data, setData] = useState<Array<IAtividadeData>>([]);
 	const [auxData, setAuxData] = useState<Array<IAtividadeData>>([]);
 	const { getAtividades } = atividadesService;
@@ -35,7 +34,7 @@ export default function LancarPresenca(){
 			setAuxData(res.data);
 		}
 		fetchAll()
-	}, [user, getAtividades]);
+	}, []);
 	
 	return(
 		<div className="min-h-screen">
