@@ -11,7 +11,9 @@ import { toast } from "sonner";
 
 const schema = yup.object({
     userId: yup.number(),
-	userStatus: yup.string()
+	userStatus: yup.string(),
+	userProfileId: yup.number(),
+	departmentId: yup.number()
 });
 
 type FormData = yup.InferType<typeof schema>;
@@ -41,10 +43,12 @@ interface IUserData{
 export default function DetalhesUsuario(){
     const [data, setData] = useState<IUserData>();
 	const [userStatus, setUserStatus] = useState();
+	const [userSetores, setUserSetores] = useState();
+	const [userProfiles, setUserProfiles] = useState();
 	const [canEdit, setCanEdit] = useState(false);
     const pathname = usePathname();
 	const router = useRouter();
-    const { getUserData, getUserStatus, updateUserStatus } = userService;
+    const { getUserData, getUserStatus, updateUserStatus, getUserProfiles, getUserSetores } = userService;
     const user = JSON.parse(window.sessionStorage.getItem("user") || "{}");
 	const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>({
 		resolver: yupResolver(schema)
@@ -56,9 +60,15 @@ export default function DetalhesUsuario(){
 		async function fetch(){
 			const res = await getUserData(Number(pathname.substring(23)), user.token);
 			const res2 = await getUserStatus(user.token);
+			const res3 = await getUserProfiles();
+			const res4 = await getUserSetores();
+			setUserProfiles(res3.data);
+			setUserSetores(res4.data);
 			setData(res.data);
 			setUserStatus(res2.data);
 			setValue("userStatus", res.data.STATUS_USUARIO);
+			setValue("userProfileId", res.data.USER_DOMAIN_idUSER_DOMAIN);
+			setValue("departmentId", res.data.SETOR_idSETOR);
 		}
         fetch();
 		setValue("userId", Number(pathname.substring(23)));
@@ -94,12 +104,28 @@ export default function DetalhesUsuario(){
 									<input readOnly={true} type="text" className="input" value={data?.EMAIL}/>
 								</label>
 								<label>Setor:
-									<input readOnly={true} type="text" className="input" value={data?.SETOR_idSETOR}/>
+									<select disabled={!canEdit} className="input" {...register("departmentId")}>
+										<option hidden={true}></option>
+										{userSetores && (
+											//@ts-ignore
+											userSetores.map((setor) => (
+												<option value={setor.idSETOR} key={setor.idSETOR}>{setor.DESCRICAO}</option>
+											))
+										)}
+									</select>
 								</label>
 							</div>
 							<div className="flex flex-row space-x-5">
 								<label>Tipo do usuário:
-									<input readOnly={true} type="text" className="input" value={data?.USER_DOMAIN_idUSER_DOMAIN}/>
+									<select disabled={!canEdit} className="input" {...register("userProfileId")} >
+										<option hidden={true}></option>
+										{userProfiles && (
+											//@ts-ignore
+											userProfiles.map((profile) => (
+												<option value={profile.idUSER_DOMAIN} key={profile.idUSER_DOMAIN}>{profile.DOMAIN_DESCRIPTION}</option>
+											))
+										)}
+									</select>
 								</label>
 								<label>Telefone:
 									<input readOnly={true} type="text" className="input" value={data?.TELEFONE}/>
@@ -163,7 +189,7 @@ export default function DetalhesUsuario(){
 								</div>
 						</div>
 						<div className="flex justify-end space-x-3 mt-4">
-							<MyButton buttonText="Alterar Status" buttonType="button" hidden={user.user.access == "ADMIN" ? false : true} handleClick={() => setCanEdit(!canEdit)}/>
+							<MyButton buttonText="Editar" buttonType="button" hidden={user.user.access == "ADMIN" ? false : true} handleClick={() => setCanEdit(!canEdit)}/>
 							<MyButton buttonText="Salvar" buttonType="submit" />
 						</div>
 					</form>

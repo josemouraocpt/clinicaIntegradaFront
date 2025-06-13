@@ -66,7 +66,7 @@ export function RegisterForm(){
         }
         fetch()
 	}, []);
-
+ 
     async function onError(formErrors: FieldErrors<FormData>) {
         for (const value of Object.entries(formErrors)) {
             toast.error(value[1].message)
@@ -123,7 +123,7 @@ export function RegisterForm(){
                             <select className="input" {...register("userProfileId")}>
                                 <option hidden={true}></option>
                                 {profiles?.length >= 1 && (
-                                    profiles.map((value) => (
+                                    profiles.filter((value) => value.DOMAIN_VALUE !== 'ADMIN').map((value) => (
                                         <option value={value.idUSER_DOMAIN} key={value.idUSER_DOMAIN}>{value.DOMAIN_DESCRIPTION}</option>
                                     ))
                                 )}
