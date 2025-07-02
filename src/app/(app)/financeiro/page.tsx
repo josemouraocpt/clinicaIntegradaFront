@@ -1,5 +1,12 @@
+import { ContainerFinanceiro } from "@/components/ContainerFinanceiro";
+
 export default function Financeiro(){
 	return(
-		<h1>Financeiro</h1>
+		<div className="p-4 min-h-screen">
+			<ContainerFinanceiro/>
+			<div >
+
+			</div>
+		</div>
 	)
 };

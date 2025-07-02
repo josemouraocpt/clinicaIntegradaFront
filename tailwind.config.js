@@ -8,8 +8,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'banner': 'url("../../public/images/banner.png")',
-								"gradient": 'linear-gradient(to right, #ED3237, #F8797C , #ED3237)',
+       'banner': 'url("../../public/images/banner.png")'
       },
 						colors: {
 							"button": "#ED3237",
@@ -19,9 +18,14 @@ module.exports = {
 							"gradient2": "#ED3237",
 							"footer": "#bfbfbf",
 							"background": "#EBEBEB",
-							"label": "#888888"
+							"label": "#888888",
+              "container": "#ED3237",
+              "info": "#121111",
+              "bord": "#A4A4A4",
+              "inp": "#141414",
 						},
     },
   },
+		darkMode: "class",
   plugins: [],
 }

@@ -12,9 +12,7 @@ export function NavBar(){
 				</Link>
 			</div>
 			<div className="mr-14 space-x-5 text-lg text-menu-text">
-				<Link href="/dashboard">Home</Link>
 				<Link href="/about">Contatos</Link>
-				<Link href="/about">Trabalhe Conosco</Link>
 				<Link href="/login"><MyButton buttonText="Login"/></Link>
 				<Link href="/register"><MyButton buttonText="Cadastro"/></Link>
 			</div>
